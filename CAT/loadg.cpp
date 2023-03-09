@@ -27,32 +27,32 @@ grap[t][tt]=0;
 //end();
 
 
-//画像読み込み
+// Image loading
 
-// 透過色を変更
+// Change transparent color
 SetTransColor( 9*16+9 , 255 , 255 ) ;
 
-//プレイヤー
+// player
 mgrap[0] = LoadGraph( "res/player.png" ) ;
-//ブロック
+// block
 mgrap[1] = LoadGraph( "res/brock.png" ) ;
-//アイテム
+// item
 mgrap[2] = LoadGraph( "res/item.png" ) ;
-//敵
+// enemy
 mgrap[3] = LoadGraph( "res/teki.png" ) ;
-//背景
+// background
 mgrap[4] = LoadGraph( "res/haikei.png" ) ;
-//ブロック2
+// block 2
 mgrap[5] = LoadGraph( "res/brock2.png" ) ;
-//おまけ
+// bonus (敵人)
 mgrap[6] = LoadGraph( "res/omake.png" ) ;
-//おまけ2
+// Bonus 2 （敵人）
 mgrap[7] = LoadGraph( "res/omake2.png" ) ;
-//タイトル
+// title （logo）
 mgrap[30] = LoadGraph( "res/syobon3.PNG" ) ;
 
 
-//プレイヤー読み込み
+//プレイヤー読み込み player loading
 grap[40][0] = DerivationGraph( 0, 0, 30, 36, mgrap[0]) ;
 grap[0][0] = DerivationGraph( 31*4, 0, 30, 36, mgrap[0]) ;
 grap[1][0] = DerivationGraph( 31*1, 0, 30, 36, mgrap[0]) ;
@@ -61,7 +61,7 @@ grap[3][0] = DerivationGraph( 31*3, 0, 30, 36, mgrap[0]) ;
 grap[41][0] = DerivationGraph( 50, 0, 51, 73, mgrap[6]) ;
 
 x1=1;
-//ブロック読み込み
+//ブロック読み込み block loading
 for (t=0;t<=6;t++){
 grap[t][x1] = DerivationGraph( 33*t, 0, 30, 30, mgrap[x1]) ;
 grap[t+30][x1] = DerivationGraph( 33*t, 33, 30, 30, mgrap[x1]) ;
@@ -73,7 +73,7 @@ grap[10][x1] = DerivationGraph( 33*9, 0, 30, 30, mgrap[x1]) ;
 grap[40][x1] = DerivationGraph( 33*9, 33, 30, 30, mgrap[x1]) ;
 grap[70][x1] = DerivationGraph( 33*9, 66, 30, 30, mgrap[x1]) ;
 
-//ブロック読み込み2
+//ブロック読み込み2 block2 loading
 x1=5;
 for (t=0;t<=6;t++){
 grap[t][x1] = DerivationGraph( 33*t, 0, 30, 30, mgrap[x1]) ;
@@ -84,13 +84,13 @@ grap[12][5] = DerivationGraph( 33*0, 66, 30, 30, mgrap[x1]) ;
 grap[13][5] = DerivationGraph( 33*1, 66, 30, 30, mgrap[x1]) ;
 grap[14][5] = DerivationGraph( 33*2, 66, 30, 30, mgrap[x1]) ;
 
-//アイテム読み込み
+//アイテム読み込み Item loading
 x1=2;
 for (t=0;t<=5;t++){
 grap[t][x1] = DerivationGraph( 33*t, 0, 30, 30, mgrap[x1]) ;
 }
 
-//敵キャラ読み込み
+//敵キャラ読み込み enemy loading 
 x1=3;
 grap[0][x1] = DerivationGraph( 33*0, 0, 30, 30, mgrap[x1]) ;
 grap[1][x1] = DerivationGraph( 33*1, 0, 30, 43, mgrap[x1]) ;
@@ -132,7 +132,7 @@ grap[105][x1] = DerivationGraph( 33*5, 0, 30, 30, mgrap[2]) ;
 grap[110][x1] = DerivationGraph( 33*4, 0, 30, 30, mgrap[2]) ;
 
 
-//背景読み込み
+//背景読み込み background loading
 x1=4;
 grap[0][x1] = DerivationGraph( 0, 0, 150, 90, mgrap[x1]) ;
 grap[1][x1] = DerivationGraph( 151, 0, 65, 29, mgrap[x1]) ;
@@ -142,7 +142,7 @@ grap[4][x1] = DerivationGraph( 151, 113, 51, 29,mgrap[x1]) ;
 grap[5][x1] = DerivationGraph( 222, 0, 28, 60,mgrap[x1]) ;
 grap[6][x1] = DerivationGraph( 151, 143, 90, 40,mgrap[x1]);
 
-//中間フラグ
+//中間フラグ checkpoint flag(中間flag)
 grap[20][x1] = DerivationGraph( 40, 182, 40, 60, mgrap[x1]) ;
 
 
@@ -158,7 +158,7 @@ grap[0][x1] = DerivationGraph( 167, 0, 45, 45, mgrap[6]) ;
 
 
 
-//敵サイズ収得
+//敵サイズ収得 enemy size
 //int GrHandle=0;
 x1=3;
 for (t=0;t<=140;t++){
@@ -168,7 +168,7 @@ anx[t]*=100;any[t]*=100;
 anx[79]=120*100;any[79]=15*100;
 anx[85]=25*100;any[85]=30*10*100;
 
-//背景サイズ収得
+//背景サイズ収得 background size
 x1=4;
 for (t=0;t<40;t++){
 GetGraphSize(grap[t][x1] ,&ne[t] ,&nf[t]);
@@ -190,7 +190,7 @@ anx[3]=30;any[3]=44;
 
 
 
-//wav読み込み
+//wav読み込み loading
 //try{
 //oto[2] = LoadSoundMem( "SE/1.WAV" ) ;
 SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMPRESS);
@@ -232,7 +232,7 @@ x1=40;
 ChangeVolumeSoundMem( 255 * x1 / 100, oto[103] ) ;
 
 
-//ループ設定-20000-20秒
+//ループ設定-20000-20秒 (loop setting - 20000 - 20 seconds)
 //SetLoopPosSoundMem( 1,oto[104]) ;
 //SetLoopSamplePosSoundMem(44100,oto[104]);
 //SetLoopSamplePosSoundMem(22050,oto[104]);

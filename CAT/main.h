@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include <stdio.h>
 #include <math.h>
 #include <string>
@@ -6,54 +6,54 @@ using namespace std;
 
 void loadg();
 
-//String g—p
+//String ä½¿ç”¨ (Using Strings)
 
-//ƒvƒƒOƒ‰ƒ€’†
+//ãƒ—ãƒ­ã‚°ãƒ©ãƒ ä¸­ (in program)
 //main-10
-//ƒ^ƒCƒgƒ‹-100
+//ã‚¿ã‚¤ãƒˆãƒ«-100 (Title-100)
 int main=100,maintm=0;
 
-//ƒXƒe[ƒW
+//ã‚¹ãƒ†ãƒ¼ã‚¸ (stage)
 int stagecolor=0;
 int sta=1,stb=4,stc=0;
 
-//ƒNƒCƒbƒN
+//ã‚¯ã‚¤ãƒƒã‚¯ (fast or speed) 
 int fast=1;
 
-//ƒgƒ‰ƒbƒv•\¦
+//ãƒˆãƒ©ãƒƒãƒ—è¡¨ç¤º (trap display)
 int trap=1;
 
-//’†ŠÔƒQ[ƒg
+//ä¸­é–“ã‚²ãƒ¼ãƒˆ (middle gate)
 int tyuukan=0;
 
 
-//ƒXƒ^ƒbƒtƒ[ƒ‹
+//ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ« (stuffed roll)
 int ending=0;
 
 
-//ƒXƒe[ƒW“Ç‚İ‚İƒ‹[ƒv(‚¢‚¶‚ç‚È‚¢)
+//ã‚¹ãƒ†ãƒ¼ã‚¸èª­ã¿è¾¼ã¿ãƒ«ãƒ¼ãƒ—(ã„ã˜ã‚‰ãªã„) (Stage loading loop (no fiddling))
 int stagerr,stagepoint;
-//ƒI[ƒo[ƒtƒ[‚³‚¹‚é
+//ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã•ã›ã‚‹ (overflow)
 int over=0;
 
-//ƒXƒe[ƒWƒXƒCƒbƒ`
+//ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¹ã‚¤ãƒƒãƒ stage switch
 int stageonoff=0;
 
 
-//ƒƒCƒ“ƒvƒƒOƒ‰ƒ€
+//ãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚°ãƒ©ãƒ  main program
 void Mainprogram();
 void rpaint();
 int maint;
 
 
-//ƒTƒuƒNƒ‰ƒX
-//(ƒEƒGƒCƒgŒn
+//ã‚µãƒ–ã‚¯ãƒ©ã‚¹ subclass
+//(ã‚¦ã‚¨ã‚¤ãƒˆç³» (æˆ‘ä¸çŸ¥é“è‹±æ–‡æ€éº½ç¿»è­¯) 
 void wait(int interval);
 void wait2(long stime, long etime,int FLAME_TIME);
 int rand(int Rand);
 void end();
 
-//•`‰æ
+//æç”» drawing
 int color;
 void setfont(int a);
 void setcolor(int red, int green, int blue);
@@ -77,7 +77,7 @@ void setno();
 int oto[151];
 void ot(int x);void bgmchange(int x);
 
-//•¶š
+//æ–‡å­— character
 void str(string c,int a,int b);
 
 
@@ -91,27 +91,27 @@ void stagep();
 
 
 
-//1-ƒXƒe[ƒW
-//10-ƒXƒe[ƒW‘O
+//1-ã‚¹ãƒ†ãƒ¼ã‚¸ ï¼ˆ1-Stageï¼‰
+//10-ã‚¹ãƒ†ãƒ¼ã‚¸å‰ (10-before stage)
 //
 
 
 
-//ƒ‹[ƒv
+//ãƒ«ãƒ¼ãƒ— (loop)
 int t,tt,t1,t2,t3,t4;
 
 
-//‰Šú‰»
+//åˆæœŸåŒ– Initialization
 int zxon,zzxon;
 
-//ƒL[ƒRƒ“ƒtƒBƒO
+//ã‚­ãƒ¼ã‚³ãƒ³ãƒ•ã‚£ã‚° (key configuration or key setting)
 int key,keytm;
 
-//OŠpŠÖ”
+//ä¸‰è§’é–¢æ•° Trigonometric function
 double pai=3.1415926535;
 
 
-//’n–Ê
+//åœ°é¢ Ground
 #define smax 31
 int sx,sco;
 int sa[smax],sb[smax],sc[smax],sd[smax],stype[smax],sxtype[smax],sr[smax];
@@ -119,7 +119,7 @@ int sgtype[smax];
 
 
 
-//ƒvƒŒƒCƒ„[
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ player
 int mainmsgtype;
 int ma,mb,mnobia,mnobib,mhp;
 int mc,md,macttype,atkon,atktm,mactsok,msstar,nokori=2,mactp,mact;
@@ -129,7 +129,7 @@ int mzimen,mrzimen,mkasok,mmuki,mmukitm,mjumptm,mkeytm,mcleartm;
 int mmutekitm,mmutekion;
 int mztm,mztype;
 int actaon[7];
-//ƒƒbƒZ[ƒW
+//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ message
 int mmsgtm,mmsgtype;
 
 int mascrollmax=21000;//9000
@@ -137,7 +137,7 @@ int mascrollmax=21000;//9000
 
 
 
-//ƒuƒƒbƒN
+//ãƒ–ãƒ­ãƒƒã‚¯ clock
 void tyobi(int x,int y,int type);
 void brockbreak(int t);
 #define tmax 641
@@ -145,12 +145,12 @@ int tco;
 int ta[tmax],tb[tmax],tc[tmax],td[tmax],thp[tmax],ttype[tmax];
 int titem[tmax],txtype[tmax];
 
-//ƒƒbƒZ[ƒWƒuƒƒbƒN
+//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ–ãƒ­ãƒƒã‚¯ message block
 int tmsgtm,tmsgtype,tmsgx,tmsgy,tmsgnobix,tmsgnobiy,tmsg;
 void ttmsg();void txmsg(string x,int a);
 void setfont(int x,int y);
-
-//Œø‰Ê‚ğ‚½‚È‚¢ƒOƒ‰
+ 
+//åŠ¹æœã‚’æŒãŸãªã„ã‚°ãƒ© graphics that have no effect
 void eyobi(int xa,int xb,int xc,int xd,int xe,int xf,int xnobia,int xnobib,int xgtype,int xtm);
 #define emax 201
 int eco;
@@ -160,7 +160,7 @@ int egtype[emax];
 
 
 
-//“GƒLƒƒƒ‰
+//æ•µã‚­ãƒ£ãƒ© enemy character
 void ayobi(int xa,int xb,int xc,int xd,int xnotm,int xtype,int xxtype);
 void tekizimen();
 #define amax 24
@@ -173,21 +173,21 @@ int anotm[amax],anx[160],any[160];
 int atm[amax],a2tm[amax];
 int amsgtm[amax],amsgtype[amax];
 
-//“GoŒ»
+//æ•µå‡ºç¾ Enemy Appearance
 #define bmax 81
 int bco;
 int ba[bmax],bb[bmax],btm[bmax];
 int btype[bmax],bxtype[bmax],bz[bmax];
 
 
-//”wŒi
+//èƒŒæ™¯ background
 #define nmax 41
 int nxxmax,nco;
 int na[nmax],nb[nmax],nc[nmax],nd[nmax],ntype[nmax];
 int ne[nmax],nf[nmax],ng[nmax],nx[nmax];
 
 
-//ƒŠƒtƒg
+//ãƒªãƒ•ãƒˆ
 #define srmax 21
 int srco;
 int sra[srmax],srb[srmax],src[srmax],srd[srmax],sre[srmax],srf[srmax];
@@ -199,30 +199,29 @@ int srsok[srmax],srmovep[srmax],srmove[srmax];
 
 
 
-//ƒXƒNƒ[ƒ‹”ÍˆÍ
+//ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ç¯„å›² scroll range
 int fx=0,fy=0,fzx,fzy,scrollx,scrolly;
-//‘S‘Ì‚Ìƒ|ƒCƒ“ƒg
+//å…¨ä½“ã®ãƒã‚¤ãƒ³ãƒˆ whole point
 int fma=0,fmb=0;
-//‹­§ƒXƒNƒ[ƒ‹
+//å¼·åˆ¶ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« forced scroll
 int kscroll=0;
-//‰æ–ÊƒTƒCƒY(ƒtƒ@ƒ~ƒRƒ“ƒTƒCƒY~2)(256-224)
+//ç”»é¢ã‚µã‚¤ã‚º(ãƒ•ã‚¡ãƒŸã‚³ãƒ³ã‚µã‚¤ã‚ºÃ—2)(256-224) => (Screen size (Famicom size x 2) (256-224))
 int fxmax=48000,fymax=42000;
 
 
 
-//ƒXƒe[ƒW
+//ã‚¹ãƒ†ãƒ¼ã‚¸ stage 
 byte stagedate[17][2001];
 
-//‰æ–Ê•
-int blacktm=1,blackx=0;
+//ç”»é¢é»’ screen black
+int blacktm=1,blackx=0;screen black
 
 
 
-//©—R‚È’l
+//è‡ªç”±ãªå€¤ free value
 int xx[91];
 double xd[11];
 string xs[31];
 
 
-//ƒ^ƒCƒ}[‘ª’è
 long stime;
