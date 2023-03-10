@@ -1037,7 +1037,7 @@ ChangeFontType(DX_FONTTYPE_NORMAL);
 
 
 
-//メッセージブロック
+//メッセージブロック message block
 if (tmsgtm>0){
 ttmsg();
 if (tmsgtype==1){
@@ -1061,7 +1061,7 @@ tmsgtm--;
 }//tmsgtm
 
 
-//メッセージ
+//メッセージ message
 if (mainmsgtype>=1){
 setfont(20,4);
 if (mainmsgtype==1){DrawFormatString(126,100,GetColor(255,255,255),"WELCOME TO OWATA ZONE");}
@@ -1070,7 +1070,7 @@ setfont(20,5);
 }//mainmsgtype>=1
 
 
-//画面黒
+//画面黒 screen black
 if (blacktm>0){
 blacktm--;
 fillrect(0,0,fxmax,fymax);
@@ -1127,7 +1127,7 @@ DrawFormatString(230,200,GetColor(255,255,255)," × %d",nokori);
 }//if (main==10){
 
 
-//タイトル
+//タイトル title
 if (main==100){
 
 setcolor(160,180,250);
@@ -1138,7 +1138,7 @@ drawimage(mgrap[30],240-380/2,60);
 drawimage(grap[0][4],12*30,10*29-12);
 drawimage(grap[1][4],6*30,12*29-12);
 
-//プレイヤー
+//プレイヤー player
 drawimage(grap[0][0],2*30,12*29-12-6);
 for (t=0;t<=16;t++){
 drawimage(grap[5][1],29*t,13*29-12);
@@ -1165,7 +1165,7 @@ ScreenFlip();
 
 
 
-//メインプログラム
+//メインプログラム main program
 void Mainprogram(){
 
 stime=long(GetNowCount());
@@ -1174,7 +1174,7 @@ stime=long(GetNowCount());
 if (ending==1)main=2;
 
 
-//キー
+//キー key
 key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 
@@ -1200,7 +1200,7 @@ stageonoff=0;
 
 
 
-//チーターマン　入れ
+//チーターマン　入れ Add Cheetahman(enemy)
 bgmchange(oto[100]);
 
 stagecls();
@@ -1208,7 +1208,7 @@ stagecls();
 stage();
 
 
-//ランダムにさせる
+//ランダムにさせる let it be random
 if (over==1){
 //for (t=0;t<;t++){na[t]=rand(300000);nb[t]=rand(3000);}
 for (t=0;t<tmax;t++){if (rand(3)<=1){ta[t]=(rand(500)-1)*29*100;tb[t]=rand(14)*100*29-1200;ttype[t]=rand(142);if (ttype[t]>=9 && ttype[t]<=99){ttype[t]=rand(8);}txtype[t]=rand(4);}}
@@ -1226,7 +1226,7 @@ if (rand(4)==0)stagecolor=rand(4);
 StopSoundMem(oto[0]);
 
 
-//メインBGM
+//メインBGM (main BGM)
 PlaySoundMem(oto[0],DX_PLAYTYPE_LOOP) ;
 //PlayMusic("BGM/titerman.mp3",DX_PLAYTYPE_LOOP) ;
 
@@ -1241,7 +1241,7 @@ PlaySoundMem(oto[0],DX_PLAYTYPE_LOOP) ;
 
 
 
-//プレイヤーの移動
+//プレイヤーの移動 player movement
 xx[0]=0;actaon[2]=0;actaon[3]=0;
 if (mkeytm<=0){
 if (( key & PAD_INPUT_LEFT) && keytm<=0){actaon[0]=-1;mmuki=0;actaon[4]=-1;}	
@@ -1264,7 +1264,7 @@ actaon[2]=1;
 if (key & PAD_INPUT_UP || CheckHitKey(KEY_INPUT_Z)==1){
 if (mjumptm==8 && md>=-900){
 md=-1300;
-//ダッシュ中
+//ダッシュ中 while dashing
 xx[22]=200;if (mc>=xx[22] || mc<=-xx[22]){md=-1400;}
 xx[22]=600;if (mc>=xx[22] || mc<=-xx[22]){md=-1500;}
 }
