@@ -1,8 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\CAT"
+    "\\pure-game-framework",
+    "\\pure-game-framework\\Resources",
+    "\\pure-game-framework\\Resources\\image\\player",
+    "\\pure-game-framework\\Source",
+    "\\pure-game-framework\\Source\\Game",
+    "\\pure-game-framework\\Source\\Library"
   ],
-  "SelectedNode": "\\CAT\\main.cpp",
+  "SelectedNode": "\\pure-game-framework\\game.sln",
   "PreviewInSolutionExplorer": false
 }

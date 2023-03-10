@@ -33,8 +33,10 @@ void CGameStateRun::OnMove()							// 移動遊戲元素 move
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {	
-	player.LoadBitmapByString({ "../../resources/image/player/player_1.png"});
-	player.SetTopLeft(150, 265);
+	
+	player.LoadBitmapByString({ "resources/p1.bmp"});
+	player.SetTopLeft(10, 10);
+	player.ShowBitmap();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
