@@ -34,20 +34,34 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素 move (always loop)
 {
+	// player movement
 	if (isMoveLeft) {
 		player.SetTopLeft(player.GetLeft() - 3, player.GetTop());
 	}
 	if (isMoveRight) {
 		player.SetTopLeft(player.GetLeft() + 3, player.GetTop());
 	}
-		
+	
+	// player restriction (resolution 800 x 800)
+	if (player.GetLeft()+player.GetWidth()<= 32) {
+		player.SetTopLeft(0, 300);
+	}
+
+	// brick collision
+	if (player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) {
+		player.SetTopLeft(enemy.GetLeft()-27, player.GetTop());
+	}
 }
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
-	player.LoadBitmapByString({ "resources/image/player/player_1.bmp", "resources/image/player/player_2.bmp" }, RGB(255, 201, 14));
+	player.LoadBitmapByString({ "resources/image/player/player_1.bmp", "resources/image/player/player_2.bmp" }, RGB(255, 201, 14)); // player color background (255, 201, 14)
 	player.SetFrameIndexOfBitmap(0);
  	player.SetTopLeft(120, 300);
+
+	enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(64, 128, 128));
+	enemy.SetFrameIndexOfBitmap(0);
+	enemy.SetTopLeft(200, 300);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -105,4 +119,5 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 void CGameStateRun::OnShow()
 {
 	player.ShowBitmap();
+	enemy.ShowBitmap();
 }
