@@ -40,12 +40,12 @@ void CGameStateRun::OnMove()							// 移動遊戲元素 move (always loop)
 	if (isMoveRight) {
 		player.SetTopLeft(player.GetLeft() + 3, player.GetTop());
 	}
-
+		
 }
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
-{	
- 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp", "resources/image/player/player_2.bmp" });
+{
+	player.LoadBitmapByString({ "resources/image/player/player_1.bmp", "resources/image/player/player_2.bmp" }, RGB(255, 201, 14));
 	player.SetFrameIndexOfBitmap(0);
  	player.SetTopLeft(120, 300);
 }

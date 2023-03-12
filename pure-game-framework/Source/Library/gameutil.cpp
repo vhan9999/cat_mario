@@ -131,12 +131,11 @@ namespace game_framework {
 	*/
 	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color)
 	{
-
 		for (int i = 0; i < (int)filepaths.size(); i++) {
 			LoadBitmap((char*)filepaths[i].c_str(), color);
 		}
 	}
-	
+
 	//! 讀取空白圖片資源。
 	/*!
 		讀取一個特定大小的白色點陣圖。
