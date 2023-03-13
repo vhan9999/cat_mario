@@ -89,6 +89,12 @@
     <ClInclude Include="Source\Game\config.h">
       <Filter>MyGame</Filter>
     </ClInclude>
+    <ClInclude Include="brick.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickFactory.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\Core\game.rc">
