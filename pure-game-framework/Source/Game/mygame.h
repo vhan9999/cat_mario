@@ -92,7 +92,7 @@ namespace game_framework {
 	private:
 		CMovingBitmap background;
 		CMovingBitmap player;
-		// CMovingBitmap enemy;
+		CMovingBitmap enemy;
 		CMovingBitmap ground_brick;
 	};
 
