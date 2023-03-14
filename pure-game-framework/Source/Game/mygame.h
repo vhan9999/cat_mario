@@ -92,6 +92,16 @@ namespace game_framework {
 	private:
 		CMovingBitmap background;
 		CMovingBitmap player;
+		int moveSpeed = 0;
+		int jumpSpeed = 0;
+		bool keyUp = false;
+		bool isBigJump = false;
+		bool keyRight = false;
+		bool keyLeft = false;
+		int frame = 0;
+		int jumpBonusFrame;
+		void moveHor();
+		void moveVer();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
