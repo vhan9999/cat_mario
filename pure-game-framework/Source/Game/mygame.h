@@ -94,6 +94,7 @@ namespace game_framework {
 		CMovingBitmap player;
 		CMovingBitmap enemy;
 		CMovingBitmap ground_brick;
+		CMovingBitmap brick;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

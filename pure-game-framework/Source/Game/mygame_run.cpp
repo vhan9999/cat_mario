@@ -22,7 +22,7 @@ bool isMoveRight = false;
 bool isMoveUp = false;
 bool isMoveDown = false;
 bool isAnimated = false;
-
+bool isCollideEnemy = false;
 int i = 0; // index loop vector
 
 // ground_brick array
@@ -76,22 +76,24 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 {
-	// player movement
-	if (isMoveLeft) {
-		player.SetTopLeft(player.GetLeft() - 3, player.GetTop());
-	}
-	if (isMoveRight) {
-		player.SetTopLeft(player.GetLeft() + 3, player.GetTop());
-	}
-	
-	// player restriction (resolution(x,y) 800 X 600)
-	if (player.GetLeft()+player.GetWidth()<= 32) {
-		player.SetTopLeft(0, player.GetTop());
+	if (isCollideEnemy == false) {
+		// player movement
+		if (isMoveLeft) {
+			player.SetTopLeft(player.GetLeft() - 2, player.GetTop());
+		}
+		if (isMoveRight) {
+			player.SetTopLeft(player.GetLeft() + 2, player.GetTop());
+		}
+
+		// player restriction (resolution(x,y) 800 X 600)
+		if (player.GetLeft() + player.GetWidth() <= 32) {
+			player.SetTopLeft(0, player.GetTop());
+		}
 	}
 
-	// collision
-	if (player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) {
-		player.SetTopLeft(enemy.GetLeft()-27, player.GetTop());
+	// enemy collision
+	if ((player.GetLeft() + player.GetWidth())-5 >= enemy.GetLeft()) {
+		isCollideEnemy = true;
 	}
 }
 
@@ -124,6 +126,13 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(64, 128, 128));
 	enemy.SetFrameIndexOfBitmap(0);
 	enemy.SetTopLeft(200, 536 - enemy.GetHeight() - 32);
+
+	// brick
+	int brick_X = 0;
+	int brick_Y = 504 - 32+2;
+	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(64, 128, 128));
+	brick.SetFrameIndexOfBitmap(0);
+	brick.SetTopLeft(brick_X, brick_Y);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -187,4 +196,6 @@ void CGameStateRun::OnShow()
 
 	player.ShowBitmap();
 	enemy.ShowBitmap();
+
+	brick.ShowBitmap();
 }
