@@ -2,6 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\pure-game-framework",
+    "\\pure-game-framework\\Resources",
     "\\pure-game-framework\\Source",
     "\\pure-game-framework\\Source\\Game",
     "\\pure-game-framework\\Source\\Library"
