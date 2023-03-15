@@ -52,7 +52,8 @@ public:
 		return brick;
 	}
 };
-	
+
+
 /* ----FUNCTION---- */
 void build_brick_horizontal(std::vector<CMovingBitmap> &ground_brick_arr, int type, int amount, int x, int y) {
 	CMovingBitmap brick;
@@ -61,6 +62,33 @@ void build_brick_horizontal(std::vector<CMovingBitmap> &ground_brick_arr, int ty
 		ground_brick_arr.push_back(brick);
 		x += 32-2; // -2 pixel remaining pixel
 	}
+}
+
+
+// load ground brick image
+void loadBitMap_ground() {
+	// ground brick up
+	int groundX_up = 0;
+	int groundY_up = 536 - 32;
+	build_brick_horizontal(ground_brick_arr1, 3, 23, groundX_up, groundY_up);
+
+	// ground brick mid
+	int groundX_mid = 0;
+	int groundY_mid = 536 - 2; // -2 ramaining pixel
+	build_brick_horizontal(ground_brick_arr2, 5, 23, groundX_mid, groundY_mid);
+
+	// ground brick mid
+	int groundX_down = 0;
+	int groundY_down = 566 - 2;
+	build_brick_horizontal(ground_brick_arr3, 5, 23, groundX_down, groundY_down);
+}
+
+// show ground brick image
+void showBitMap_ground() {
+	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
+	for (auto i : ground_brick_arr1) { i.ShowBitmap(); } // ground brick up
+	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } //ground brick mid
+	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } //ground brick down
 }
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
@@ -155,22 +183,8 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	player.SetFrameIndexOfBitmap(0);
  	player.SetTopLeft(100, 400);
 
-	// build groundbrick
-	
-	// ground brick up
-	int groundX_up = 0;
-	int groundY_up = 536 - 32;
-	build_brick_horizontal(ground_brick_arr1, 3, 23, groundX_up, groundY_up);
-
-	// ground brick mid
-	int groundX_mid = 0;
-	int groundY_mid = 536-2; // -2 ramaining pixel
-	build_brick_horizontal(ground_brick_arr2, 5, 23, groundX_mid, groundY_mid);
-
-	// ground brick mid
-	int groundX_down = 0;
-	int groundY_down = 566-2;
-	build_brick_horizontal(ground_brick_arr3, 5, 23, groundX_down, groundY_down);
+	// ground brick
+	loadBitMap_ground();
 
 	// enemy
 	enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(64, 128, 128));
@@ -235,13 +249,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 }
 
 void CGameStateRun::OnShow()
-
 {	
-	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
-	for (auto i : ground_brick_arr1) { i.ShowBitmap();} // ground brick up
-	for (auto i : ground_brick_arr2) { i.ShowBitmap();} //ground brick mid
-	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } //ground brick down
-
+	showBitMap_ground();
 	player.ShowBitmap();
 	enemy.ShowBitmap();
 
