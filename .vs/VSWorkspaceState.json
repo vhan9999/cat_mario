@@ -2,11 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\pure-game-framework",
-    "\\pure-game-framework\\Resources",
     "\\pure-game-framework\\Resources\\image",
-    "\\pure-game-framework\\Resources\\image\\object",
     "\\pure-game-framework\\Resources\\image\\object\\environment"
   ],
-  "SelectedNode": "\\pure-game-framework\\Resources\\image\\object\\environment\\checkpoint_reached.png",
+  "SelectedNode": "\\pure-game-framework\\game.sln",
   "PreviewInSolutionExplorer": false
 }
