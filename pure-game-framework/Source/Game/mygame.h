@@ -102,6 +102,9 @@ namespace game_framework {
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
+		CMovingBitmap enemy;
+		CMovingBitmap ground_brick;
+		CMovingBitmap brick;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
