@@ -144,15 +144,14 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (frame + 1 < 0) {//到int的上限後 歸零
 		frame = 0;
 	}
-	
 	// player restriction
 	if (player.GetLeft() <= 0) {
 		player.SetTopLeft(0, groundY_up - player.GetHeight());
 	}
 }
 
+// move Horizontal
 void CGameStateRun::moveHor() {
-	
 	if (keyRight == true) {//move right
 		if (frame %10 == 0) {//every 10 frame
 			moveSpeed += 3;
@@ -182,10 +181,11 @@ void CGameStateRun::moveHor() {
 				moveSpeed = 0;
 		}
 	}
-	
 }
 
-void CGameStateRun::moveVer() {//jump
+// move Vertical
+void CGameStateRun::moveVer() {
+	//jump
 	jumpBonusFrame++;
 	if (player.GetTop() < groundY_up - player.GetHeight()) {//重力
 		jumpSpeed += 1;
@@ -197,9 +197,14 @@ void CGameStateRun::moveVer() {//jump
 		isBigJump = true;
 		jumpSpeed -= 10;
 	}
-	
-	// enemy collision
 
+	// enemy collision
+	if(player.GetTop() + player.GetHeight() >= enemy.GetTop()) {
+		if ((player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) && (player.GetLeft() <= enemy.GetLeft() + enemy.GetWidth())) {
+			moveSpeed = 0;
+			jumpSpeed = 0;
+		}
+	}
 }
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
