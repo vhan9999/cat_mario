@@ -82,7 +82,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	moveHor();
 	moveVer();
 	if (player.GetTop() + jumpSpeed > 400) {//touch ground
-		player.SetTopLeft(player.GetLeft() + moveSpeed, 800);
+		player.SetTopLeft(player.GetLeft() + moveSpeed, 400);
 		jumpSpeed = 0;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
@@ -134,8 +134,7 @@ void CGameStateRun::moveVer() {//jump
 	}
 	else if (keyUp && player.GetTop() == 400) {//touch ground jump
 		jumpBonusFrame = 0;
-		jumpSpeed = -24;
-	}
+		jumpSpeed = -24;	}
 	if (jumpBonusFrame == 4 && keyUp) {//toggle jump duration (if hold long will higher)
 		isBigJump = true;
 		jumpSpeed -= 10;
@@ -154,7 +153,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp", "resources/image/player/player_2.bmp" }, RGB(255, 201, 14)); // player color background (255, 201, 14)
 	player.SetFrameIndexOfBitmap(0);
- 	player.SetTopLeft(100, 536-player.GetHeight()-32);
+ 	player.SetTopLeft(100, 400);
 
 	// build groundbrick
 	
