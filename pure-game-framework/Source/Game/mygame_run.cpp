@@ -41,7 +41,7 @@ public:
 		CMovingBitmap brick;
 		switch (type) {
 		case 3: // brick3
-			brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(64, 128, 128));
+			brick.LoadBitmapByString({"resources/image/object/block1/brown_brick3.bmp"}, RGB(64, 128, 128));
 		case 5: // brick5
 			brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(64, 128, 128));
 		default:
@@ -52,14 +52,14 @@ public:
 		return brick;
 	}
 };
-
+	
 /* ----FUNCTION---- */
 void build_brick_horizontal(std::vector<CMovingBitmap> &ground_brick_arr, int type, int amount, int x, int y) {
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
 		brick = BrickFactory::createBrick(type, x, y);
 		ground_brick_arr.push_back(brick);
-		x += 32 - 2; // -2 pixel remaining pixel
+		x += 32-2; // -2 pixel remaining pixel
 	}
 }
 
@@ -73,7 +73,7 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-
+	
 }
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
@@ -82,7 +82,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	moveHor();
 	moveVer();
 	if (player.GetTop() + jumpSpeed > 400) {//touch ground
-		player.SetTopLeft(player.GetLeft() + moveSpeed, 800);
+		player.SetTopLeft(player.GetLeft() + moveSpeed, 400);
 		jumpSpeed = 0;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
@@ -94,9 +94,9 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 }
 
 void CGameStateRun::moveHor() {
-
+	
 	if (keyRight == true) {//move right
-		if (frame % 10 == 0) {//every 10 frame
+		if (frame %10 == 0) {//every 10 frame
 			moveSpeed += 3;
 			if (moveSpeed < 0)
 				moveSpeed++;
@@ -124,7 +124,7 @@ void CGameStateRun::moveHor() {
 				moveSpeed = 0;
 		}
 	}
-
+	
 }
 
 void CGameStateRun::moveVer() {//jump
@@ -134,30 +134,29 @@ void CGameStateRun::moveVer() {//jump
 	}
 	else if (keyUp && player.GetTop() == 400) {//touch ground jump
 		jumpBonusFrame = 0;
-		jumpSpeed = -24;
-	}
+		jumpSpeed = -24;	}
 	if (jumpBonusFrame == 4 && keyUp) {//toggle jump duration (if hold long will higher)
 		isBigJump = true;
 		jumpSpeed -= 10;
 	}
-
-
+	
+	
 
 	// enemy collision
 }
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
-{
+{	
 
-
-
+	
+	
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp", "resources/image/player/player_2.bmp" }, RGB(255, 201, 14)); // player color background (255, 201, 14)
 	player.SetFrameIndexOfBitmap(0);
-	player.SetTopLeft(100, 536 - player.GetHeight() - 32);
+ 	player.SetTopLeft(100, 400);
 
 	// build groundbrick
-
+	
 	// ground brick up
 	int groundX_up = 0;
 	int groundY_up = 536 - 32;
@@ -165,12 +164,12 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 
 	// ground brick mid
 	int groundX_mid = 0;
-	int groundY_mid = 536 - 2; // -2 ramaining pixel
+	int groundY_mid = 536-2; // -2 ramaining pixel
 	build_brick_horizontal(ground_brick_arr2, 5, 23, groundX_mid, groundY_mid);
 
 	// ground brick mid
 	int groundX_down = 0;
-	int groundY_down = 566 - 2;
+	int groundY_down = 566-2;
 	build_brick_horizontal(ground_brick_arr3, 5, 23, groundX_down, groundY_down);
 
 	// enemy
@@ -180,13 +179,13 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 
 	// brick
 	int brick_X = 0;
-	int brick_Y = 504 - 32 + 2;
+	int brick_Y = 504 - 32+2;
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(64, 128, 128));
 	brick.SetFrameIndexOfBitmap(0);
 	brick.SetTopLeft(brick_X, brick_Y);
 }
 
-void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 	if (nChar == 0x25) {
 		keyLeft = true;
 		keyRight = false;
@@ -237,10 +236,10 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 
-{
+{	
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
-	for (auto i : ground_brick_arr1) { i.ShowBitmap(); } // ground brick up
-	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } //ground brick mid
+	for (auto i : ground_brick_arr1) { i.ShowBitmap();} // ground brick up
+	for (auto i : ground_brick_arr2) { i.ShowBitmap();} //ground brick mid
 	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } //ground brick down
 
 	player.ShowBitmap();
