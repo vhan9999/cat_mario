@@ -103,6 +103,7 @@ void loadBitMap_ground(int amount) {
 	build_brick_horizontal(ground_brick_arr3, 5, amount, groundX_down, groundY_down);
 }
 
+
 // show ground brick image
 void showBitMap_ground() {
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
@@ -146,7 +147,10 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	// player restriction
 	if (player.GetLeft() <= 0) {
-		player.SetTopLeft(0, groundY_up - player.GetHeight());
+		// if (player.GetTop() + player.GetHeight() < groundY_up) {
+			
+		// }
+		player.SetTopLeft(0,  player.GetTop());
 	}
 }
 
@@ -199,11 +203,14 @@ void CGameStateRun::moveVer() {
 	}
 
 	// enemy collision
-	if(player.GetTop() + player.GetHeight() >= enemy.GetTop()) {
-		if ((player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) && (player.GetLeft() <= enemy.GetLeft() + enemy.GetWidth())) {
-			moveSpeed = 0;
-			jumpSpeed = 0;
-		}
+	if ((player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) && (player.GetLeft() <= enemy.GetLeft() + enemy.GetWidth())) {
+		int highMinus = player.GetTop() + player.GetHeight() - enemy.GetTop();
+		// if (highMinus >= 0 && highMinus < 20)
+			//enemy = CMovingBitmap();
+		/*else if(highMinus >= 0) {
+				moveSpeed = 0;
+				jumpSpeed = 0;
+		}*/
 	}
 }
 
