@@ -196,10 +196,10 @@ void CGameStateRun::moveVer() {
 	}
 	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {//touch ground jump
 		jumpBonusFrame = 0;
-		jumpSpeed = -24;	}
-	if (jumpBonusFrame == 4 && keyUp) {//toggle jump duration (if hold long will higher)
+		jumpSpeed = -19;	}
+	if (jumpBonusFrame == 5 && keyUp) {//toggle jump duration (if hold long will higher)
 		isBigJump = true;
-		jumpSpeed -= 10;
+		jumpSpeed -= 5;
 	}
 
 	// enemy collision
