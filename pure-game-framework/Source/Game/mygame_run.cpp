@@ -7,7 +7,6 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 #include "stdio.h"
-
 #include <vector>
 using namespace game_framework;
 
@@ -146,6 +145,14 @@ void CGameStateRun::OnBeginState()
 	
 }
 
+bool inRange(double num, double min, double max) {
+	return (min <= num && num <= max);
+}
+
+double disp(double x1, double y1, double x2, double y2){
+	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2) * 1.0); // Calculating distance
+}
+
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 {
 	frame++;//用來判斷幀數
@@ -163,11 +170,24 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	// player restriction
 	if (player.GetLeft() <= 0) {
-		// if (player.GetTop() + player.GetHeight() < groundY_up) {
-			
-		// }
 		player.SetTopLeft(0,  player.GetTop());
 	}
+	// block collision
+	if ((player.GetTop()+player.GetHeight() >= brick.GetTop()) && (player.GetTop()<=brick.GetTop()+brick.GetHeight())) { // compare player height and brick height
+		if (inRange(player.GetLeft()+player.GetWidth(), brick.GetLeft(), brick.GetLeft()+7)) { // left
+			player.SetTopLeft(brick.GetLeft()-player.GetWidth(), player.GetTop());
+		}
+		else if (inRange(player.GetLeft(), brick.GetLeft() + brick.GetWidth() - 7, brick.GetLeft() + brick.GetWidth())) { // right
+			player.SetTopLeft(brick.GetLeft() + brick.GetWidth(), player.GetTop());
+		}
+	}
+
+	if (inRange(player.GetLeft()+player.GetWidth(), brick.GetLeft()+10, (brick.GetLeft()+brick.GetWidth())/2) || inRange(player.GetLeft(), (brick.GetLeft() + brick.GetWidth()) / 2, brick.GetLeft() + brick.GetWidth()-10)) {
+		if (player.GetTop() + player.GetHeight() >= brick.GetTop()) {
+			player.SetTopLeft(player.GetLeft(), brick.GetTop()-player.GetHeight());
+		}
+	}
+	
 }
 
 // move Horizontal
@@ -207,27 +227,16 @@ void CGameStateRun::moveHor() {
 void CGameStateRun::moveVer() {
 	//jump
 	jumpBonusFrame++;
-	if (player.GetTop() < groundY_up - player.GetHeight()) {//重力
+	if (player.GetTop() < groundY_up - player.GetHeight()) {// 重力
 		jumpSpeed += 1;
 	}
-	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {//touch ground jump
+	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {// touch ground jump
 		jumpBonusFrame = 0;
 		jumpSpeed = -19;
 	}
-	if (jumpBonusFrame == 5 && keyUp) {//toggle jump duration (if hold long will higher)
+	if (jumpBonusFrame == 5 && keyUp) {// toggle jump duration (if hold long will higher)
 		isBigJump = true;
 		jumpSpeed -= 5;
-	}
-
-	// enemy collision
-	if ((player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) && (player.GetLeft() <= enemy.GetLeft() + enemy.GetWidth())) {
-		int highMinus = player.GetTop() + player.GetHeight() - enemy.GetTop();
-		// if (highMinus >= 0 && highMinus < 20)
-			//enemy = CMovingBitmap();
-		/*else if(highMinus >= 0) {
-				moveSpeed = 0;
-				jumpSpeed = 0;
-		}*/
 	}
 }
 
