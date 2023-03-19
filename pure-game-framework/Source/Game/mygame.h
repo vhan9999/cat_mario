@@ -87,6 +87,7 @@ namespace game_framework {
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
 		void singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player);
+		void skyBlockCollision(CMovingBitmap &block, CMovingBitmap &player);
 		void singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &player, int &frame,int &jumpBonusFrame);
 	protected:
 		void OnMove();									// 移動遊戲元素
