@@ -7,6 +7,7 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 #include "stdio.h"
+
 #include <vector>
 using namespace game_framework;
 
@@ -143,6 +144,7 @@ void CGameStateRun::OnBeginState()
 	
 }
 
+<<<<<<< HEAD
 // collide single object
 void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player) {
 	if ((player.GetTop() + player.GetHeight() >= block.GetTop()) && (player.GetTop() <= block.GetTop() + block.GetHeight())) { // compare player height and block height
@@ -171,6 +173,29 @@ void CGameStateRun::singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &pl
 		}
 	}
 
+=======
+void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
+{
+	frame++;//用來判斷幀數
+	moveHor();
+	moveVer();
+	if (player.GetTop() + jumpSpeed > groundY_up - player.GetHeight()) {//touch ground
+		player.SetTopLeft(player.GetLeft() + moveSpeed, groundY_up - player.GetHeight());
+		jumpSpeed = 0;
+	}
+	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
+		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
+	}
+	if (frame + 1 < 0) {//到int的上限後 歸零
+		frame = 0;
+	}
+	// player restriction
+	if (player.GetLeft() <= 0) {
+		// if (player.GetTop() + player.GetHeight() < groundY_up) {
+			
+		// }
+		player.SetTopLeft(0,  player.GetTop());
+	}
 }
 
 // move Horizontal
@@ -210,16 +235,31 @@ void CGameStateRun::moveHor() {
 void CGameStateRun::moveVer() 
 {
 	jumpBonusFrame++;
-	if (player.GetTop() < groundY_up - player.GetHeight()) {// 重力
+	if (player.GetTop() < groundY_up - player.GetHeight()) {//重力
 		jumpSpeed += 1;
 	}
-	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {// touch ground jump
+	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {//touch ground jump
 		jumpBonusFrame = 0;
 		jumpSpeed = -19;
 	}
+<<<<<<< HEAD
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
+=======
+	if (jumpBonusFrame == 5 && keyUp) {//toggle jump duration (if hold long will higher)
+>>>>>>> parent of 30b0234 (edit block collision)
 		isBigJump = true;
 		jumpSpeed -= 5;
+	}
+
+	// enemy collision
+	if ((player.GetLeft() + player.GetWidth() >= enemy.GetLeft()) && (player.GetLeft() <= enemy.GetLeft() + enemy.GetWidth())) {
+		int highMinus = player.GetTop() + player.GetHeight() - enemy.GetTop();
+		// if (highMinus >= 0 && highMinus < 20)
+			//enemy = CMovingBitmap();
+		/*else if(highMinus >= 0) {
+				moveSpeed = 0;
+				jumpSpeed = 0;
+		}*/
 	}
 }
 
