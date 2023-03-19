@@ -284,10 +284,12 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 
 	// vertical brick
 	loadImage_vertical(1, 4, 420, groundY_up-60);
-	// Horizontal brick
+	// Horizontal sky brick
 	loadImage_horizontal(1, 3, 780, groundY_up-240);
 	// sky brick
-	loadImage_vertical(4, 1, 600, groundY_up-240);
+	sky_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
+	sky_brick.SetFrameIndexOfBitmap(0);
+	sky_brick.SetTopLeft(600, groundY_up - 240);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
@@ -348,4 +350,5 @@ void CGameStateRun::OnShow()
 	player.ShowBitmap();
 	enemy.ShowBitmap();
 	brick.ShowBitmap();
+	sky_brick.ShowBitmap();
 }

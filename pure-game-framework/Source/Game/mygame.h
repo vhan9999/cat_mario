@@ -107,7 +107,7 @@ namespace game_framework {
 		CMovingBitmap enemy;
 		CMovingBitmap ground_brick;
 		CMovingBitmap brick;
-		CMovingBitmap brick2;
+		CMovingBitmap sky_brick;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
