@@ -17,26 +17,18 @@ using namespace game_framework;
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 // This class is the game execution object of the game, and the main game programs are here
 // select multiple line = alt + shift + .
-/////////////////////////////////////////////////////////////////////////////
-
-/* 
+/*
 	bmp image background
 	player = (255, 242, 0)
 	object, enemy = (163, 73, 164)
 */
+/////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
 
 
 /* ----VARIABLE---- */
 /*-----------------------------------------------------------------------------------------------------*/
-bool isMoveLeft = false;
-bool isMoveRight = false;
-bool isMoveUp = false;
-bool isMoveDown = false;
-bool isAnimated = false;
-bool isCollideEnemy = false;
-int i = 0; // index loop vector
 
 // ground brick coordinate
 int groundX_up = 0;
@@ -129,8 +121,14 @@ void showBitMap_vertical() {
 	for (auto i : ver_brick_arr) { i.ShowBitmap(); }
 }
 
+// check value is in range [min, max] or not
+bool inRange(double num, double min, double max) {
+	return (min <= num && num <= max);
+}
+
 /*-----------------------------------------------------------------------------------------------------*/
 
+/* ---- CGameStateRun ---- */
 
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
@@ -145,49 +143,34 @@ void CGameStateRun::OnBeginState()
 	
 }
 
-bool inRange(double num, double min, double max) {
-	return (min <= num && num <= max);
+// collide single object
+void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player) {
+	if ((player.GetTop() + player.GetHeight() >= block.GetTop()) && (player.GetTop() <= block.GetTop() + block.GetHeight())) { // compare player height and block height
+		if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 7)) { // left
+			player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());
+		}
+		else if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 7, block.GetLeft() + block.GetWidth())) { // right
+			player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop());
+		}
+	}
+	if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 10, (block.GetLeft() + block.GetWidth()) / 2) || inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) / 2, block.GetLeft() + block.GetWidth() - 10)) { // upper
+		if (player.GetTop() + player.GetHeight() >= block.GetTop()) {
+			player.SetTopLeft(player.GetLeft(), block.GetTop() - player.GetHeight());
+		}
+	}
 }
 
-double disp(double x1, double y1, double x2, double y2){
-	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2) * 1.0); // Calculating distance
-}
-
-void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
-{
-	frame++;//用來判斷幀數
-	moveHor();
-	moveVer();
-	if (player.GetTop() + jumpSpeed > groundY_up - player.GetHeight()) {//touch ground
-		player.SetTopLeft(player.GetLeft() + moveSpeed, groundY_up - player.GetHeight());
-		jumpSpeed = 0;
-	}
-	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
-		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
-	}
-	if (frame + 1 < 0) {//到int的上限後 歸零
-		frame = 0;
-	}
-	// player restriction
-	if (player.GetLeft() <= 0) {
-		player.SetTopLeft(0,  player.GetTop());
-	}
-	// block collision
-	if ((player.GetTop()+player.GetHeight() >= brick.GetTop()) && (player.GetTop()<=brick.GetTop()+brick.GetHeight())) { // compare player height and brick height
-		if (inRange(player.GetLeft()+player.GetWidth(), brick.GetLeft(), brick.GetLeft()+7)) { // left
-			player.SetTopLeft(brick.GetLeft()-player.GetWidth(), player.GetTop());
+// collide enemy
+void CGameStateRun::singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &player, int &frame, int &jumpBonusFrame) {
+	if ((player.GetTop() + player.GetHeight() >= enemy.GetTop()) && (player.GetTop() <= enemy.GetTop() + enemy.GetHeight())) { // compare player height and enemy height
+		if (inRange(player.GetLeft() + player.GetWidth(), enemy.GetLeft(), enemy.GetLeft() + 7)) { // left
+			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
 		}
-		else if (inRange(player.GetLeft(), brick.GetLeft() + brick.GetWidth() - 7, brick.GetLeft() + brick.GetWidth())) { // right
-			player.SetTopLeft(brick.GetLeft() + brick.GetWidth(), player.GetTop());
+		if (inRange(player.GetLeft(), enemy.GetLeft() + enemy.GetWidth() - 7, enemy.GetLeft() + enemy.GetWidth())) { // right
+			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
 		}
 	}
 
-	if (inRange(player.GetLeft()+player.GetWidth(), brick.GetLeft()+10, (brick.GetLeft()+brick.GetWidth())/2) || inRange(player.GetLeft(), (brick.GetLeft() + brick.GetWidth()) / 2, brick.GetLeft() + brick.GetWidth()-10)) {
-		if (player.GetTop() + player.GetHeight() >= brick.GetTop()) {
-			player.SetTopLeft(player.GetLeft(), brick.GetTop()-player.GetHeight());
-		}
-	}
-	
 }
 
 // move Horizontal
@@ -211,7 +194,7 @@ void CGameStateRun::moveHor() {
 		if (moveSpeed <= -6)
 			moveSpeed = -6;
 	}
-	if ((!keyRight && !keyLeft && moveSpeed != 0)) {//stop
+	if ((!keyRight && !keyLeft && moveSpeed != 0)) {// stop
 		if (frame % 5 == 0) {
 			if (moveSpeed > 1)
 				moveSpeed -= 1;
@@ -223,9 +206,9 @@ void CGameStateRun::moveHor() {
 	}
 }
 
-// move Vertical
-void CGameStateRun::moveVer() {
-	//jump
+// jump
+void CGameStateRun::moveVer() 
+{
 	jumpBonusFrame++;
 	if (player.GetTop() < groundY_up - player.GetHeight()) {// 重力
 		jumpSpeed += 1;
@@ -234,7 +217,7 @@ void CGameStateRun::moveVer() {
 		jumpBonusFrame = 0;
 		jumpSpeed = -19;
 	}
-	if (jumpBonusFrame == 5 && keyUp) {// toggle jump duration (if hold long will higher)
+	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		isBigJump = true;
 		jumpSpeed -= 5;
 	}
@@ -258,7 +241,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// brick
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
 	brick.SetFrameIndexOfBitmap(0);
-	brick.SetTopLeft(120, groundY_up - brick.GetHeight());
+	brick.SetTopLeft(90, groundY_up - brick.GetHeight());
 
 	// vertical brick
 	loadBitMap_vertical(4, 420, 656);
