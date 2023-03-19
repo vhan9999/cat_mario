@@ -149,39 +149,30 @@ void CGameStateRun::OnBeginState()
 }
 
 // collide single object
-void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player) {
-	bool isCollideLeft = (player.GetTop() + player.GetHeight() >= block.GetTop());
-	bool isCollideRight = (player.GetTop() <= block.GetTop() + block.GetHeight());
-	if (isCollideLeft && isCollideRight) { // compare player height and block height
-		if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 6)) { // left
-			player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());
-		}
-		else if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 6, block.GetLeft() + block.GetWidth())) { // right
-			player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop());
-		}
-	}
-	
-	bool isHalfLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 8, (block.GetLeft() + block.GetWidth()) / 2);
-	bool isHalfRight = inRange(player.GetLeft(), ((brick.GetLeft() + block.GetWidth()) / 2), (block.GetLeft() + block.GetWidth())-8);
-	if (isHalfRight || isHalfRight) { 
-		if (player.GetTop() + player.GetHeight() >= block.GetTop()) {
-			player.SetTopLeft(player.GetLeft(), block.GetTop() - player.GetHeight());
-		}
-	}
-}
-
-void CGameStateRun::skyBlockCollision(CMovingBitmap &block, CMovingBitmap &player) {
+void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) {
 	// detect left/right side collision of block
 	bool collUp = inRange(player.GetTop(), block.GetTop(), block.GetTop()+block.GetHeight());
+	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, block.GetTop(), block.GetTop() + block.GetHeight());
 	bool collMid = inRange((player.GetTop()+player.GetHeight())/2, block.GetTop(), block.GetTop() + block.GetHeight());
 	bool collDown = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + block.GetHeight());
-	if (inRange(player.GetLeft()+player.GetWidth(),block.GetLeft(), block.GetLeft()+3) && (collUp == true || collMid == true || collDown == true)) { 
+	// left
+	if (inRange(player.GetLeft()+player.GetWidth(),block.GetLeft(), block.GetLeft()+4) && (collUp == true || collMid == true || collDown == true || collUpMid== true)) { 
 		player.SetTopLeft(block.GetLeft()-player.GetWidth(), player.GetTop());
 		moveSpeed = 0;
 	}
-	if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 3, block.GetLeft() + block.GetWidth()) && (collUp == true || collMid == true || collDown == true)) {
+	// right
+	if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 4, block.GetLeft() + block.GetWidth()) && (collUp == true || collMid == true || collDown == true || collUpMid==true)) {
 		player.SetTopLeft(block.GetLeft()+block.GetWidth(), player.GetTop());
 		moveSpeed = 0;
+	}
+	// detect upper/lower side collision of block
+	bool atLeft = inRange(player.GetLeft(), block.GetLeft()+10, (block.GetLeft() + block.GetWidth())-10);
+	bool atRight = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft()+10, (block.GetLeft()+block.GetWidth())+10);
+	bool collideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight()/2)), block.GetTop() + block.GetHeight());
+	// down
+	if ((atLeft == true || atRight==true ) && collideBottomBrick==true) {
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), block.GetTop() + block.GetHeight());
 	}
 }
 
@@ -217,9 +208,9 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		player.SetTopLeft(0, player.GetTop());
 	}
 	// block collision
-	CGameStateRun::singleBlockCollision(brick, player);
+	CGameStateRun::blockCollision(brick, player);
 	// sky block collision
-	CGameStateRun::skyBlockCollision(sky_brick, player);
+	CGameStateRun::blockCollision(sky_brick, player);
 	// enemy collision
 	CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
 }
@@ -301,7 +292,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// sky brick
 	sky_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
 	sky_brick.SetFrameIndexOfBitmap(0);
-	sky_brick.SetTopLeft(600, groundY_up - sky_brick.GetHeight()*3);
+	sky_brick.SetTopLeft(600, groundY_up - sky_brick.GetHeight()*5);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
