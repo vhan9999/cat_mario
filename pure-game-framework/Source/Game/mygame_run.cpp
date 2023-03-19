@@ -210,6 +210,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	// }
 	// enemy collision
 	CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
+	// sky collision
+	CGameStateRun::singleBlockCollision(sky_brick, player);
 }
 
 // move Horizontal
