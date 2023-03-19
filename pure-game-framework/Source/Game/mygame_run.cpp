@@ -197,6 +197,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	// brick collision
 	CGameStateRun::singleBlockCollision(brick, player);
+	// enemy collision
+	CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
 }
 
 // move Horizontal
