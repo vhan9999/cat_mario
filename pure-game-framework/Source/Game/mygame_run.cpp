@@ -197,6 +197,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	// brick collision
 	CGameStateRun::singleBlockCollision(brick, player);
+	CGameStateRun::singleBlockCollision(brick2, player);
+
 	// enemy collision
 	CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
 }
@@ -269,7 +271,11 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// brick
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
 	brick.SetFrameIndexOfBitmap(0);
-	brick.SetTopLeft(120, groundY_up - brick.GetHeight());
+	brick.SetTopLeft(60, groundY_up - brick.GetHeight());
+
+	brick2.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
+	brick2.SetFrameIndexOfBitmap(0);
+	brick2.SetTopLeft(180, groundY_up - brick.GetHeight());
 
 	// vertical brick
 	loadBitMap_vertical(4, 420, 656);
@@ -331,5 +337,6 @@ void CGameStateRun::OnShow()
 	enemy.ShowBitmap();
 
 	brick.ShowBitmap();
+	brick2.ShowBitmap();
 	showBitMap_vertical();
 }
