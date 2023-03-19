@@ -45,6 +45,9 @@ std::vector<CMovingBitmap> ground_brick_arr3; // ground_brick 3
 
 // vertical brick
 std::vector<CMovingBitmap> ver_brick_arr;
+
+//single object
+std::vector<CMovingBitmap> block_arr;
 /*-----------------------------------------------------------------------------------------------------*/
 
 
@@ -77,7 +80,8 @@ public:
 
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
-void build_brick_horizontal(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build brick horizontally
+
+void build_block_horizontal(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build brick horizontally
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
 		brick = BrickFactory::createBrick(type, x, y);
@@ -86,7 +90,7 @@ void build_brick_horizontal(std::vector<CMovingBitmap> &brick_arr, int type, int
 	}
 }
 
-void build_brick_vertical(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) {
+void build_block_vertical(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build brick horizontally
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) {
 		brick = BrickFactory::createBrick(type, x, y);
@@ -95,16 +99,14 @@ void build_brick_vertical(std::vector<CMovingBitmap> &brick_arr, int type, int a
 	}
 }
 
-// load and show ground brick image
-void loadBitMap_ground(int amount) {
-	// ground brick up
-	build_brick_horizontal(ground_brick_arr1, 3, amount, groundX_up, groundY_up);
-
-	// ground brick mid
-	build_brick_horizontal(ground_brick_arr2, 5, amount, groundX_mid, groundY_mid);
-
-	// ground brick down
-	build_brick_horizontal(ground_brick_arr3, 5, amount, groundX_down, groundY_down);
+// load and show 
+void showBitMap_single() {
+	for (auto i : ver_brick_arr) { i.ShowBitmap(); }
+}
+void loadBitMap_ground(int amount) { // ground brick image
+	build_block_horizontal(ground_brick_arr1, 3, amount, groundX_up, groundY_up); // ground brick up
+	build_block_horizontal(ground_brick_arr2, 5, amount, groundX_mid, groundY_mid); // ground brick mid
+	build_block_horizontal(ground_brick_arr3, 5, amount, groundX_down, groundY_down); // ground brick down
 }
 void showBitMap_ground() {
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
@@ -112,14 +114,13 @@ void showBitMap_ground() {
 	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } //ground brick mid
 	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } //ground brick down
 }
-
-// load and show vertical brick
-void loadBitMap_vertical(int amount, int x, int y) {
-	build_brick_vertical(ver_brick_arr, 4, amount, x, y);
+void loadBitMap_vertical(int amount, int x, int y) { // vertical brick
+	build_block_vertical(ver_brick_arr, 4, amount, x, y);
 }
 void showBitMap_vertical() {
 	for (auto i : ver_brick_arr) { i.ShowBitmap(); }
 }
+
 
 // check value is in range [min, max] or not
 bool inRange(double num, double min, double max) {
@@ -266,7 +267,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// enemy
 	enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
 	enemy.SetFrameIndexOfBitmap(0);
-	enemy.SetTopLeft(700, groundY_up-enemy.GetHeight());
+	enemy.SetTopLeft(755, groundY_up-enemy.GetHeight());
 
 	// brick
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
@@ -278,7 +279,9 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	brick2.SetTopLeft(180, groundY_up - brick.GetHeight());
 
 	// vertical brick
-	loadBitMap_vertical(4, 420, 656);
+	loadBitMap_vertical(4, 420, groundY_up-60);
+	// sky brick
+	loadBitMap_vertical(1, 575, groundY_up-240);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
@@ -333,10 +336,10 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 void CGameStateRun::OnShow()
 {	
 	showBitMap_ground();
+	showBitMap_vertical();
+
 	player.ShowBitmap();
 	enemy.ShowBitmap();
-
 	brick.ShowBitmap();
 	brick2.ShowBitmap();
-	showBitMap_vertical();
 }
