@@ -145,7 +145,9 @@ void CGameStateRun::OnBeginState()
 
 // collide single object
 void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player) {
-	if ((player.GetTop() + player.GetHeight() >= block.GetTop()) && (player.GetTop() <= block.GetTop() + block.GetHeight())) { // compare player height and block height
+	bool isCollideLeft = (player.GetTop() + player.GetHeight() >= block.GetTop());
+	bool isCollideRight = (player.GetTop() <= block.GetTop() + block.GetHeight());
+	if (isCollideLeft && isCollideRight) { // compare player height and block height
 		if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 6)) { // left
 			player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());
 		}
@@ -153,7 +155,8 @@ void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &pl
 			player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop());
 		}
 	}
-	if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 8, (block.GetLeft() + block.GetWidth()) / 2)) { // upper
+	bool isOnObj = inRange(player.GetLeft(), ((brick.GetLeft() + brick.GetWidth()) / 2), (brick.GetLeft() + brick.GetWidth())-8);
+	if (isOnObj) { // upper
 		if (player.GetTop() + player.GetHeight() >= block.GetTop()) {
 			player.SetTopLeft(player.GetLeft(), block.GetTop() - player.GetHeight());
 		}
@@ -193,7 +196,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		player.SetTopLeft(0, player.GetTop());
 	}
 	// brick collision
-	singleBlockCollision(brick, player);
+	CGameStateRun::singleBlockCollision(brick, player);
 }
 
 // move Horizontal
@@ -264,7 +267,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// brick
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
 	brick.SetFrameIndexOfBitmap(0);
-	brick.SetTopLeft(90, groundY_up - brick.GetHeight());
+	brick.SetTopLeft(120, groundY_up - brick.GetHeight());
 
 	// vertical brick
 	loadBitMap_vertical(4, 420, 656);
