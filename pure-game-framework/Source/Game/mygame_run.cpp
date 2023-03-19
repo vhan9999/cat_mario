@@ -43,8 +43,10 @@ std::vector<CMovingBitmap> ground_brick_arr1; // ground_brick 1
 std::vector<CMovingBitmap> ground_brick_arr2; // ground_brick 2
 std::vector<CMovingBitmap> ground_brick_arr3; // ground_brick 3
 
-// vertical brick
-std::vector<CMovingBitmap> ver_brick_arr;
+// vertical block
+std::vector<CMovingBitmap> ver_block_arr;
+// horizontal block
+std::vector<CMovingBitmap> hor_block_arr;
 /*-----------------------------------------------------------------------------------------------------*/
 
 
@@ -56,6 +58,8 @@ public:
 	static CMovingBitmap createBrick(int type, int x, int y) {
 		CMovingBitmap brick;
 		switch (type) {
+		case 1: // brick1
+			brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
 		case 3: // brick3
 			brick.LoadBitmapByString({"resources/image/object/block1/brown_brick3.bmp"}, RGB(163, 73, 164));
 		case 4: //brick4
@@ -78,27 +82,25 @@ public:
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
 
+void build_block_vertical(std::vector<CMovingBitmap> &block_arr, int type, int amount, int x, int y) { // build brick vertically
+	CMovingBitmap brick;
+	for (int i = 0; i < amount; i++) {
+		brick = BrickFactory::createBrick(type, x, y);
+		block_arr.push_back(brick);
+		y -= 60;
+	}
+}
 void build_block_horizontal(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build brick horizontally
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
 		brick = BrickFactory::createBrick(type, x, y);
 		brick_arr.push_back(brick);
-		x += 60; 
+		x += 60;
 	}
 }
-
-void build_block_vertical(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build brick vertically
-	CMovingBitmap brick;
-	for (int i = 0; i < amount; i++) {
-		brick = BrickFactory::createBrick(type, x, y);
-		brick_arr.push_back(brick);
-		y -= 60;
-	}
-}
-
 // load and show 
 void showBitMap_single() {
-	for (auto i : ver_brick_arr) { i.ShowBitmap(); }
+	for (auto i : ver_block_arr) { i.ShowBitmap(); }
 }
 void loadImage_ground(int amount) { // ground brick image
 	build_block_horizontal(ground_brick_arr1, 3, amount, groundX_up, groundY_up); // ground brick up
@@ -111,13 +113,20 @@ void showBitMap_ground() {
 	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } //ground brick mid
 	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } //ground brick down
 }
-void loadImage_vertical(int type, int amount, int x, int y) { // vertical brick
-	build_block_vertical(ver_brick_arr, type, amount, x, y);
+// vertical block
+void loadImage_vertical(int type, int amount, int x, int y) { 
+	build_block_vertical(ver_block_arr, type, amount, x, y);
 }
 void showBitMap_vertical() {
-	for (auto i : ver_brick_arr) { i.ShowBitmap(); }
+	for (auto i : ver_block_arr) { i.ShowBitmap(); }
 }
-
+// horizontal block
+void loadImage_horizontal(int type, int amount, int x, int y) {
+	build_block_horizontal(hor_block_arr, type, amount, x, y);
+}
+void showBitMap_horizontal() {
+	for (auto i : hor_block_arr) { i.ShowBitmap(); }
+}
 
 // check value is in range [min, max] or not
 bool inRange(double num, double min, double max) {
@@ -173,7 +182,6 @@ void CGameStateRun::singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &pl
 			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
 		}
 	}
-
 }
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
@@ -197,7 +205,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	// block collision
 	CGameStateRun::singleBlockCollision(brick, player);
-	// for (auto i : ver_brick_arr) {
+	// for (auto i : ver_block_arr) {
 		// CGameStateRun::singleBlockCollision(i, player);
 	// }
 	// enemy collision
@@ -259,7 +267,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp"}, RGB(255, 242, 0)); 
 	player.SetFrameIndexOfBitmap(0);
- 	player.SetTopLeft(650, groundY_up-player.GetHeight());
+ 	player.SetTopLeft(240, groundY_up-player.GetHeight());
 
 	// ground brick
 	loadImage_ground(17);
@@ -267,22 +275,19 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// enemy
 	enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
 	enemy.SetFrameIndexOfBitmap(0);
-	enemy.SetTopLeft(755, groundY_up-enemy.GetHeight());
+	enemy.SetTopLeft(840, groundY_up - 54);
 
 	// brick
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
 	brick.SetFrameIndexOfBitmap(0);
 	brick.SetTopLeft(60, groundY_up - brick.GetHeight());
 
-	loadImage_vertical(3, 1, 240, groundY_up - 60);
-
 	// vertical brick
-	loadImage_vertical(3, 4, 420, groundY_up-60);
+	loadImage_vertical(1, 4, 420, groundY_up-60);
+	// Horizontal brick
+	loadImage_horizontal(1, 3, 780, groundY_up-240);
 	// sky brick
-	loadImage_vertical(4, 1, 575, groundY_up-240);
-	// brick3
-	loadImage_vertical(3, 1, 840, groundY_up - 60);
-	
+	loadImage_vertical(4, 1, 600, groundY_up-240);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
@@ -338,6 +343,7 @@ void CGameStateRun::OnShow()
 {	
 	showBitMap_ground();
 	showBitMap_vertical();
+	showBitMap_horizontal();
 
 	player.ShowBitmap();
 	enemy.ShowBitmap();
