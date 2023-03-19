@@ -146,14 +146,14 @@ void CGameStateRun::OnBeginState()
 // collide single object
 void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player) {
 	if ((player.GetTop() + player.GetHeight() >= block.GetTop()) && (player.GetTop() <= block.GetTop() + block.GetHeight())) { // compare player height and block height
-		if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 7)) { // left
+		if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 6)) { // left
 			player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());
 		}
-		else if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 7, block.GetLeft() + block.GetWidth())) { // right
+		else if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 6, block.GetLeft() + block.GetWidth())) { // right
 			player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop());
 		}
 	}
-	if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 10, (block.GetLeft() + block.GetWidth()) / 2) || inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) / 2, block.GetLeft() + block.GetWidth() - 10)) { // upper
+	if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 8, (block.GetLeft() + block.GetWidth()) / 2)) { // upper
 		if (player.GetTop() + player.GetHeight() >= block.GetTop()) {
 			player.SetTopLeft(player.GetLeft(), block.GetTop() - player.GetHeight());
 		}
@@ -163,10 +163,10 @@ void CGameStateRun::singleBlockCollision(CMovingBitmap &block, CMovingBitmap &pl
 // collide enemy
 void CGameStateRun::singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &player, int &frame, int &jumpBonusFrame) {
 	if ((player.GetTop() + player.GetHeight() >= enemy.GetTop()) && (player.GetTop() <= enemy.GetTop() + enemy.GetHeight())) { // compare player height and enemy height
-		if (inRange(player.GetLeft() + player.GetWidth(), enemy.GetLeft(), enemy.GetLeft() + 7)) { // left
+		if (inRange(player.GetLeft() + player.GetWidth(), enemy.GetLeft(), enemy.GetLeft() + 6)) { // left
 			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
 		}
-		if (inRange(player.GetLeft(), enemy.GetLeft() + enemy.GetWidth() - 7, enemy.GetLeft() + enemy.GetWidth())) { // right
+		if (inRange(player.GetLeft(), enemy.GetLeft() + enemy.GetWidth() - 6, enemy.GetLeft() + enemy.GetWidth())) { // right
 			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
 		}
 	}
@@ -190,11 +190,10 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	// player restriction
 	if (player.GetLeft() <= 0) {
-		// if (player.GetTop() + player.GetHeight() < groundY_up) {
-
-		// }
 		player.SetTopLeft(0, player.GetTop());
 	}
+	// brick collision
+	singleBlockCollision(brick, player);
 }
 
 // move Horizontal
