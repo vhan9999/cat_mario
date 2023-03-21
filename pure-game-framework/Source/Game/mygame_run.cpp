@@ -166,14 +166,19 @@ void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) 
 		moveSpeed = 0;
 	}
 	// detect upper/lower side collision of block
-	bool atLeft = inRange(player.GetLeft(), block.GetLeft()+10, (block.GetLeft() + block.GetWidth())-10);
-	bool atRight = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft()+10, (block.GetLeft()+block.GetWidth())+10);
+	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft()+15, (block.GetLeft()+block.GetWidth())+15);
+	bool atRight = inRange(player.GetLeft(), block.GetLeft()+15, (block.GetLeft() + block.GetWidth())-15);
 	bool collideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight()/2)), block.GetTop() + block.GetHeight());
 	// down
 	if ((atLeft == true || atRight==true ) && collideBottomBrick==true) {
-		jumpSpeed = 0; jumpBonusFrame = 0;
+		jumpSpeed = 0;
 		player.SetTopLeft(player.GetLeft(), block.GetTop() + block.GetHeight());
+		jumpSpeed += 1;	
 	}
+	bool atDownLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 14.5);
+	bool atDownRight = inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) - 14.5, block.GetLeft() + block.GetWidth());
+	if (atDownLeft == true && collideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());}
+	if (atDownRight == true && collideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
 }
 
 // collide enemy
@@ -251,17 +256,16 @@ void CGameStateRun::moveHor() {
 // jump
 void CGameStateRun::moveVer() 
 {
-	jumpBonusFrame++;
-	if (player.GetTop() < groundY_up - player.GetHeight()) {// 重力
-		jumpSpeed += 1;
+	jumpBonusFrame++; // frame
+	if (player.GetTop() < groundY_up - player.GetHeight()) {// player in the air
+		jumpSpeed += 1; // v += a 
 	}
 	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {// touch ground jump
-		jumpBonusFrame = 0;
-		jumpSpeed = -19;
+		jumpBonusFrame = 0; // for big jump 
+		jumpSpeed = -19;//v0
 	}
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
-		isBigJump = true;
-		jumpSpeed -= 5;
+		jumpSpeed -= 5; // v-=5(a)
 	}
 }
 
@@ -270,7 +274,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp"}, RGB(255, 242, 0)); 
 	player.SetFrameIndexOfBitmap(0);
- 	player.SetTopLeft(240, groundY_up-player.GetHeight());
+ 	player.SetTopLeft(600+60-13, groundY_up-player.GetHeight());
 
 	// ground brick
 	loadImage_ground(17);
@@ -292,7 +296,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// sky brick
 	sky_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
 	sky_brick.SetFrameIndexOfBitmap(0);
-	sky_brick.SetTopLeft(600, groundY_up - sky_brick.GetHeight()*5);
+	sky_brick.SetTopLeft(600, groundY_up - sky_brick.GetHeight()*4);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
