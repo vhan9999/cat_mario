@@ -56,22 +56,24 @@ std::vector<CMovingBitmap> hor_block_arr;
 class BrickFactory {
 public:
 	static CMovingBitmap createBrick(int type, int x, int y) {
-		CMovingBitmap brick;
+		CMovingBitmap new_brick;
 		switch (type) {
 		case 1: // brick1
-			brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
+		case 2: // brick2
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
 		case 3: // brick3
-			brick.LoadBitmapByString({"resources/image/object/block1/brown_brick3.bmp"}, RGB(163, 73, 164));
+			new_brick.LoadBitmapByString({"resources/image/object/block1/brown_brick3.bmp"}, RGB(163, 73, 164));
 		case 4: //brick4
-			brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
 		case 5: // brick5
-			brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
 		default:
 			break;
 		}
-		brick.SetFrameIndexOfBitmap(0);
-		brick.SetTopLeft(x, y);
-		return brick;
+		new_brick.SetFrameIndexOfBitmap(0);
+		new_brick.SetTopLeft(x, y);
+		return new_brick;
 	}
 };
 /*-----------------------------------------------------------------------------------------------------*/
@@ -194,7 +196,7 @@ void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) 
 	if (atDownRight == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
 	// upper side of block
 	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop()+25);
-	if ((atLeft == true || atRight == true) && isCollideUpperBrick == true) {
+	if ((atLeft == true || atRight == true) && (isCollideUpperBrick == true) && (jumpSpeed >= 1)) {
 		jumpSpeed = 0;
 		jumpBonusFrame = 0;
 		player.SetTopLeft(player.GetLeft(), block.GetTop()-player.GetHeight());
@@ -306,8 +308,12 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	brick.SetFrameIndexOfBitmap(0);
 	brick.SetTopLeft(60, groundY_up - brick.GetHeight());
 
-	// vertical brick
+	// vertical brick (stair)
 	loadImage_vertical(1, 4, 420, groundY_up-60);
+	loadImage_vertical(1, 3, 360, groundY_up - 60);
+	loadImage_vertical(1, 2, 300, groundY_up - 60);
+	loadImage_vertical(1, 1, 240, groundY_up - 60);
+
 	// Horizontal sky brick
 	loadImage_horizontal(1, 3, 780, groundY_up-240);
 	// sky brick
