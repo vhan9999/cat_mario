@@ -109,8 +109,8 @@ void loadImage_ground(int amount) { // ground brick image
 void showBitMap_ground() {
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
 	for (auto i : ground_brick_arr1) { i.ShowBitmap(); } // ground brick up
-	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } //ground brick mid
-	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } //ground brick down
+	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } // ground brick mid
+	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } // ground brick down
 }
 // vertical block
 void loadImage_vertical(int type, int amount, int x, int y) { 
@@ -199,7 +199,7 @@ void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) 
 		jumpBonusFrame = 0;
 		player.SetTopLeft(player.GetLeft(), block.GetTop()-player.GetHeight());
 		double ground = block.GetTop() - player.GetHeight();
-		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground);
+		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 }
 
@@ -239,7 +239,16 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	// sky block collision
 	CGameStateRun::blockCollision(sky_brick, player);
 	// enemy collision
-	CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
+	// CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
+	
+	// horizontal block collision
+	for (auto i : hor_block_arr) {
+		CGameStateRun::blockCollision(i, player);
+	}
+	// vertical collision
+	for (auto i : ver_block_arr) {
+		CGameStateRun::blockCollision(i, player);
+	}
 }
 
 // move Horizontal
@@ -291,11 +300,6 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 
 	// ground brick
 	loadImage_ground(17);
-
-	// enemy
-	enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
-	enemy.SetFrameIndexOfBitmap(0);
-	enemy.SetTopLeft(840, groundY_up - 54);
 
 	// brick
 	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
@@ -368,7 +372,6 @@ void CGameStateRun::OnShow()
 	showBitMap_horizontal();
 
 	player.ShowBitmap();
-	enemy.ShowBitmap();
 	brick.ShowBitmap();
 	sky_brick.ShowBitmap();
 }
