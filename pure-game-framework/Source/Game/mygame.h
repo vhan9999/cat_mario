@@ -89,6 +89,7 @@ namespace game_framework {
 		void singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player);
 		void blockCollision(CMovingBitmap &block, CMovingBitmap &player);
 		void singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &player, int &frame,int &jumpBonusFrame);
+		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面

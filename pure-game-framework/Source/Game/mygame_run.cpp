@@ -132,6 +132,20 @@ bool inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
 }
 
+// able to jump
+void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
+	jumpBns++; // frame
+	if (player.GetTop() < ground) {// player in the air
+		jumpSpd += 1; // v += a 
+	}
+	else if (keyUp && player.GetTop() == ground) {// touch ground jump
+		jumpBns = 0; // for big jump 
+		jumpSpd = -19;//v0
+	}
+	if (jumpBns == 5 && keyUp) {// jump hold duration (if hold long will higher)
+		jumpSpd -= 5; // v-=5(a)
+	}
+}
 /*-----------------------------------------------------------------------------------------------------*/
 
 /* ---- CGameStateRun ---- */
@@ -179,23 +193,13 @@ void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) 
 	if (atDownLeft == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());}
 	if (atDownRight == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
 	// upper side of block
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + 10);
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop()+25);
 	if ((atLeft == true || atRight == true) && isCollideUpperBrick == true) {
 		jumpSpeed = 0;
 		jumpBonusFrame = 0;
 		player.SetTopLeft(player.GetLeft(), block.GetTop()-player.GetHeight());
-
-		jumpBonusFrame++; // frame
-		if (player.GetTop() < block.GetTop() - player.GetHeight()) {// player in the air
-			jumpSpeed += 1; // v += a 
-		}
-		else if (keyUp && player.GetTop() == block.GetTop() - player.GetHeight()) {// touch ground jump
-			jumpBonusFrame = 0; // for big jump 
-			jumpSpeed = -19;//v0
-		}
-		if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
-			jumpSpeed -= 5; // v-=5(a)
-		}
+		double ground = block.GetTop() - player.GetHeight();
+		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground);
 	}
 }
 
@@ -274,17 +278,8 @@ void CGameStateRun::moveHor() {
 // jump
 void CGameStateRun::moveVer() 
 {
-	jumpBonusFrame++; // frame
-	if (player.GetTop() < groundY_up - player.GetHeight()) {// player in the air
-		jumpSpeed += 1; // v += a 
-	}
-	else if (keyUp && player.GetTop() == groundY_up - player.GetHeight()) {// touch ground jump
-		jumpBonusFrame = 0; // for big jump 
-		jumpSpeed = -19;//v0
-	}
-	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
-		jumpSpeed -= 5; // v-=5(a)
-	}
+	double ground = groundY_up - player.GetHeight();
+	ableToJump(jumpSpeed, jumpBonusFrame, ground);
 }
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
