@@ -105,7 +105,7 @@ void loadImage_ground(int amount) { // ground brick image
 	build_block_horizontal(ground_brick_arr1, 3, amount, groundX_up, groundY_up); // ground brick up
 	build_block_horizontal(ground_brick_arr2, 5, amount, groundX_mid, groundY_mid); // ground brick mid
 	build_block_horizontal(ground_brick_arr3, 5, amount, groundX_down, groundY_down); // ground brick down
-}
+}		
 void showBitMap_ground() {
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
 	for (auto i : ground_brick_arr1) { i.ShowBitmap(); } // ground brick up
@@ -155,30 +155,48 @@ void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) 
 	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, block.GetTop(), block.GetTop() + block.GetHeight());
 	bool collMid = inRange((player.GetTop()+player.GetHeight())/2, block.GetTop(), block.GetTop() + block.GetHeight());
 	bool collDown = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + block.GetHeight());
-	// left
+	// left side of block
 	if (inRange(player.GetLeft()+player.GetWidth(),block.GetLeft(), block.GetLeft()+4) && (collUp == true || collMid == true || collDown == true || collUpMid== true)) { 
 		player.SetTopLeft(block.GetLeft()-player.GetWidth(), player.GetTop());
 		moveSpeed = 0;
 	}
-	// right
+	// right side of block
 	if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 4, block.GetLeft() + block.GetWidth()) && (collUp == true || collMid == true || collDown == true || collUpMid==true)) {
 		player.SetTopLeft(block.GetLeft()+block.GetWidth(), player.GetTop());
 		moveSpeed = 0;
 	}
-	// detect upper/lower side collision of block
+	// lower side of block
 	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft()+15, (block.GetLeft()+block.GetWidth())+15);
 	bool atRight = inRange(player.GetLeft(), block.GetLeft()+15, (block.GetLeft() + block.GetWidth())-15);
-	bool collideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight()/2)), block.GetTop() + block.GetHeight());
-	// down
-	if ((atLeft == true || atRight==true ) && collideBottomBrick==true) {
+	bool isCollideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight()/2)), block.GetTop() + block.GetHeight());
+	if ((atLeft == true || atRight==true ) && isCollideBottomBrick==true) {
 		jumpSpeed = 0;
 		player.SetTopLeft(player.GetLeft(), block.GetTop() + block.GetHeight());
 		jumpSpeed += 1;	
 	}
-	bool atDownLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 14.5);
+	bool atDownLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 14.5); 
 	bool atDownRight = inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) - 14.5, block.GetLeft() + block.GetWidth());
-	if (atDownLeft == true && collideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());}
-	if (atDownRight == true && collideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
+	if (atDownLeft == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());}
+	if (atDownRight == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
+	// upper side of block
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + 10);
+	if ((atLeft == true || atRight == true) && isCollideUpperBrick == true) {
+		jumpSpeed = 0;
+		jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), block.GetTop()-player.GetHeight());
+
+		jumpBonusFrame++; // frame
+		if (player.GetTop() < block.GetTop() - player.GetHeight()) {// player in the air
+			jumpSpeed += 1; // v += a 
+		}
+		else if (keyUp && player.GetTop() == block.GetTop() - player.GetHeight()) {// touch ground jump
+			jumpBonusFrame = 0; // for big jump 
+			jumpSpeed = -19;//v0
+		}
+		if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
+			jumpSpeed -= 5; // v-=5(a)
+		}
+	}
 }
 
 // collide enemy
@@ -230,7 +248,7 @@ void CGameStateRun::moveHor() {
 		}
 		if (moveSpeed >= 6)//speed max = 6
 			moveSpeed = 6;
-	}
+	} 
 	if (keyLeft == true) {//move left
 
 		if (frame % 10 == 0) {
