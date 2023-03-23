@@ -171,41 +171,48 @@ void CGameStateRun::OnBeginState()
 // collide single object
 void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) {
 	// detect left/right side collision of block
-	bool collUp = inRange(player.GetTop(), block.GetTop(), block.GetTop()+block.GetHeight());
+	bool collUp = inRange(player.GetTop(), block.GetTop(), block.GetTop() + block.GetHeight());
 	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, block.GetTop(), block.GetTop() + block.GetHeight());
-	bool collMid = inRange((player.GetTop()+player.GetHeight())/2, block.GetTop(), block.GetTop() + block.GetHeight());
+	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, block.GetTop(), block.GetTop() + block.GetHeight());
 	bool collDown = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + block.GetHeight());
 	// left side of block
-	if (inRange(player.GetLeft()+player.GetWidth(),block.GetLeft(), block.GetLeft()+4) && (collUp == true || collMid == true || collDown == true || collUpMid== true)) { 
-		player.SetTopLeft(block.GetLeft()-player.GetWidth(), player.GetTop());
+	if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 4) && (collUp == true || collMid == true || collDown == true || collUpMid == true)) {
 		moveSpeed = 0;
+		player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());
+		frame += 2;
 	}
 	// right side of block
-	if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 4, block.GetLeft() + block.GetWidth()) && (collUp == true || collMid == true || collDown == true || collUpMid==true)) {
-		player.SetTopLeft(block.GetLeft()+block.GetWidth(), player.GetTop());
+	if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 4, block.GetLeft() + block.GetWidth()) && (collUp == true || collMid == true || collDown == true || collUpMid == true)) {
 		moveSpeed = 0;
+		player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop());
+		frame += 2;
 	}
 	// lower side of block
-	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft()+15, (block.GetLeft()+block.GetWidth())+15);
-	bool atRight = inRange(player.GetLeft(), block.GetLeft()+15, (block.GetLeft() + block.GetWidth())-15);
-	bool isCollideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight()/2)), block.GetTop() + block.GetHeight());
-	if ((atLeft == true || atRight==true ) && isCollideBottomBrick==true) {
+	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 15, (block.GetLeft() + block.GetWidth()) + 15);
+	bool atRight = inRange(player.GetLeft(), block.GetLeft() + 15, (block.GetLeft() + block.GetWidth()) - 15);
+	bool isCollideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight() / 2)), block.GetTop() + block.GetHeight());
+	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
 		jumpSpeed = 0;
 		player.SetTopLeft(player.GetLeft(), block.GetTop() + block.GetHeight());
-		jumpSpeed += 1;	
+		jumpSpeed += 1;
 	}
-	bool atDownLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 14.5); 
-	bool atDownRight = inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) - 14.5, block.GetLeft() + block.GetWidth());
-	if (atDownLeft == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());}
+	bool atDownLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 14.9);
+	bool atDownRight = inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) - 14.9, block.GetLeft() + block.GetWidth());
+	if (atDownLeft == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop()); }
 	if (atDownRight == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
 	// upper side of block
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop()+30);
-	if ((atLeft == true || atRight == true)  && (isCollideUpperBrick == true)) {
+	bool Left = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 4, (block.GetLeft() + block.GetWidth()) + 4);
+	bool Right = inRange(player.GetLeft(), block.GetLeft() + 4, (block.GetLeft() + block.GetWidth()) - 4);
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + 29.9);
+	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
 		jumpSpeed = 0;
 		jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), block.GetTop()-player.GetHeight());
+		player.SetTopLeft(player.GetLeft(), block.GetTop() - player.GetHeight());
 		double ground = block.GetTop() - player.GetHeight();
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+	}
+	else {
+		player.SetTopLeft(player.GetLeft(), player.GetTop());
 	}
 }
 
