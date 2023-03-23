@@ -43,10 +43,9 @@ std::vector<CMovingBitmap> ground_brick_arr1; // ground_brick 1
 std::vector<CMovingBitmap> ground_brick_arr2; // ground_brick 2
 std::vector<CMovingBitmap> ground_brick_arr3; // ground_brick 3
 
-std::vector<CMovingBitmap> ver_block_arr; // vertical block
-std::vector<CMovingBitmap> hor_block_arr; // horizontal block
+std::vector< std::vector<CMovingBitmap>> ver_block_arr; // vertical block
+std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block
 
-std::vector<std::vector<CMovingBitmap>> multiple_block_arr; // multiple block
 /*-----------------------------------------------------------------------------------------------------*/
 
 /* ----CLASS---- */
@@ -62,7 +61,7 @@ public:
 		case 2: // brick2
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
 		case 3: // brick3
-			new_brick.LoadBitmapByString({"resources/image/object/block1/brown_brick3.bmp"}, RGB(163, 73, 164));
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
 		case 4: //brick4
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
 		case 5: // brick5
@@ -82,15 +81,7 @@ public:
 
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
-void build_block_vertical(std::vector<CMovingBitmap> &block_arr, int type, int amount, int x, int y) { // build brick vertically
-	CMovingBitmap brick;
-	for (int i = 0; i < amount; i++) {
-		brick = BrickFactory::createBrick(type, x, y);
-		block_arr.push_back(brick);
-		y -= 60;
-	}
-}
-void build_block_horizontal(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build brick horizontally
+void build_block_ground(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build ground
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
 		brick = BrickFactory::createBrick(type, x, y);
@@ -98,39 +89,54 @@ void build_block_horizontal(std::vector<CMovingBitmap> &brick_arr, int type, int
 		x += 60;
 	}
 }
-// void build_block_multiple(std::vector<std::vector<CMovingBitmap>> &multi_block_arr, int type, int amount, int x, int y) {
-	
-// }
+void build_multiple_vertical(int type, int amount, int x, int y) { // build block multiple (vertical)
+	std::vector<CMovingBitmap> block_arr;
+	CMovingBitmap brick;
+	for (int i = 0; i < amount; i++) { // ground brick up
+		brick = BrickFactory::createBrick(type, x, y);
+		block_arr.push_back(brick);
+		y -= 60;
+	}
+	ver_block_arr.push_back(block_arr);
+}
+void build_multiple_horizontal(int type, int amount, int x, int y) { // build block multiple (horizontal)
+	std::vector<CMovingBitmap> block_arr;
+	CMovingBitmap brick;
+	for (int i = 0; i < amount; i++) { // ground brick up
+		brick = BrickFactory::createBrick(type, x, y);
+		block_arr.push_back(brick);
+		x += 60;
+	}
+	hor_block_arr.push_back(block_arr);
+}
 
 
 // load and show 
-void showBitMap_single() {
-	for (auto i : ver_block_arr) { i.ShowBitmap(); }
-}
 void loadImage_ground(int amount) { // ground brick image
-	build_block_horizontal(ground_brick_arr1, 3, amount, groundX_up, groundY_up); // ground brick up
-	build_block_horizontal(ground_brick_arr2, 5, amount, groundX_mid, groundY_mid); // ground brick mid
-	build_block_horizontal(ground_brick_arr3, 5, amount, groundX_down, groundY_down); // ground brick down
-}		
-void showBitMap_ground() {
+	build_block_ground(ground_brick_arr1, 3, amount, groundX_up, groundY_up); // ground brick up
+	build_block_ground(ground_brick_arr2, 5, amount, groundX_mid, groundY_mid); // ground brick mid
+	build_block_ground(ground_brick_arr3, 5, amount, groundX_down, groundY_down); // ground brick down
+}
+void show_ground() {
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
 	for (auto i : ground_brick_arr1) { i.ShowBitmap(); } // ground brick up
 	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } // ground brick mid
 	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } // ground brick down
 }
-// vertical block
-void loadImage_vertical(int type, int amount, int x, int y) { 
-	build_block_vertical(ver_block_arr, type, amount, x, y);
-}
-void showBitMap_vertical() {
-	for (auto i : ver_block_arr) { i.ShowBitmap(); }
-}
 // horizontal block
-void loadImage_horizontal(int type, int amount, int x, int y) {
-	build_block_horizontal(hor_block_arr, type, amount, x, y);
+void loadImage_multiple_hor(int type, int amount, int x, int y) {
+	build_multiple_horizontal(type, amount, x, y);
 }
-void showBitMap_horizontal() {
-	for (auto i : hor_block_arr) { i.ShowBitmap(); }
+void show_hor() {
+	for (auto i : hor_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
+}
+
+//  vertical block
+void loadImage_multiple_ver(int type, int amount, int x, int y) {
+	build_multiple_vertical(type, amount, x, y);
+}
+void show_ver() {
+	for (auto i : ver_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
 // check value is in range [min, max] or not
@@ -153,7 +159,6 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 	}
 }
 /*-----------------------------------------------------------------------------------------------------*/
-
 /* ---- CGameStateRun ---- */
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
@@ -165,67 +170,117 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-	
+
 }
 
-// collide single object
-void CGameStateRun::blockCollision(CMovingBitmap &block, CMovingBitmap &player) {
+// collision vertical
+void CGameStateRun::check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
+	int obj_left = arr[0].GetLeft();
+	int obj_right = arr[0].GetLeft() + arr[0].GetWidth();
+	int obj_top = arr[arr.size() - 1].GetTop();
+	int obj_bottom = arr[0].GetTop() + arr[0].GetHeight();
+	int obj_height = arr[0].GetHeight();
 	// detect left/right side collision of block
-	bool collUp = inRange(player.GetTop(), block.GetTop(), block.GetTop() + block.GetHeight());
-	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, block.GetTop(), block.GetTop() + block.GetHeight());
-	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, block.GetTop(), block.GetTop() + block.GetHeight());
-	bool collDown = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + block.GetHeight());
+	bool collUp = inRange(player.GetTop(), obj_top, obj_bottom);
+	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, obj_top, obj_bottom);
+	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
+	bool collDown = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_bottom);
+	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
+	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
 	// left side of block
-	if (inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 4) && (collUp == true || collMid == true || collDown == true || collUpMid == true)) {
+	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
 		moveSpeed = 0;
-		player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop());
+		player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
 		frame += 2;
 	}
 	// right side of block
-	if (inRange(player.GetLeft(), block.GetLeft() + block.GetWidth() - 4, block.GetLeft() + block.GetWidth()) && (collUp == true || collMid == true || collDown == true || collUpMid == true)) {
+	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
 		moveSpeed = 0;
-		player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop());
+		player.SetTopLeft(obj_right, player.GetTop());
 		frame += 2;
 	}
-	// lower side of block
-	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 15, (block.GetLeft() + block.GetWidth()) + 15);
-	bool atRight = inRange(player.GetLeft(), block.GetLeft() + 15, (block.GetLeft() + block.GetWidth()) - 15);
-	bool isCollideBottomBrick = inRange(player.GetTop(), (block.GetTop() + (block.GetHeight() / 2)), block.GetTop() + block.GetHeight());
-	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
-		jumpSpeed = 0;
-		player.SetTopLeft(player.GetLeft(), block.GetTop() + block.GetHeight());
-		jumpSpeed += 1;
-	}
-	bool atDownLeft = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft(), block.GetLeft() + 14.9);
-	bool atDownRight = inRange(player.GetLeft(), (block.GetLeft() + block.GetWidth()) - 14.9, block.GetLeft() + block.GetWidth());
-	if (atDownLeft == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() - player.GetWidth(), player.GetTop()); }
-	if (atDownRight == true && isCollideBottomBrick == true) { player.SetTopLeft(block.GetLeft() + block.GetWidth(), player.GetTop()); }
 	// upper side of block
-	bool Left = inRange(player.GetLeft() + player.GetWidth(), block.GetLeft() + 4, (block.GetLeft() + block.GetWidth()) + 4);
-	bool Right = inRange(player.GetLeft(), block.GetLeft() + 4, (block.GetLeft() + block.GetWidth()) - 4);
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), block.GetTop(), block.GetTop() + 29.9);
+	bool Left = inRange(player.GetLeft() + player.GetWidth(), obj_left + 4, obj_right - 4);
+	bool Right = inRange(player.GetLeft(), obj_left + 4, obj_right - 4);
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_top + 29.99);
 	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
 		jumpSpeed = 0;
 		jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), block.GetTop() - player.GetHeight());
-		double ground = block.GetTop() - player.GetHeight();
+		player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
+		double ground = obj_top - player.GetHeight();
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 	else {
 		player.SetTopLeft(player.GetLeft(), player.GetTop());
 	}
+	// bottom side of block
+	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), obj_left + 15, obj_right + 15);
+	bool atRight = inRange(player.GetLeft(), obj_left + 15, obj_right - 15);
+	bool isCollideBottomBrick = inRange(player.GetTop(), (obj_top + (obj_height / 2)), obj_bottom);
+	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
+		jumpSpeed = 0;
+		player.SetTopLeft(player.GetLeft(), obj_bottom);
+		jumpSpeed += 1;
+	}
+	bool atLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 14.99);
+	bool atRightSide = inRange(player.GetLeft(), obj_right - 14.9, obj_right);
+	if (atLeftSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop()); }
+	if (atRightSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_right, player.GetTop()); }
 }
 
-// collide enemy
-void CGameStateRun::singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &player, int &frame, int &jumpBonusFrame) {
-	if ((player.GetTop() + player.GetHeight() >= enemy.GetTop()) && (player.GetTop() <= enemy.GetTop() + enemy.GetHeight())) { // compare player height and enemy height
-		if (inRange(player.GetLeft() + player.GetWidth(), enemy.GetLeft(), enemy.GetLeft() + 6)) { // left
-			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
-		}
-		if (inRange(player.GetLeft(), enemy.GetLeft() + enemy.GetWidth() - 6, enemy.GetLeft() + enemy.GetWidth())) { // right
-			frame = 0; moveSpeed = 0; jumpBonusFrame = 0; jumpSpeed = 0;
-		}
+// collision horizontal
+void CGameStateRun::check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
+	int obj_left = arr[0].GetLeft();
+	int obj_right = arr[arr.size() - 1].GetLeft() + arr[arr.size() - 1].GetWidth();
+	int obj_top = arr[0].GetTop();
+	int obj_bottom = arr[0].GetTop() + arr[0].GetHeight();
+	int obj_height = arr[0].GetHeight();
+	// detect left/right side collision of block
+	bool collUp = inRange(player.GetTop(), obj_top, obj_bottom);
+	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, obj_top, obj_bottom);
+	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
+	bool collDown = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_bottom);
+	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
+	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
+	// left side of block
+	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
+		moveSpeed = 0;
+		player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
+		frame += 2;
 	}
+	// right side of block
+	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
+		moveSpeed = 0;
+		player.SetTopLeft(obj_right, player.GetTop());
+		frame += 2;
+	}
+	// upper side of block
+	bool Left = inRange(player.GetLeft() + player.GetWidth(), obj_left + 4, obj_right - 4);
+	bool Right = inRange(player.GetLeft(), obj_left + 4, obj_right - 4);
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_top + 29.99);
+	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
+		jumpSpeed = 0;
+		jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
+		double ground = obj_top - player.GetHeight();
+		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+	}
+	else {
+		player.SetTopLeft(player.GetLeft(), player.GetTop());
+	}
+	// bottom side of block
+	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), obj_left + 15, obj_right + 15);
+	bool atRight = inRange(player.GetLeft(), obj_left + 15, obj_right - 15);
+	bool isCollideBottomBrick = inRange(player.GetTop(), (obj_top + (obj_height / 2)), obj_top + obj_height);
+	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
+		jumpSpeed = 0;
+		player.SetTopLeft(player.GetLeft(), obj_bottom);
+		jumpSpeed += 1;
+	}
+	bool atLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 14.99);
+	bool atRightSide = inRange(player.GetLeft(), obj_right - 14.9, obj_right);
+	if (atLeftSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop()); }
+	if (atRightSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_right, player.GetTop()); }
 }
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
@@ -247,36 +302,28 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (player.GetLeft() <= 0) {
 		player.SetTopLeft(0, player.GetTop());
 	}
-	// block collision
-	CGameStateRun::blockCollision(brick, player);
-	CGameStateRun::blockCollision(brick2, player);
 
-	// sky block collision
-	CGameStateRun::blockCollision(sky_brick, player);
 	// enemy collision
 	// CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
-	
-	// horizontal block collision
-	for (auto i : hor_block_arr) {
-		CGameStateRun::blockCollision(i, player);
-	}
-	// vertical collision
-	for (auto i : ver_block_arr) {
-		CGameStateRun::blockCollision(i, player);
-	}
+
+	// collision check vertical
+	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); }
+
+	// collision check horizontal 
+	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player);}
 }
 
 // move Horizontal
 void CGameStateRun::moveHor() {
 	if (keyRight == true) {//move right
-		if (frame %10 == 0) {//every 10 frame
+		if (frame % 10 == 0) {//every 10 frame
 			moveSpeed += 3;
 			if (moveSpeed < 0)
 				moveSpeed++;
 		}
 		if (moveSpeed >= 6)//speed max = 6
 			moveSpeed = 6;
-	} 
+	}
 	if (keyLeft == true) {//move left
 
 		if (frame % 10 == 0) {
@@ -300,46 +347,38 @@ void CGameStateRun::moveHor() {
 }
 
 // jump
-void CGameStateRun::moveVer() 
+void CGameStateRun::moveVer()
 {
 	double ground = groundY_up - player.GetHeight();
 	ableToJump(jumpSpeed, jumpBonusFrame, ground);
 }
 
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
-{		
+{
 	// player
-	player.LoadBitmapByString({ "resources/image/player/player_1.bmp"}, RGB(255, 242, 0)); 
+	player.LoadBitmapByString({ "resources/image/player/player_1.bmp" }, RGB(255, 242, 0));
 	player.SetFrameIndexOfBitmap(0);
- 	player.SetTopLeft(600+60-13, groundY_up-player.GetHeight());
+	player.SetTopLeft(600 + 60 - 13, groundY_up - player.GetHeight());
 
 	// ground brick
 	loadImage_ground(17);
 
-	// brick
-	brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
-	brick.SetFrameIndexOfBitmap(0);
-	brick.SetTopLeft(60, groundY_up - brick.GetHeight());
-	
-	brick2.LoadBitmapByString({ "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
-	brick2.SetFrameIndexOfBitmap(0);
-	brick2.SetTopLeft(120, groundY_up - brick2.GetHeight());
+	// front brick
+	loadImage_multiple_hor(2, 2, 60, groundY_up - 60);
 
 	// vertical brick (stair)
-	loadImage_vertical(1, 4, 420, groundY_up-60);
-	loadImage_vertical(1, 3, 360, groundY_up - 60);
-	loadImage_vertical(1, 2, 300, groundY_up - 60);
-	loadImage_vertical(1, 1, 240, groundY_up - 60);
+	loadImage_multiple_ver(1, 4, 420, groundY_up - 60);
+	loadImage_multiple_ver(1, 3, 360, groundY_up - 60);
+	loadImage_multiple_ver(1, 2, 300, groundY_up - 60);
+	loadImage_multiple_ver(1, 1, 240, groundY_up - 60);
 
-	// Horizontal sky brick
-	loadImage_horizontal(1, 3, 780, groundY_up-240);
-	// sky brick
-	sky_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
-	sky_brick.SetFrameIndexOfBitmap(0);
-	sky_brick.SetTopLeft(600, groundY_up - sky_brick.GetHeight()*4);
+	// vertical sky brick
+	loadImage_multiple_ver(1, 3, 540, groundY_up - 60 * 3);
+	// multiple brick
+	loadImage_multiple_hor(1, 3, 720, groundY_up - 240);
 }
 
-void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
+void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	if (nChar == 0x25) {
 		keyLeft = true;
 		keyRight = false;
@@ -389,13 +428,10 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 }
 
 void CGameStateRun::OnShow()
-{	
-	showBitMap_ground();
-	showBitMap_vertical();
-	showBitMap_horizontal();
+{
+	show_ground();
+	show_ver();
+	show_hor();
 
 	player.ShowBitmap();
-	brick.ShowBitmap();
-	brick2.ShowBitmap();
-	sky_brick.ShowBitmap();
 }

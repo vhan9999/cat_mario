@@ -86,10 +86,9 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		void singleBlockCollision(CMovingBitmap &block, CMovingBitmap &player);
-		void blockCollision(CMovingBitmap &block, CMovingBitmap &player);
-		void singleEnemyCollision(CMovingBitmap &enemy, CMovingBitmap &player, int &frame,int &jumpBonusFrame);
 		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
+		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
