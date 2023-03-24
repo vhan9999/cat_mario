@@ -73,6 +73,13 @@ public:
 		new_brick.SetTopLeft(x, y);
 		return new_brick;
 	}
+	static CMovingBitmap createEnemy(std::string name, int x, int y) {
+		CMovingBitmap new_enemy;
+		if (name == "normal") { new_enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164)); }
+		new_enemy.SetFrameIndexOfBitmap(0);
+		new_enemy.SetTopLeft(x, y);
+		return new_enemy;
+	}
 };
 /*-----------------------------------------------------------------------------------------------------*/
 
