@@ -38,13 +38,11 @@ int groundY_mid = 776;
 int groundX_down = 0;
 int groundY_down = 836;
 
-// ground_brick array
-std::vector<CMovingBitmap> ground_brick_arr1; // ground_brick 1 
-std::vector<CMovingBitmap> ground_brick_arr2; // ground_brick 2
-std::vector<CMovingBitmap> ground_brick_arr3; // ground_brick 3
-
+std::vector<std::vector<CMovingBitmap>> ground_brick_arr; // ground block arr
 std::vector< std::vector<CMovingBitmap>> ver_block_arr; // vertical block
 std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block
+
+// enemy array
 std::vector<CMovingBitmap> enemy_arr;
 /*-----------------------------------------------------------------------------------------------------*/
 
@@ -89,22 +87,20 @@ public:
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
 // load
-void build_block_ground(std::vector<CMovingBitmap> &brick_arr, int type, int amount, int x, int y) { // build ground
+// build ground
+void build_block_ground(int type, int amount, int x, int y) { 
+	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
 		brick = ImageFactory::createBrick(type, x, y);
-		brick_arr.push_back(brick);
+		block_arr.push_back(brick);
 		x += 60;
 	}
+	ground_brick_arr.push_back(block_arr);
 }
 
-void loadImage_ground(int amount) { // ground brick image
-	build_block_ground(ground_brick_arr1, 3, amount, groundX_up, groundY_up); // ground brick up
-	build_block_ground(ground_brick_arr2, 5, amount, groundX_mid, groundY_mid); // ground brick mid
-	build_block_ground(ground_brick_arr3, 5, amount, groundX_down, groundY_down); // ground brick down
-}
-
-void loadImage_multiple_ver(int type, int amount, int x, int y) { // build block multiple (vertical)
+// build block multiple (vertical)
+void loadImage_multiple_ver(int type, int amount, int x, int y) { 
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -114,7 +110,9 @@ void loadImage_multiple_ver(int type, int amount, int x, int y) { // build block
 	}
 	ver_block_arr.push_back(block_arr);
 }
-void loadImage_multiple_hor(int type, int amount, int x, int y) { // build block multiple (horizontal)
+
+// build block multiple (horizontal)
+void loadImage_multiple_hor(int type, int amount, int x, int y) { 
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -125,13 +123,19 @@ void loadImage_multiple_hor(int type, int amount, int x, int y) { // build block
 	hor_block_arr.push_back(block_arr);
 }
 
+// ground brick image
+void loadImage_ground(int amount) { 
+	build_block_ground(3, amount, groundX_up, groundY_up); // ground brick up
+	build_block_ground(5, amount, groundX_mid, groundY_mid); // ground brick mid
+	build_block_ground(5, amount, groundX_down, groundY_down); // ground brick down
+}
 
 
 void show_ground() {
 	// use 'auto' for iterate to avoid "signed/unsigned mismatch"
-	for (auto i : ground_brick_arr1) { i.ShowBitmap(); } // ground brick up
-	for (auto i : ground_brick_arr2) { i.ShowBitmap(); } // ground brick mid
-	for (auto i : ground_brick_arr3) { i.ShowBitmap(); } // ground brick down
+	for (auto i : ground_brick_arr) {
+		for (auto j : i) { j.ShowBitmap(); }
+	} 
 }
 // show horizontal block
 void show_hor() {
