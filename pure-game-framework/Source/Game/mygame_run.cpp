@@ -71,7 +71,7 @@ public:
 			break;
 		}
 		brick.SetFrameIndexOfBitmap(0);
-		brick.SetTopLeft(x, y);
+		CGameStateRun::gridMap[x][y] = brick;
 		return brick;
 	}
 };
@@ -186,7 +186,16 @@ void CGameStateRun::moveHor() {
 		}
 	}
 }
-
+void CGameStateRun::putBlockinMap(int x,int y,CMovingBitmap block) {
+	block.SetTopLeft(x * 60, y * 60 - 4);
+}
+void CGameStateRun::setUpMap() {
+	for (int i = 0; i < 1000; i++) {
+		for (int j = 0; j < 15; j++) {
+			gridMap[i][j].SetTopLeft(i * 60, j * 60 - 4);
+		}
+	}
+}
 // move Vertical
 void CGameStateRun::moveVer() {
 	//jump
