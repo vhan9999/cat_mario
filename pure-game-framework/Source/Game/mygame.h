@@ -89,6 +89,7 @@ namespace game_framework {
 		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
 		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
