@@ -58,6 +58,9 @@ public:
 		if (name == "normal") {
 			enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
 		}
+		else if (name == "star_smile") {
+			enemy.LoadBitmapByString({ "resources/image/enemy/star_smile.bmp" }, RGB(163, 73, 164));
+		}
 		enemy.SetFrameIndexOfBitmap(0);
 		enemy.SetTopLeft(x, y);
 		return enemy;
@@ -302,24 +305,33 @@ void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &p
 	int enemy_bottom = enemy.GetTop() + enemy.GetHeight();
 	int enemy_height = enemy.GetHeight();
 
-	// detect left/right side collision of block
+	// detect left/right side collision of enemy
 	bool collUp = inRange(player.GetTop(), enemy_top, enemy_bottom);
 	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, enemy_top, enemy_bottom);
 	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, enemy_top, enemy_bottom);
 	bool collDown = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_bottom);
 	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_left + 5);
 	bool isCollideRightSide = inRange(player.GetLeft(), enemy_right - 5, enemy_right);
-	// left side of block
+	// left side of enemy
 	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
 		moveSpeed = 0; frame = 0;
 		jumpSpeed = 0; jumpBonusFrame = 0;
 		player.SetTopLeft(enemy_left - player.GetWidth(), player.GetTop());
 	}
-	// right side of block
+	// right side of enemy
 	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
 		moveSpeed = 0; frame = 0;
 		jumpSpeed = 0; jumpBonusFrame = 0;
 		player.SetTopLeft(enemy_right, player.GetTop());
+	}
+	// lower side of enemy
+	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_right);
+	bool atRight = inRange(player.GetLeft(), enemy_left, enemy_right);
+	bool isCollideBottomBrick = inRange(player.GetTop(), (enemy_top + (enemy_height / 2)), enemy_top + enemy_height);
+	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
+		moveSpeed = 0; frame = 0;
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), enemy_bottom);
 	}
 }
 
@@ -427,6 +439,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	
 	// enemy
 	loadImage_enemy("normal", 300, groundY_up-54);
+	loadImage_enemy("star_smile", 540, high_from_ground(6));
 
 	// ground brick
 	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
