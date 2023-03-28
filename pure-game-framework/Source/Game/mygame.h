@@ -91,6 +91,14 @@ namespace game_framework {
 		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		int high_from_ground(int blockCount);
+		void build_block_ground(int type, int amt, int x, int y);
+		void loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down);
+		void show_ground();
+		void loadImage_multiple_ver(int type, int amount, int x, int y);
+		void loadImage_multiple_hor(int type, int amount, int x, int y);
+		void show_hor();
+		void show_ver();
+		bool inRange(double num, double min, double max);
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
@@ -117,7 +125,15 @@ namespace game_framework {
 		int groundY_mid = 776;
 		int groundX_down = 0;
 		int groundY_down = 836;
+		// ground_brick array
+		int current_ground_arr_flag = -1; // to track number of element ground block were build
+		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
+		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
+		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block
+		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block
 
+		// enemy array
+		std::vector<CMovingBitmap> enemy_arr;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

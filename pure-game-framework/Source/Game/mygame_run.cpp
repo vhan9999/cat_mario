@@ -27,21 +27,6 @@ using namespace game_framework;
 
 
 
-/* ----VARIABLE---- */
-/*-----------------------------------------------------------------------------------------------------*/
-
-// ground brick coordinate
-
-// ground_brick array
-int current_ground_arr_flag = -1; // to track number of element ground block were build
-std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
-std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
-
-std::vector< std::vector<CMovingBitmap>> ver_block_arr; // vertical block
-std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block
-
-/*-----------------------------------------------------------------------------------------------------*/
-
 /* ----CLASS---- */
 /*-----------------------------------------------------------------------------------------------------*/
 // Brick Factory
@@ -67,6 +52,16 @@ public:
 		new_brick.SetTopLeft(x, y);
 		return new_brick;
 	}
+
+	static CMovingBitmap createEnemy(std::string name, int x, int y) {
+		CMovingBitmap enemy;
+		if (name == "normal") {
+			enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
+		}
+		enemy.SetFrameIndexOfBitmap(0);
+		enemy.SetTopLeft(x, y);
+		return enemy;
+	}
 };
 /*-----------------------------------------------------------------------------------------------------*/
 
@@ -77,7 +72,7 @@ public:
 /*-----------------------------------------------------------------------------------------------------*/
 
 // build ground
-void build_block_ground(int type, int amt, int x, int y) { 
+void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amt; i++) {
@@ -95,19 +90,19 @@ void build_block_ground(int type, int amt, int x, int y) {
 }
 
 // load ground 
-void loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down) {
+void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down) {
 	build_block_ground(3, amount, x_up, y_up); // ground brick up
 	build_block_ground(5, amount, x_mid, y_mid); // ground brick mid
 	build_block_ground(5, amount, x_down, y_down); // ground brick down
 }
 
-void show_ground() {
+void CGameStateRun::show_ground() {
 	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
 	for (auto i : rem_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
 }
 
 // build multiple vertical block
-void build_multiple_vertical(int type, int amount, int x, int y) { // build block multiple (vertical)
+void CGameStateRun::loadImage_multiple_ver(int type, int amount, int x, int y) { // build block multiple (vertical)
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -118,8 +113,8 @@ void build_multiple_vertical(int type, int amount, int x, int y) { // build bloc
 	ver_block_arr.push_back(block_arr);
 }
 
-// build multiple vertical horizontal
-void build_multiple_horizontal(int type, int amount, int x, int y) { // build block multiple (horizontal)
+// load multiple vertical horizontal
+void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) { // build block multiple (horizontal)
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -130,24 +125,16 @@ void build_multiple_horizontal(int type, int amount, int x, int y) { // build bl
 	hor_block_arr.push_back(block_arr);
 }
 
-// load and show horizontal block
-void loadImage_multiple_hor(int type, int amount, int x, int y) {
-	build_multiple_horizontal(type, amount, x, y);
-}
-void show_hor() {
+void CGameStateRun::show_hor() {
 	for (auto i : hor_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
-// load and show vertical block
-void loadImage_multiple_ver(int type, int amount, int x, int y) {
-	build_multiple_vertical(type, amount, x, y);
-}
-void show_ver() {
+void CGameStateRun::show_ver() {
 	for (auto i : ver_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
 // check value is in range [min, max] or not
-bool inRange(double num, double min, double max) {
+bool CGameStateRun::inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
 }
 
@@ -407,9 +394,6 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	loadImage_multiple_ver(1, 3, 360, high_from_ground(1));
 	loadImage_multiple_ver(1, 2, 300, high_from_ground(1));
 	loadImage_multiple_ver(1, 1, 240, high_from_ground(1));
-
-	// upper sky brick
-	loadImage_multiple_hor(1, 3, 480, high_from_ground(7));
 
 	// lower sky brick 
 	loadImage_multiple_hor(1, 1, 540, high_from_ground(3));
