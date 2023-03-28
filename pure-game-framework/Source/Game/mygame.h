@@ -90,6 +90,7 @@ namespace game_framework {
 		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		int high_from_ground(int blockCount);
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
@@ -110,6 +111,13 @@ namespace game_framework {
 		CMovingBitmap brick;
 		CMovingBitmap brick2;
 		CMovingBitmap sky_brick;
+		int groundX_up = 0;
+		int groundY_up = 716;
+		int groundX_mid = 0;
+		int groundY_mid = 776;
+		int groundX_down = 0;
+		int groundY_down = 836;
+
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

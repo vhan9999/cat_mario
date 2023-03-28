@@ -31,12 +31,6 @@ using namespace game_framework;
 /*-----------------------------------------------------------------------------------------------------*/
 
 // ground brick coordinate
-int groundX_up = 0;
-int groundY_up = 716;
-int groundX_mid = 0;
-int groundY_mid = 776;
-int groundX_down = 0;
-int groundY_down = 836;
 
 // ground_brick array
 int current_ground_arr_flag = -1; // to track number of element ground block were build
@@ -301,6 +295,10 @@ void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMov
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 }
+// high from ground
+int CGameStateRun::high_from_ground(int blockCount) {
+	return  groundY_up - (60 * blockCount);
+}
 
 /*-----------------------------------------------------------------------------------------------------*/
 /* ---- CGameStateRun ---- */
@@ -323,8 +321,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	moveHor();
 	moveVer();
 	// gravity and moving
-	if (player.GetTop() + jumpSpeed > 1000) {// fall down
-		player.SetTopLeft(player.GetLeft() + moveSpeed, 1000);
+	if (player.GetTop() + jumpSpeed >= 1500) {// fall down
+		player.SetTopLeft(player.GetLeft() + moveSpeed, 1500);
 		jumpSpeed = 0;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
@@ -381,7 +379,7 @@ void CGameStateRun::moveHor() {
 // jump
 void CGameStateRun::moveVer()
 {
-	double fall_ground = 1000; 
+	double fall_ground = 1500; 
 	ableToJump(jumpSpeed, jumpBonusFrame, fall_ground);
 }
 
@@ -399,27 +397,22 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 
 	// ground brick
 	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(4, 60*11, groundY_up, 60*11, groundY_mid, 60*11, groundY_down);
+	loadImage_ground(8, 60*11, groundY_up, 60*11, groundY_mid, 60*11, groundY_down);
 
 	// front brick
-	loadImage_multiple_hor(2, 2, 60, groundY_up - 60);
+	loadImage_multiple_hor(2, 2, 60, high_from_ground(1));
 
 	// vertical brick (stair)
-	loadImage_multiple_ver(1, 4, 420, groundY_up - 60);
-	loadImage_multiple_ver(1, 3, 360, groundY_up - 60);
-	loadImage_multiple_ver(1, 2, 300, groundY_up - 60);
-	loadImage_multiple_ver(1, 1, 240, groundY_up - 60);
+	loadImage_multiple_ver(1, 4, 420, high_from_ground(1));
+	loadImage_multiple_ver(1, 3, 360, high_from_ground(1));
+	loadImage_multiple_ver(1, 2, 300, high_from_ground(1));
+	loadImage_multiple_ver(1, 1, 240, high_from_ground(1));
 
-	// vertical sky brick
-	loadImage_multiple_ver(1, 3, 540, groundY_up - 60 * 3);
-	// multiple brick
-	loadImage_multiple_hor(1, 3, 720, groundY_up - 240);
+	// upper sky brick
+	loadImage_multiple_hor(1, 3, 480, high_from_ground(7));
 
-	// vertical brick (stair2)
-	loadImage_multiple_ver(1, 4, 660, groundY_up - 60);
-	loadImage_multiple_ver(1, 3, 720, groundY_up - 60);
-	loadImage_multiple_ver(1, 2, 780, groundY_up - 60);
-	loadImage_multiple_ver(1, 1, 840, groundY_up - 60);
+	// lower sky brick 
+	loadImage_multiple_hor(1, 1, 540, high_from_ground(3));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
