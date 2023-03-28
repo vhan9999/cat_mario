@@ -88,10 +88,13 @@ namespace game_framework {
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
 
 		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
+		bool inRange(double num, double min, double max);
+
+		// collision
 		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		bool inRange(double num, double min, double max);
+		void check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player);
 
 		// Load and show image 
 		int high_from_ground(int blockCount);
@@ -103,6 +106,7 @@ namespace game_framework {
 		void show_ground();
 		void show_hor();
 		void show_ver();
+		void show_enemy();
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
@@ -133,9 +137,8 @@ namespace game_framework {
 
 		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
-		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block
-		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block
-
+		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block arr
+		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
 		std::vector<CMovingBitmap> enemy_arr; // enemy array
 	};
 

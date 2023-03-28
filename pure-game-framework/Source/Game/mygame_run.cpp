@@ -122,7 +122,8 @@ void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) {
 
 // load enemy
 void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
-
+	CMovingBitmap enemy = ImageFactory::createEnemy(name, x, y);
+	enemy_arr.push_back(enemy);
 }
 
 // --Show--
@@ -137,6 +138,10 @@ void CGameStateRun::show_hor() {
 
 void CGameStateRun::show_ver() {
 	for (auto i : ver_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
+}
+
+void CGameStateRun::show_enemy() {
+	for (auto i : enemy_arr) { i.ShowBitmap(); }
 }
 
 // check value is in range [min, max] or not
@@ -288,6 +293,36 @@ void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMov
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 }
+
+// check enemy collision
+void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player) {
+	int enemy_left = enemy.GetLeft();
+	int enemy_right = enemy.GetLeft() + enemy.GetWidth();
+	int enemy_top = enemy.GetTop();
+	int enemy_bottom = enemy.GetTop() + enemy.GetHeight();
+	int enemy_height = enemy.GetHeight();
+
+	// detect left/right side collision of block
+	bool collUp = inRange(player.GetTop(), enemy_top, enemy_bottom);
+	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, enemy_top, enemy_bottom);
+	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, enemy_top, enemy_bottom);
+	bool collDown = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_bottom);
+	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_left + 5);
+	bool isCollideRightSide = inRange(player.GetLeft(), enemy_right - 5, enemy_right);
+	// left side of block
+	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
+		moveSpeed = 0; frame = 0;
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(enemy_left - player.GetWidth(), player.GetTop());
+	}
+	// right side of block
+	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
+		moveSpeed = 0; frame = 0;
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(enemy_right, player.GetTop());
+	}
+}
+
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
 	return  groundY_up - (60 * blockCount);
@@ -335,11 +370,10 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	}
 	*/
 
-	// enemy collision
-	// CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player);} // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); } // collision check vertical
 	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player);} // collision check horizontal 
+	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
 }
 
 // move Horizontal
@@ -392,7 +426,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	player.SetTopLeft(120, 500);
 	
 	// enemy
-	//loadImage_enemy("normal", 540, groundY_up-54);
+	loadImage_enemy("normal", 300, groundY_up-54);
 
 	// ground brick
 	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
@@ -401,14 +435,8 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// front brick
 	loadImage_multiple_hor(2, 2, 60, high_from_ground(1));
 
-	// vertical brick (stair)
-	loadImage_multiple_ver(1, 4, 420, high_from_ground(1));
-	loadImage_multiple_ver(1, 3, 360, high_from_ground(1));
-	loadImage_multiple_ver(1, 2, 300, high_from_ground(1));
-	loadImage_multiple_ver(1, 1, 240, high_from_ground(1));
-
 	// lower sky brick 
-	loadImage_multiple_hor(1, 3, 480, high_from_ground(6));
+	loadImage_multiple_hor(1, 3, 480, high_from_ground(3));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -465,6 +493,7 @@ void CGameStateRun::OnShow()
 	show_ground();
 	show_ver();
 	show_hor();
+	show_enemy();
 
 	player.ShowBitmap();
 }
