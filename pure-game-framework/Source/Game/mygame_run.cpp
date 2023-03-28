@@ -96,12 +96,7 @@ void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_mid, 
 	build_block_ground(5, amount, x_down, y_down); // ground brick down
 }
 
-void CGameStateRun::show_ground() {
-	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
-	for (auto i : rem_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
-}
-
-// build multiple vertical block
+// load multiple vertical block
 void CGameStateRun::loadImage_multiple_ver(int type, int amount, int x, int y) { // build block multiple (vertical)
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
@@ -123,6 +118,17 @@ void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) {
 		x += 60;
 	}
 	hor_block_arr.push_back(block_arr);
+}
+
+// load enemy
+void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
+
+}
+
+// --Show--
+void CGameStateRun::show_ground() {
+	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
+	for (auto i : rem_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
 }
 
 void CGameStateRun::show_hor() {
@@ -319,9 +325,15 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		frame = 0;
 	}
 	// player restriction
-	if (player.GetLeft() <= 0) {
+	if (player.GetLeft() <= 0) { // left
 		player.SetTopLeft(0, player.GetTop());
 	}
+	/*
+	else if (player.GetLeft() + player.GetWidth() >= 512) { // right
+		int player_posX = 512 - player.GetWidth();
+		player.SetTopLeft(player_posX, player.GetTop());
+	}
+	*/
 
 	// enemy collision
 	// CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
@@ -396,7 +408,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	loadImage_multiple_ver(1, 1, 240, high_from_ground(1));
 
 	// lower sky brick 
-	loadImage_multiple_hor(1, 1, 540, high_from_ground(3));
+	loadImage_multiple_hor(1, 3, 480, high_from_ground(6));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
