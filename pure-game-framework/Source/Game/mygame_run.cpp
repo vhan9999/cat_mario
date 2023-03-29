@@ -398,11 +398,38 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
 
 	// player restriction
-	if (player.GetLeft() + player.GetWidth() >= 512) { // right
+	if (player.GetLeft() <= 0) {
+		player.SetTopLeft(0, player.GetTop());
+	}
+	// if player move to half of the screen the camera will move forward(camera)
+	else if (player.GetLeft() + player.GetWidth() >= 512) { 
 		int player_posX = 512 - player.GetWidth();
 		player.SetTopLeft(player_posX, player.GetTop());
-		for (auto i : upper_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop());}}
-		for (auto i : rem_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop()); } }
+		// shift the image
+		for (auto &i : upper_ground_brick_arr) {
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - 4;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : rem_ground_brick_arr) {
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - 4;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : ver_block_arr) { 
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - 4;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : hor_block_arr) { 
+			for (auto &j : i) { 
+				int block_pos = j.GetLeft() - 4;
+				j.SetTopLeft(block_pos, j.GetTop()); 
+			} 
+		}
 	}
 }
 
