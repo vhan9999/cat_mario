@@ -89,6 +89,8 @@ namespace game_framework {
 
 		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
 		bool inRange(double num, double min, double max);
+		int high_from_ground(int blockCount);
+		int far_from_start(int blockCount);
 
 		// collision
 		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
@@ -97,7 +99,6 @@ namespace game_framework {
 		void check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player);
 
 		// Load and show image 
-		int high_from_ground(int blockCount);
 		void build_block_ground(int type, int amt, int x, int y);
 		void loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down);
 		void loadImage_multiple_ver(int type, int amount, int x, int y);

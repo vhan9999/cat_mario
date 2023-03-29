@@ -333,12 +333,32 @@ void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &p
 		jumpSpeed = 0; jumpBonusFrame = 0;
 		player.SetTopLeft(player.GetLeft(), enemy_bottom);
 	}
+	// uppper side of enemy
+	bool Left = inRange(player.GetLeft() + player.GetWidth(), enemy_left + 4, enemy_right - 4);
+	bool Right = inRange(player.GetLeft(), enemy_left + 4, enemy_right - 4);
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_top + 29.99);
+	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
+		jumpSpeed = 0;
+		jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), enemy_top - player.GetHeight());
+		double ground = enemy_top - player.GetHeight();
+		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+	}
+	else {
+		player.SetTopLeft(player.GetLeft(), player.GetTop());
+	}
 }
 
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
 	return  groundY_up - (60 * blockCount);
 }
+
+// far from start
+int CGameStateRun::far_from_start(int blockCount) {
+	return 60 * blockCount;
+}
+
 
 /*-----------------------------------------------------------------------------------------------------*/
 /* ---- CGameStateRun ---- */
@@ -371,21 +391,19 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (frame + 1 < 0) {//到int的上限後 歸零
 		frame = 0;
 	}
+
+	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
+	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); } // collision check vertical
+	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player); } // collision check horizontal 
+	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
+
 	// player restriction
-	if (player.GetLeft() <= 0) { // left
-		player.SetTopLeft(0, player.GetTop());
-	}
-	/*
-	else if (player.GetLeft() + player.GetWidth() >= 512) { // right
+	if (player.GetLeft() + player.GetWidth() >= 512) { // right
 		int player_posX = 512 - player.GetWidth();
 		player.SetTopLeft(player_posX, player.GetTop());
+		for (auto i : upper_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop());}}
+		for (auto i : rem_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop()); } }
 	}
-	*/
-
-	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player);} // collision ground
-	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); } // collision check vertical
-	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player);} // collision check horizontal 
-	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
 }
 
 // move Horizontal
@@ -428,6 +446,7 @@ void CGameStateRun::moveVer()
 	ableToJump(jumpSpeed, jumpBonusFrame, fall_ground);
 }
 
+
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
@@ -437,19 +456,16 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	player.SetTopLeft(600 + 60 - 13, groundY_up - player.GetHeight());
 	player.SetTopLeft(120, 500);
 	
-	// enemy
-	loadImage_enemy("normal", 300, groundY_up-54);
-	loadImage_enemy("star_smile", 540, high_from_ground(6));
 
 	// ground brick
 	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(8, 60*11, groundY_up, 60*11, groundY_mid, 60*11, groundY_down);
+	loadImage_ground(8, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
 
 	// front brick
-	loadImage_multiple_hor(2, 2, 60, high_from_ground(1));
+	loadImage_multiple_hor(2, 2, far_from_start(1), high_from_ground(1));
 
 	// lower sky brick 
-	loadImage_multiple_hor(1, 3, 480, high_from_ground(3));
+	loadImage_multiple_hor(1, 3, far_from_start(8), high_from_ground(3));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -510,3 +526,4 @@ void CGameStateRun::OnShow()
 
 	player.ShowBitmap();
 }
+
