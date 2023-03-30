@@ -27,21 +27,6 @@ using namespace game_framework;
 
 
 
-/* ----VARIABLE---- */
-/*-----------------------------------------------------------------------------------------------------*/
-
-// ground brick coordinate
-
-// ground_brick array
-int current_ground_arr_flag = -1; // to track number of element ground block were build
-std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
-std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
-
-std::vector< std::vector<CMovingBitmap>> ver_block_arr; // vertical block
-std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block
-
-/*-----------------------------------------------------------------------------------------------------*/
-
 /* ----CLASS---- */
 /*-----------------------------------------------------------------------------------------------------*/
 // Brick Factory
@@ -67,6 +52,19 @@ public:
 		new_brick.SetTopLeft(x, y);
 		return new_brick;
 	}
+
+	static CMovingBitmap createEnemy(std::string name, int x, int y) {
+		CMovingBitmap enemy;
+		if (name == "normal") {
+			enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "star_smile") {
+			enemy.LoadBitmapByString({ "resources/image/enemy/star_smile.bmp" }, RGB(163, 73, 164));
+		}
+		enemy.SetFrameIndexOfBitmap(0);
+		enemy.SetTopLeft(x, y);
+		return enemy;
+	}
 };
 /*-----------------------------------------------------------------------------------------------------*/
 
@@ -77,7 +75,7 @@ public:
 /*-----------------------------------------------------------------------------------------------------*/
 
 // build ground
-void build_block_ground(int type, int amt, int x, int y) { 
+void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amt; i++) {
@@ -95,19 +93,14 @@ void build_block_ground(int type, int amt, int x, int y) {
 }
 
 // load ground 
-void loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down) {
+void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down) {
 	build_block_ground(3, amount, x_up, y_up); // ground brick up
 	build_block_ground(5, amount, x_mid, y_mid); // ground brick mid
 	build_block_ground(5, amount, x_down, y_down); // ground brick down
 }
 
-void show_ground() {
-	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
-	for (auto i : rem_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
-}
-
-// build multiple vertical block
-void build_multiple_vertical(int type, int amount, int x, int y) { // build block multiple (vertical)
+// load multiple vertical block
+void CGameStateRun::loadImage_multiple_ver(int type, int amount, int x, int y) { // build block multiple (vertical)
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -118,8 +111,8 @@ void build_multiple_vertical(int type, int amount, int x, int y) { // build bloc
 	ver_block_arr.push_back(block_arr);
 }
 
-// build multiple vertical horizontal
-void build_multiple_horizontal(int type, int amount, int x, int y) { // build block multiple (horizontal)
+// load multiple vertical horizontal
+void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) { // build block multiple (horizontal)
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -130,24 +123,32 @@ void build_multiple_horizontal(int type, int amount, int x, int y) { // build bl
 	hor_block_arr.push_back(block_arr);
 }
 
-// load and show horizontal block
-void loadImage_multiple_hor(int type, int amount, int x, int y) {
-	build_multiple_horizontal(type, amount, x, y);
+// load enemy
+void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
+	CMovingBitmap enemy = ImageFactory::createEnemy(name, x, y);
+	enemy_arr.push_back(enemy);
 }
-void show_hor() {
+
+// --Show--
+void CGameStateRun::show_ground() {
+	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
+	for (auto i : rem_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
+}
+
+void CGameStateRun::show_hor() {
 	for (auto i : hor_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
-// load and show vertical block
-void loadImage_multiple_ver(int type, int amount, int x, int y) {
-	build_multiple_vertical(type, amount, x, y);
-}
-void show_ver() {
+void CGameStateRun::show_ver() {
 	for (auto i : ver_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
+void CGameStateRun::show_enemy() {
+	for (auto i : enemy_arr) { i.ShowBitmap(); }
+}
+
 // check value is in range [min, max] or not
-bool inRange(double num, double min, double max) {
+bool CGameStateRun::inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
 }
 
@@ -295,10 +296,69 @@ void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMov
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 }
+
+// check enemy collision
+void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player) {
+	int enemy_left = enemy.GetLeft();
+	int enemy_right = enemy.GetLeft() + enemy.GetWidth();
+	int enemy_top = enemy.GetTop();
+	int enemy_bottom = enemy.GetTop() + enemy.GetHeight();
+	int enemy_height = enemy.GetHeight();
+
+	// detect left/right side collision of enemy
+	bool collUp = inRange(player.GetTop(), enemy_top, enemy_bottom);
+	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, enemy_top, enemy_bottom);
+	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, enemy_top, enemy_bottom);
+	bool collDown = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_bottom);
+	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_left + 5);
+	bool isCollideRightSide = inRange(player.GetLeft(), enemy_right - 5, enemy_right);
+	// left side of enemy
+	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
+		moveSpeed = 0; frame = 0;
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(enemy_left - player.GetWidth(), player.GetTop());
+	}
+	// right side of enemy
+	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
+		moveSpeed = 0; frame = 0;
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(enemy_right, player.GetTop());
+	}
+	// lower side of enemy
+	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_right);
+	bool atRight = inRange(player.GetLeft(), enemy_left, enemy_right);
+	bool isCollideBottomBrick = inRange(player.GetTop(), (enemy_top + (enemy_height / 2)), enemy_top + enemy_height);
+	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
+		moveSpeed = 0; frame = 0;
+		jumpSpeed = 0; jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), enemy_bottom);
+	}
+	// uppper side of enemy
+	bool Left = inRange(player.GetLeft() + player.GetWidth(), enemy_left + 4, enemy_right - 4);
+	bool Right = inRange(player.GetLeft(), enemy_left + 4, enemy_right - 4);
+	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_top + 29.99);
+	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
+		jumpSpeed = 0;
+		jumpBonusFrame = 0;
+		player.SetTopLeft(player.GetLeft(), enemy_top - player.GetHeight());
+		double ground = enemy_top - player.GetHeight();
+		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+	}
+	else {
+		player.SetTopLeft(player.GetLeft(), player.GetTop());
+	}
+}
+
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
 	return  groundY_up - (60 * blockCount);
 }
+
+// far from start
+int CGameStateRun::far_from_start(int blockCount) {
+	return 60 * blockCount;
+}
+
 
 /*-----------------------------------------------------------------------------------------------------*/
 /* ---- CGameStateRun ---- */
@@ -331,16 +391,46 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (frame + 1 < 0) {//到int的上限後 歸零
 		frame = 0;
 	}
+
+	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
+	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); } // collision check vertical
+	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player); } // collision check horizontal 
+	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
+
 	// player restriction
 	if (player.GetLeft() <= 0) {
 		player.SetTopLeft(0, player.GetTop());
 	}
-
-	// enemy collision
-	// CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
-	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player);} // collision ground
-	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); } // collision check vertical
-	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player);} // collision check horizontal 
+	// if player move to half of the screen the camera will move forward(camera)
+	else if (player.GetLeft() + player.GetWidth() >= 512) { 
+		int player_posX = 512 - player.GetWidth();
+		player.SetTopLeft(player_posX, player.GetTop());
+		// shift the image
+		for (auto &i : upper_ground_brick_arr) {
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - 6;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : rem_ground_brick_arr) {
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - 6;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : ver_block_arr) { 
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - 6;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : hor_block_arr) { 
+			for (auto &j : i) { 
+				int block_pos = j.GetLeft() - 6;
+				j.SetTopLeft(block_pos, j.GetTop()); 
+			} 
+		}
+	}
 }
 
 // move Horizontal
@@ -383,6 +473,7 @@ void CGameStateRun::moveVer()
 	ableToJump(jumpSpeed, jumpBonusFrame, fall_ground);
 }
 
+
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
@@ -392,27 +483,32 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	player.SetTopLeft(600 + 60 - 13, groundY_up - player.GetHeight());
 	player.SetTopLeft(120, 500);
 	
-	// enemy
-	//loadImage_enemy("normal", 540, groundY_up-54);
 
 	// ground brick
 	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(8, 60*11, groundY_up, 60*11, groundY_mid, 60*11, groundY_down);
+	loadImage_ground(11, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
 
 	// front brick
-	loadImage_multiple_hor(2, 2, 60, high_from_ground(1));
-
-	// vertical brick (stair)
-	loadImage_multiple_ver(1, 4, 420, high_from_ground(1));
-	loadImage_multiple_ver(1, 3, 360, high_from_ground(1));
-	loadImage_multiple_ver(1, 2, 300, high_from_ground(1));
-	loadImage_multiple_ver(1, 1, 240, high_from_ground(1));
-
-	// upper sky brick
-	loadImage_multiple_hor(1, 3, 480, high_from_ground(7));
+	loadImage_multiple_hor(2, 2, far_from_start(1), high_from_ground(1));
 
 	// lower sky brick 
-	loadImage_multiple_hor(1, 1, 540, high_from_ground(3));
+	loadImage_multiple_hor(1, 3, far_from_start(8), high_from_ground(3));
+
+	// stairs
+	loadImage_multiple_ver(1, 1, far_from_start(18), high_from_ground(1));
+	loadImage_multiple_ver(1, 2, far_from_start(19), high_from_ground(1));
+	loadImage_multiple_ver(1, 3, far_from_start(20), high_from_ground(1));
+	loadImage_multiple_ver(1, 4, far_from_start(21), high_from_ground(1));
+
+	// sky brick
+	loadImage_multiple_hor(2, 6, far_from_start(23), high_from_ground(6));
+
+	loadImage_ground(9, far_from_start(30), groundY_up, far_from_start(30), groundY_mid, far_from_start(30), groundY_down);
+	// stairs (opposite)
+	loadImage_multiple_ver(1, 4, far_from_start(30), high_from_ground(1));
+	loadImage_multiple_ver(1, 3, far_from_start(31), high_from_ground(1));
+	loadImage_multiple_ver(1, 2, far_from_start(32), high_from_ground(1));
+	loadImage_multiple_ver(1, 1, far_from_start(33), high_from_ground(1));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -469,6 +565,8 @@ void CGameStateRun::OnShow()
 	show_ground();
 	show_ver();
 	show_hor();
+	show_enemy();
 
 	player.ShowBitmap();
 }
+
