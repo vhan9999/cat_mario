@@ -408,25 +408,25 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		// shift the image
 		for (auto &i : upper_ground_brick_arr) {
 			for (auto &j : i) {
-				int block_pos = j.GetLeft() - 4;
+				int block_pos = j.GetLeft() - 6;
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
 		for (auto &i : rem_ground_brick_arr) {
 			for (auto &j : i) {
-				int block_pos = j.GetLeft() - 4;
+				int block_pos = j.GetLeft() - 6;
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
 		for (auto &i : ver_block_arr) { 
 			for (auto &j : i) {
-				int block_pos = j.GetLeft() - 4;
+				int block_pos = j.GetLeft() - 6;
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
 		for (auto &i : hor_block_arr) { 
 			for (auto &j : i) { 
-				int block_pos = j.GetLeft() - 4;
+				int block_pos = j.GetLeft() - 6;
 				j.SetTopLeft(block_pos, j.GetTop()); 
 			} 
 		}
@@ -486,13 +486,29 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 
 	// ground brick
 	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(8, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
+	loadImage_ground(11, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
 
 	// front brick
 	loadImage_multiple_hor(2, 2, far_from_start(1), high_from_ground(1));
 
 	// lower sky brick 
 	loadImage_multiple_hor(1, 3, far_from_start(8), high_from_ground(3));
+
+	// stairs
+	loadImage_multiple_ver(1, 1, far_from_start(18), high_from_ground(1));
+	loadImage_multiple_ver(1, 2, far_from_start(19), high_from_ground(1));
+	loadImage_multiple_ver(1, 3, far_from_start(20), high_from_ground(1));
+	loadImage_multiple_ver(1, 4, far_from_start(21), high_from_ground(1));
+
+	// sky brick
+	loadImage_multiple_hor(2, 6, far_from_start(23), high_from_ground(6));
+
+	loadImage_ground(9, far_from_start(30), groundY_up, far_from_start(30), groundY_mid, far_from_start(30), groundY_down);
+	// stairs (opposite)
+	loadImage_multiple_ver(1, 4, far_from_start(30), high_from_ground(1));
+	loadImage_multiple_ver(1, 3, far_from_start(31), high_from_ground(1));
+	loadImage_multiple_ver(1, 2, far_from_start(32), high_from_ground(1));
+	loadImage_multiple_ver(1, 1, far_from_start(33), high_from_ground(1));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
