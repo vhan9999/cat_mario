@@ -302,6 +302,12 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (player.GetLeft() <= 0) {
 		player.SetTopLeft(0, player.GetTop());
 	}
+	if (player.GetLeft() > 650) {
+		int exLen = player.GetLeft() - 650;
+		player.SetTopLeft(650, player.GetTop());
+		for (auto i : hor_block_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - exLen, j.GetTop()); } }
+		for (auto i : ver_block_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - exLen, j.GetTop()); } }
+	}
 
 	// enemy collision
 	// CGameStateRun::singleEnemyCollision(enemy, player, frame, jumpBonusFrame);
