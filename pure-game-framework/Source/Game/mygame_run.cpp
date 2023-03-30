@@ -344,9 +344,6 @@ void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &p
 		double ground = enemy_top - player.GetHeight();
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
-	else {
-		player.SetTopLeft(player.GetLeft(), player.GetTop());
-	}
 }
 
 // high from ground
