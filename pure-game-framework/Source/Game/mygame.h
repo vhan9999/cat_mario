@@ -86,9 +86,28 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+
 		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
+		bool inRange(double num, double min, double max);
+		int high_from_ground(int blockCount);
+		int far_from_start(int blockCount);
+
+		// collision
 		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		void check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player);
+
+		// Load and show image 
+		void build_block_ground(int type, int amt, int x, int y);
+		void loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down);
+		void loadImage_multiple_ver(int type, int amount, int x, int y);
+		void loadImage_multiple_hor(int type, int amount, int x, int y);
+		void loadImage_enemy(std::string name, int x, int y);
+		void show_ground();
+		void show_hor();
+		void show_ver();
+		void show_enemy();
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
@@ -105,11 +124,23 @@ namespace game_framework {
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
-		CMovingBitmap enemy;
 		CMovingBitmap ground_brick;
 		CMovingBitmap brick;
 		CMovingBitmap brick2;
 		CMovingBitmap sky_brick;
+		int groundX_up = 0;
+		int groundY_up = 716;
+		int groundX_mid = 0;
+		int groundY_mid = 776;
+		int groundX_down = 0;
+		int groundY_down = 836;
+		int current_ground_arr_flag = -1; // to track number of element ground block were built
+
+		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
+		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
+		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block arr
+		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
+		std::vector<CMovingBitmap> enemy_arr; // enemy array
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
