@@ -104,10 +104,12 @@ namespace game_framework {
 		void loadImage_multiple_ver(int type, int amount, int x, int y);
 		void loadImage_multiple_hor(int type, int amount, int x, int y);
 		void loadImage_enemy(std::string name, int x, int y);
+		void loadImage_environment(std::string name, int x, int y);
 		void show_ground();
 		void show_hor();
 		void show_ver();
 		void show_enemy();
+		void show_environment();
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
@@ -141,6 +143,7 @@ namespace game_framework {
 		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block arr
 		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
 		std::vector<CMovingBitmap> enemy_arr; // enemy array
+		std::vector<CMovingBitmap> environment_arr; // environment array
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

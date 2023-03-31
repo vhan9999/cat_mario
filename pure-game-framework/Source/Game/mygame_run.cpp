@@ -8,6 +8,7 @@
 #include "mygame.h"
 #include "stdio.h"
 #include <vector>
+#include <crtdbg.h>
 using namespace game_framework;
 
 
@@ -25,6 +26,10 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
+/*CLASS*/
+/*-----------------------------------------------------------------------------------------------------*/
+
+// Image
 class ImageFactory {
 public:
 	static CMovingBitmap createBrick(int type, int x, int y) {
@@ -60,11 +65,29 @@ public:
 		enemy.SetTopLeft(x, y);
 		return enemy;
 	}
+
+	static CMovingBitmap createEnvironment(std::string name, int x, int y) {
+		CMovingBitmap new_obj;
+		if (name == "mountain") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/mountain.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "tree1") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/tree1.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "tree2") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/tree2.bmp", }, RGB(163, 73, 164));
+		}
+		new_obj.SetFrameIndexOfBitmap(0);
+		new_obj.SetTopLeft(x, y);
+		return new_obj;
+	}
 };
+
+/*-----------------------------------------------------------------------------------------------------*/
+
 
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
-
 // build ground
 void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 	std::vector<CMovingBitmap> block_arr;
@@ -120,6 +143,12 @@ void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
 	enemy_arr.push_back(enemy);
 }
 
+// load environment
+void CGameStateRun::loadImage_environment(std::string name, int x, int y) {
+	CMovingBitmap environment_obj = ImageFactory::createEnvironment(name, x, y);
+	environment_arr.push_back(environment_obj);
+}
+
 // --Show--
 void CGameStateRun::show_ground() {
 	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
@@ -136,6 +165,10 @@ void CGameStateRun::show_ver() {
 
 void CGameStateRun::show_enemy() {
 	for (auto i : enemy_arr) { i.ShowBitmap(); }
+}
+
+void CGameStateRun::show_environment() {
+	for (auto i : environment_arr) { i.ShowBitmap(); }
 }
 
 // check value is in range [min, max] or not
@@ -465,6 +498,7 @@ void CGameStateRun::moveVer()
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
+	int n = 10;
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp" }, RGB(255, 242, 0));
 	player.SetFrameIndexOfBitmap(0);

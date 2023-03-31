@@ -89,7 +89,7 @@
     <ClInclude Include="Source\Game\config.h">
       <Filter>MyGame</Filter>
     </ClInclude>
-    <ClInclude Include="ImageFactory.h">
+    <ClInclude Include="ImageFactory.cpp">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>
