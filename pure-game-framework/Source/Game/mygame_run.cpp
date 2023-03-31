@@ -8,7 +8,6 @@
 #include "mygame.h"
 #include "stdio.h"
 #include <vector>
-#include "ImageFactory.h"
 using namespace game_framework;
 
 
@@ -26,6 +25,42 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
+class ImageFactory {
+public:
+	static CMovingBitmap createBrick(int type, int x, int y) {
+		CMovingBitmap new_brick;
+		switch (type) {
+		case 1: // brick1
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
+		case 2: // brick2
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
+		case 3: // brick3
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
+		case 4: //brick4
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
+		case 5: // brick5
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
+		default:
+			break;
+		}
+		new_brick.SetFrameIndexOfBitmap(0);
+		new_brick.SetTopLeft(x, y);
+		return new_brick;
+	}
+
+	static CMovingBitmap createEnemy(std::string name, int x, int y) {
+		CMovingBitmap enemy;
+		if (name == "normal") {
+			enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "star_smile") {
+			enemy.LoadBitmapByString({ "resources/image/enemy/star_smile.bmp" }, RGB(163, 73, 164));
+		}
+		enemy.SetFrameIndexOfBitmap(0);
+		enemy.SetTopLeft(x, y);
+		return enemy;
+	}
+};
 
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
@@ -354,11 +389,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
 
 	// player restriction
-	if (player.GetLeft() <= 0) {
-		player.SetTopLeft(0, player.GetTop());
-	}
-	// if player move to half of the screen the camera will move forward(camera)
-	else if (player.GetLeft() + player.GetWidth() >= 512) { 
+	if (player.GetLeft() + player.GetWidth() >= 512) { // right
 		int player_posX = 512 - player.GetWidth();
 		player.SetTopLeft(player_posX, player.GetTop());
 		// shift the image
@@ -386,6 +417,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				j.SetTopLeft(block_pos, j.GetTop()); 
 			} 
 		}
+		for (auto i : upper_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop());}}
+		for (auto i : rem_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop()); } }
 	}
 }
 
