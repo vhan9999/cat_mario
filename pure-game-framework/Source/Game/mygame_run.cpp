@@ -8,6 +8,7 @@
 #include "mygame.h"
 #include "stdio.h"
 #include <vector>
+#include "ImageFactory.h"
 using namespace game_framework;
 
 
@@ -24,51 +25,6 @@ using namespace game_framework;
 */
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
-
-
-
-/* ----CLASS---- */
-/*-----------------------------------------------------------------------------------------------------*/
-// Brick Factory
-class ImageFactory {
-public:
-	static CMovingBitmap createBrick(int type, int x, int y) {
-		CMovingBitmap new_brick;
-		switch (type) {
-		case 1: // brick1
-			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick.bmp" }, RGB(163, 73, 164));
-		case 2: // brick2
-			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
-		case 3: // brick3
-			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick3.bmp" }, RGB(163, 73, 164));
-		case 4: //brick4
-			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
-		case 5: // brick5
-			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
-		default:
-			break;
-		}
-		new_brick.SetFrameIndexOfBitmap(0);
-		new_brick.SetTopLeft(x, y);
-		return new_brick;
-	}
-
-	static CMovingBitmap createEnemy(std::string name, int x, int y) {
-		CMovingBitmap enemy;
-		if (name == "normal") {
-			enemy.LoadBitmapByString({ "resources/image/enemy/normal.bmp" }, RGB(163, 73, 164));
-		}
-		else if (name == "star_smile") {
-			enemy.LoadBitmapByString({ "resources/image/enemy/star_smile.bmp" }, RGB(163, 73, 164));
-		}
-		enemy.SetFrameIndexOfBitmap(0);
-		enemy.SetTopLeft(x, y);
-		return enemy;
-	}
-};
-/*-----------------------------------------------------------------------------------------------------*/
-
-
 
 
 /* ----FUNCTION---- */
@@ -445,7 +401,6 @@ void CGameStateRun::moveHor() {
 			moveSpeed = 6;
 	}
 	if (keyLeft == true) {//move left
-
 		if (frame % 10 == 0) {
 			moveSpeed -= 3;
 			if (moveSpeed > 0)
@@ -480,7 +435,6 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp" }, RGB(255, 242, 0));
 	player.SetFrameIndexOfBitmap(0);
-	player.SetTopLeft(600 + 60 - 13, groundY_up - player.GetHeight());
 	player.SetTopLeft(120, 500);
 	
 
@@ -501,9 +455,13 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	loadImage_multiple_ver(1, 4, far_from_start(21), high_from_ground(1));
 
 	// sky brick
-	loadImage_multiple_hor(2, 6, far_from_start(23), high_from_ground(6));
+	loadImage_multiple_hor(2, 1, far_from_start(23), high_from_ground(6));
+	loadImage_multiple_hor(2, 1, far_from_start(25), high_from_ground(6));
+	loadImage_multiple_hor(2, 1, far_from_start(27), high_from_ground(6));
+
 
 	loadImage_ground(9, far_from_start(30), groundY_up, far_from_start(30), groundY_mid, far_from_start(30), groundY_down);
+
 	// stairs (opposite)
 	loadImage_multiple_ver(1, 4, far_from_start(30), high_from_ground(1));
 	loadImage_multiple_ver(1, 3, far_from_start(31), high_from_ground(1));
