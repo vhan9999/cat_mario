@@ -514,7 +514,6 @@ void CGameStateRun::moveVer()
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
-
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
 
@@ -536,8 +535,10 @@ void CGameStateRun::setMap1() {
 	loadImage_environment("cloud_eye", far_from_start(17 + 6), high_from_ground(10));
 
 	// phase 3 
-	loadImage_ground(9, far_from_start(17+15), groundY_up, far_from_start(17+15), groundY_down); 
-	loadImage_environment("mountain", far_from_start(17+15+2), groundY_up - 132);
+	loadImage_ground(9, far_from_start(32), groundY_up, far_from_start(32), groundY_down); 
+	loadImage_environment("mountain", far_from_start(32+2), groundY_up - 132);
+	
+	loadImage_ground(3, far_from_start(32+12), groundY_up, far_from_start(32+12), groundY_down);
 
 }
 /*-----------------------------------------------------------------------------------------------------*/
