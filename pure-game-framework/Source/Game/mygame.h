@@ -100,7 +100,7 @@ namespace game_framework {
 
 		// Load and show image 
 		void build_block_ground(int type, int amt, int x, int y);
-		void loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down);
+		void loadImage_ground(int amount, int x_up, int y_up, int x_down, int y_down);
 		void loadImage_multiple_ver(int type, int amount, int x, int y);
 		void loadImage_multiple_hor(int type, int amount, int x, int y);
 		void loadImage_enemy(std::string name, int x, int y);
@@ -134,9 +134,7 @@ namespace game_framework {
 		CMovingBitmap brick2;
 		CMovingBitmap sky_brick;
 		int groundX_up = 0;
-		int groundY_up = 716;
-		int groundX_mid = 0;
-		int groundY_mid = 776;
+		int groundY_up = 776;
 		int groundX_down = 0;
 		int groundY_down = 836;
 		int current_ground_arr_flag = -1; // to track number of element ground block were built

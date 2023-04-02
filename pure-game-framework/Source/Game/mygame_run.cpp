@@ -55,6 +55,7 @@ public:
 		return new_brick;
 	}
 
+
 	static CMovingBitmap createEnemy(std::string name, int x, int y) {
 		CMovingBitmap enemy;
 		if (name == "normal") {
@@ -78,6 +79,9 @@ public:
 		}
 		else if (name == "tree2") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/tree2.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "grass") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/grass.bmp" }, RGB(163, 73, 164));
 		}
 		else if (name == "cloud") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud.bmp" }, RGB(163, 73, 164));
@@ -106,7 +110,7 @@ void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 		x += 60;
 	}
 	current_ground_arr_flag += 1;
-	if (current_ground_arr_flag % 3 == 0) {
+	if (current_ground_arr_flag % 2 == 0) {
 		upper_ground_brick_arr.push_back(block_arr);
 	}
 	else {
@@ -115,9 +119,8 @@ void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 }
 
 // load ground 
-void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down) {
+void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_down, int y_down) {
 	build_block_ground(3, amount, x_up, y_up); // ground brick up
-	build_block_ground(5, amount, x_mid, y_mid); // ground brick mid
 	build_block_ground(5, amount, x_down, y_down); // ground brick down
 }
 
@@ -511,21 +514,34 @@ void CGameStateRun::moveVer()
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
-	// ground brick
-	loadImage_ground(17, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
 
 	// phase 1
-	loadImage_environment("mountain", far_from_start(1), groundY_up-132);
+	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
+
+	loadImage_environment("mountain", far_from_start(1), groundY_up - 132); // mountain height = 132
 	loadImage_environment("cloud_eye", far_from_start(7), high_from_ground(9));
 
 	loadImage_multiple_hor(6, 1, far_from_start(9), high_from_ground(4));
 
-	loadImage_multiple_hor(1, 5, far_from_start(9+3), high_from_ground(4));
+	loadImage_multiple_hor(1, 5, far_from_start(9 + 3), high_from_ground(4));
 
 	loadImage_multiple_ver(6, 1, far_from_start(9 + 5), high_from_ground(4 + 3));
-}
 
+	// phase 2
+	loadImage_ground(15, far_from_start(17), groundY_up, far_from_start(17), groundY_down); // ground
+	
+	loadImage_environment("grass", far_from_start(17+2), groundY_up - 50);
+	loadImage_environment("grass", far_from_start(17+9), groundY_up - 50);
+
+	loadImage_environment("cloud_eye", far_from_start(17 + 6), high_from_ground(10));
+
+	// phase 3 
+	loadImage_ground(9, far_from_start(17+15), groundY_up, far_from_start(17+15), groundY_down); 
+	loadImage_environment("mountain", far_from_start(17+15+2), groundY_up - 132);
+
+}
 /*-----------------------------------------------------------------------------------------------------*/
+
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
