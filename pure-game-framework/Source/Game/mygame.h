@@ -110,6 +110,7 @@ namespace game_framework {
 		void show_ver();
 		void show_enemy();
 		void show_environment();
+
 		// set Map
 		void setMap1();
 	protected:

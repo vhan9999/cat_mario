@@ -45,6 +45,8 @@ public:
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
 		case 5: // brick5
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
+		case 6: // item brick
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp" }, RGB(163, 73, 164));
 		default:
 			break;
 		}
@@ -76,6 +78,12 @@ public:
 		}
 		else if (name == "tree2") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/tree2.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "cloud") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "cloud_eye") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud_eye.bmp" }, RGB(163, 73, 164));
 		}
 		new_obj.SetFrameIndexOfBitmap(0);
 		new_obj.SetTopLeft(x, y);
@@ -235,7 +243,7 @@ void CGameStateRun::check_collision_ver(std::vector<CMovingBitmap> &arr, CMoving
 	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), obj_left + 15, obj_right + 15);
 	bool atRight = inRange(player.GetLeft(), obj_left + 15, obj_right - 15);
 	bool isCollideBottomBrick = inRange(player.GetTop(), (obj_top + (obj_height / 2)), obj_bottom);
-	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
+	if (isCollideBottomBrick == true && (atLeft == true || atRight == true)) {
 		jumpSpeed = 0;
 		player.SetTopLeft(player.GetLeft(), obj_bottom);
 		jumpSpeed += 1;
@@ -291,7 +299,7 @@ void CGameStateRun::check_collision_hor(std::vector<CMovingBitmap> &arr, CMoving
 	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), obj_left + 15, obj_right + 15);
 	bool atRight = inRange(player.GetLeft(), obj_left + 15, obj_right - 15);
 	bool isCollideBottomBrick = inRange(player.GetTop(), (obj_top + (obj_height / 2)), obj_top + obj_height);
-	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
+	if (isCollideBottomBrick == true && (atLeft == true || atRight == true)) {
 		jumpSpeed = 0;
 		player.SetTopLeft(player.GetLeft(), obj_bottom);
 		jumpSpeed += 1;
@@ -504,9 +512,17 @@ void CGameStateRun::moveVer()
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
 	// ground brick
-	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(11, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
-	
+	loadImage_ground(17, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
+
+	// phase 1
+	loadImage_environment("mountain", far_from_start(1), groundY_up-132);
+	loadImage_environment("cloud_eye", far_from_start(7), high_from_ground(9));
+
+	loadImage_multiple_hor(6, 1, far_from_start(9), high_from_ground(4));
+
+	loadImage_multiple_hor(1, 5, far_from_start(9+3), high_from_ground(4));
+
+	loadImage_multiple_ver(6, 1, far_from_start(9 + 5), high_from_ground(4 + 3));
 }
 
 /*-----------------------------------------------------------------------------------------------------*/
@@ -578,6 +594,7 @@ void CGameStateRun::OnShow()
 	show_ver();
 	show_hor();
 	show_enemy();
+	show_environment();
 
 	player.ShowBitmap();
 }
