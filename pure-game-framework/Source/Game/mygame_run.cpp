@@ -384,8 +384,8 @@ int CGameStateRun::far_from_start(int blockCount) {
 }
 
 
-/*-----------------------------------------------------------------------------------------------------*/
 /* ---- CGameStateRun ---- */
+/*-----------------------------------------------------------------------------------------------------*/
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
 }
@@ -422,6 +422,9 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
 
 	// player restriction
+	if (player.GetLeft() <= 0) {
+		player.SetTopLeft(0, player.GetTop());
+	}
 	if (player.GetLeft() + player.GetWidth() >= 512) { // right
 		int player_posX = 512 - player.GetWidth();
 		player.SetTopLeft(player_posX, player.GetTop());
@@ -450,9 +453,12 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				j.SetTopLeft(block_pos, j.GetTop()); 
 			} 
 		}
-		for (auto i : upper_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop());}}
-		for (auto i : rem_ground_brick_arr) { for (auto j : i) { j.SetTopLeft(j.GetLeft() - 2, j.GetTop()); } }
+		for (auto &i : environment_arr) {
+			int obj_pos = i.GetLeft() - 6;
+			i.SetTopLeft(obj_pos, i.GetTop());
+		}
 	}
+	
 }
 
 // move Horizontal
@@ -494,7 +500,16 @@ void CGameStateRun::moveVer()
 	ableToJump(jumpSpeed, jumpBonusFrame, fall_ground);
 }
 
+/* ---- Map ---- */
+/*-----------------------------------------------------------------------------------------------------*/
+void CGameStateRun::setMap1() {
+	// ground brick
+	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
+	loadImage_ground(11, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
+	
+}
 
+/*-----------------------------------------------------------------------------------------------------*/
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
@@ -504,36 +519,8 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(120, 500);
 	
+	setMap1();
 
-	// ground brick
-	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(11, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
-
-	// front brick
-	loadImage_multiple_hor(2, 2, far_from_start(1), high_from_ground(1));
-
-	// lower sky brick 
-	loadImage_multiple_hor(1, 3, far_from_start(8), high_from_ground(3));
-
-	// stairs
-	loadImage_multiple_ver(1, 1, far_from_start(18), high_from_ground(1));
-	loadImage_multiple_ver(1, 2, far_from_start(19), high_from_ground(1));
-	loadImage_multiple_ver(1, 3, far_from_start(20), high_from_ground(1));
-	loadImage_multiple_ver(1, 4, far_from_start(21), high_from_ground(1));
-
-	// sky brick
-	loadImage_multiple_hor(2, 1, far_from_start(23), high_from_ground(6));
-	loadImage_multiple_hor(2, 1, far_from_start(25), high_from_ground(6));
-	loadImage_multiple_hor(2, 1, far_from_start(27), high_from_ground(6));
-
-
-	loadImage_ground(9, far_from_start(30), groundY_up, far_from_start(30), groundY_mid, far_from_start(30), groundY_down);
-
-	// stairs (opposite)
-	loadImage_multiple_ver(1, 4, far_from_start(30), high_from_ground(1));
-	loadImage_multiple_ver(1, 3, far_from_start(31), high_from_ground(1));
-	loadImage_multiple_ver(1, 2, far_from_start(32), high_from_ground(1));
-	loadImage_multiple_ver(1, 1, far_from_start(33), high_from_ground(1));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
