@@ -514,6 +514,7 @@ void CGameStateRun::moveVer()
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
+	int currentGroundBlock= 0; // track how many ground block were build
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
 
@@ -524,22 +525,29 @@ void CGameStateRun::setMap1() {
 
 	loadImage_multiple_hor(1, 5, far_from_start(9 + 3), high_from_ground(4));
 
-	loadImage_multiple_ver(6, 1, far_from_start(9 + 5), high_from_ground(4 + 3));
+	loadImage_multiple_hor(6, 1, far_from_start(9 + 5), high_from_ground(4 + 3));
 
 	// phase 2
-	loadImage_ground(15, far_from_start(17), groundY_up, far_from_start(17), groundY_down); // ground
+	currentGroundBlock += 17;
+	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); // ground
 	
-	loadImage_environment("grass", far_from_start(17+2), groundY_up - 50);
-	loadImage_environment("grass", far_from_start(17+9), groundY_up - 50);
+	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - 50); // grass height = 50
+	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - 50);
 
-	loadImage_environment("cloud_eye", far_from_start(17 + 6), high_from_ground(10));
+	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
 
 	// phase 3 
-	loadImage_ground(9, far_from_start(32), groundY_up, far_from_start(32), groundY_down); 
-	loadImage_environment("mountain", far_from_start(32+2), groundY_up - 132);
+	currentGroundBlock += 15;
+	loadImage_ground(9, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); 
+	loadImage_environment("mountain", far_from_start(currentGroundBlock+2), groundY_up - 132);
 	
-	loadImage_ground(3, far_from_start(32+12), groundY_up, far_from_start(32+12), groundY_down);
+	// phase 4 
+	currentGroundBlock += 12;
+	loadImage_ground(11, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_environment("grass", far_from_start(currentGroundBlock + 3), groundY_up - 50);
 
+	loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock + 3), high_from_ground(4));
+	loadImage_multiple_hor(1, 5, far_from_start(currentGroundBlock + 6), high_from_ground(7));
 }
 /*-----------------------------------------------------------------------------------------------------*/
 
