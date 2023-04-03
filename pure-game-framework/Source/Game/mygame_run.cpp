@@ -89,6 +89,9 @@ public:
 		else if (name == "cloud_eye") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud_eye.bmp" }, RGB(163, 73, 164));
 		}
+		else if (name == "checkpoint_flag") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" }, RGB(163, 73, 164));
+		}
 		new_obj.SetFrameIndexOfBitmap(0);
 		new_obj.SetTopLeft(x, y);
 		return new_obj;
@@ -214,8 +217,8 @@ void CGameStateRun::check_collision_ver(std::vector<CMovingBitmap> &arr, CMoving
 	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, obj_top, obj_bottom);
 	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
 	bool collDown = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_bottom);
-	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
-	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
+	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 10);
+	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 10, obj_right);
 	// left side of block
 	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
 		moveSpeed = 0;
@@ -270,8 +273,8 @@ void CGameStateRun::check_collision_hor(std::vector<CMovingBitmap> &arr, CMoving
 	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, obj_top, obj_bottom);
 	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
 	bool collDown = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_bottom);
-	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
-	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
+	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 10);
+	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 10, obj_right);
 	// left side of block
 	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
 		moveSpeed = 0;
@@ -548,6 +551,18 @@ void CGameStateRun::setMap1() {
 
 	loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock + 3), high_from_ground(4));
 	loadImage_multiple_hor(1, 5, far_from_start(currentGroundBlock + 6), high_from_ground(7));
+
+	// phase5
+	currentGroundBlock += 14;
+	
+	loadImage_ground(14, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	// loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock), high_from_ground(9));
+	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock+2), high_from_ground(4));
+
+	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 7), high_from_ground(12));
+
+	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 9), high_from_ground(4)); // checkpoint
+	loadImage_environment("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - 120);
 }
 /*-----------------------------------------------------------------------------------------------------*/
 
