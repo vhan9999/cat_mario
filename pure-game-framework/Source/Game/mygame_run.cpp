@@ -521,7 +521,7 @@ void CGameStateRun::setMap1() {
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
 
-	loadImage_environment("mountain", far_from_start(1), groundY_up - 132); // mountain height = 132
+	loadImage_environment("mountain", far_from_start(1), groundY_up - mountain_height); // mountain height = 132
 	loadImage_environment("cloud_eye", far_from_start(7), high_from_ground(9));
 
 	loadImage_multiple_hor(6, 1, far_from_start(9), high_from_ground(4));
@@ -534,20 +534,20 @@ void CGameStateRun::setMap1() {
 	currentGroundBlock += 17;
 	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); // ground
 	
-	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - 50); // grass height = 50
-	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - 50);
+	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - grass_height); 
+	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - grass_height);
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
 
 	// phase 3 
 	currentGroundBlock += 15;
 	loadImage_ground(9, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); 
-	loadImage_environment("mountain", far_from_start(currentGroundBlock+2), groundY_up - 132);
+	loadImage_environment("mountain", far_from_start(currentGroundBlock+2), groundY_up - mountain_height);
 	
 	// phase 4 
 	currentGroundBlock += 12;
 	loadImage_ground(11, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-	loadImage_environment("grass", far_from_start(currentGroundBlock + 3), groundY_up - 50);
+	loadImage_environment("grass", far_from_start(currentGroundBlock + 3), groundY_up - grass_height);
 
 	loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock + 3), high_from_ground(4));
 	loadImage_multiple_hor(1, 5, far_from_start(currentGroundBlock + 6), high_from_ground(7));
@@ -555,14 +555,29 @@ void CGameStateRun::setMap1() {
 	// phase5
 	currentGroundBlock += 14;
 	
-	loadImage_ground(14, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_ground(11, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 	// loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock), high_from_ground(9));
 	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock+2), high_from_ground(4));
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 7), high_from_ground(12));
 
 	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 9), high_from_ground(4)); // checkpoint
-	loadImage_environment("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - 120);
+	loadImage_environment("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height);
+
+	// phase6
+	currentGroundBlock += 11;
+	loadImage_ground(17, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 3), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 6), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 9), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 6), high_from_ground(8));
+	
+	loadImage_environment("grass", far_from_start(currentGroundBlock + 10), groundY_up-grass_height);
+
+	loadImage_multiple_ver(4, 1, far_from_start(currentGroundBlock + 14), high_from_ground(1));
+	loadImage_multiple_ver(4, 2, far_from_start(currentGroundBlock + 15), high_from_ground(1));
+	loadImage_multiple_ver(4, 3, far_from_start(currentGroundBlock + 16), high_from_ground(1));
 }
 /*-----------------------------------------------------------------------------------------------------*/
 

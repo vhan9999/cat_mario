@@ -139,6 +139,11 @@ namespace game_framework {
 		int groundY_down = 836;
 		int current_ground_arr_flag = -1; // to track number of element ground block were built
 
+		// height of image
+		int grass_height = 50;
+		int mountain_height = 132;
+		int checkpoint_flag_height = 120;
+
 		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block arr
