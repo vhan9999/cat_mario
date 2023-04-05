@@ -607,7 +607,10 @@ void CGameStateRun::setMap1() {
 	loadImage_multiple_hor(4, 3, far_from_start(currentGroundBlock + 6), high_from_ground(7));
 	loadImage_multiple_hor(4, 2, far_from_start(currentGroundBlock + 7), high_from_ground(8));
 
-
+	// phase 10
+	currentGroundBlock += 9;
+	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+6), high_from_ground(1));
 }
 /*-----------------------------------------------------------------------------------------------------*/
 
