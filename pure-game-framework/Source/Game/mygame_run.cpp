@@ -92,6 +92,9 @@ public:
 		else if (name == "checkpoint_flag") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" }, RGB(163, 73, 164));
 		}
+		else if (name == "endpoint_building") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point.bmp" }, RGB(163, 73, 164));
+		}
 		new_obj.SetFrameIndexOfBitmap(0);
 		new_obj.SetTopLeft(x, y);
 		return new_obj;
@@ -611,6 +614,13 @@ void CGameStateRun::setMap1() {
 	currentGroundBlock += 9;
 	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+6), high_from_ground(1));
+
+	// phase 11
+	currentGroundBlock += 7;
+	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_environment("grass", far_from_start(currentGroundBlock), groundY_up-grass_height);
+	loadImage_environment("endpoint_building", far_from_start(currentGroundBlock+5), groundY_up - endpoint_building_height);
+
 }
 /*-----------------------------------------------------------------------------------------------------*/
 

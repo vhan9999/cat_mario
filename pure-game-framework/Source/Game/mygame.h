@@ -143,6 +143,7 @@ namespace game_framework {
 		int grass_height = 50;
 		int mountain_height = 132;
 		int checkpoint_flag_height = 120;
+		int endpoint_building_height = 180;
 
 		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
