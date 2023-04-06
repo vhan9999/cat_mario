@@ -38,13 +38,14 @@ void CGameStateInit::OnBeginState()
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+	if(nChar = 0x0D)
+		GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+	
 }
 
 void CGameStateInit::OnShow()
