@@ -617,6 +617,7 @@ void CGameStateRun::setMap1() {
 	currentGroundBlock += 9;
 	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+6), high_from_ground(1));
+	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 6)+20, high_from_ground(10) - 20);
 
 	// phase 11
 	currentGroundBlock += 7;
