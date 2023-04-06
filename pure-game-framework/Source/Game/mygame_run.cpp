@@ -8,6 +8,7 @@
 #include "mygame.h"
 #include "stdio.h"
 #include <vector>
+#include <crtdbg.h>
 using namespace game_framework;
 
 
@@ -25,37 +26,9 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
-/* ----collider---- */
-/*-----------------------------------------------------------------------------------------------------
-class Collider {
-public:
-	Collider() = default;
-	~Collider() = default;
-	virtual bool touchTop() = 0;
-	virtual bool touchSide() = 0;
-	virtual bool touchBot() = 0;
-	virtual void Event() {}
-	virtual void move() {}
-};
-class ColliderFactory {
 
-};
 
-class normalLike : public Collider {
-public:
-	normalLike(int x, int y, std::string file, int speed) {
-		aaa.
-	}
-	
-	CMovingBitmap aaa;
-	
-	
-};*/
-/*-----------------------------------------------------------------------------------------------------*/
-
-/* ----CLASS---- */
-/*-----------------------------------------------------------------------------------------------------*/
-// Brick Factory
+// Image
 class ImageFactory {
 public:
 	static CMovingBitmap createBrick(int type, int x, int y) {
@@ -71,6 +44,8 @@ public:
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
 		case 5: // brick5
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
+		case 6: // item brick
+			new_brick.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp" }, RGB(163, 73, 164));
 		default:
 			break;
 		}
@@ -78,6 +53,7 @@ public:
 		new_brick.SetTopLeft(x, y);
 		return new_brick;
 	}
+
 
 	static CMovingBitmap createEnemy(std::string name, int x, int y) {
 		CMovingBitmap enemy;
@@ -91,15 +67,47 @@ public:
 		enemy.SetTopLeft(x, y);
 		return enemy;
 	}
+
+	static CMovingBitmap createEnvironment(std::string name, int x, int y) {
+		CMovingBitmap new_obj;
+		if (name == "mountain") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/mountain.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "tree1") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/tree1.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "tree2") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/tree2.bmp", }, RGB(163, 73, 164));
+		}
+		else if (name == "grass") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/grass.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "cloud") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "cloud_eye") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud_eye.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "checkpoint_flag") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "endpoint_flag") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_flag.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "endpoint_building") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_building.bmp" }, RGB(163, 73, 164));
+		}
+		new_obj.SetFrameIndexOfBitmap(0);
+		new_obj.SetTopLeft(x, y);
+		return new_obj;
+	}
 };
+
 /*-----------------------------------------------------------------------------------------------------*/
-
-
 
 
 /* ----FUNCTION---- */
 /*-----------------------------------------------------------------------------------------------------*/
-
 // build ground
 void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 	std::vector<CMovingBitmap> block_arr;
@@ -110,7 +118,7 @@ void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 		x += 60;
 	}
 	current_ground_arr_flag += 1;
-	if (current_ground_arr_flag % 3 == 0) {
+	if (current_ground_arr_flag % 2 == 0) {
 		upper_ground_brick_arr.push_back(block_arr);
 	}
 	else {
@@ -119,9 +127,8 @@ void CGameStateRun::build_block_ground(int type, int amt, int x, int y) {
 }
 
 // load ground 
-void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_mid, int y_mid, int x_down, int y_down) {
+void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_down, int y_down) {
 	build_block_ground(3, amount, x_up, y_up); // ground brick up
-	build_block_ground(5, amount, x_mid, y_mid); // ground brick mid
 	build_block_ground(5, amount, x_down, y_down); // ground brick down
 }
 
@@ -155,6 +162,12 @@ void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
 	enemy_arr.push_back(enemy);
 }
 
+// load environment
+void CGameStateRun::loadImage_environment(std::string name, int x, int y) {
+	CMovingBitmap environment_obj = ImageFactory::createEnvironment(name, x, y);
+	environment_arr.push_back(environment_obj);
+}
+
 // --Show--
 void CGameStateRun::show_ground() {
 	for (auto i : upper_ground_brick_arr) { for (auto j : i) j.ShowBitmap(); }
@@ -171,6 +184,10 @@ void CGameStateRun::show_ver() {
 
 void CGameStateRun::show_enemy() {
 	for (auto i : enemy_arr) { i.ShowBitmap(); }
+}
+
+void CGameStateRun::show_environment() {
+	for (auto i : environment_arr) { i.ShowBitmap(); }
 }
 
 // check value is in range [min, max] or not
@@ -232,184 +249,7 @@ void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovi
 	}
 };
 
-/* collision vertical
-void CGameStateRun::check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
-	int obj_left = arr[0].GetLeft();
-	int obj_right = arr[0].GetLeft() + arr[0].GetWidth();
-	int obj_top = arr[arr.size() - 1].GetTop();
-	int obj_bottom = arr[0].GetTop() + arr[0].GetHeight();
-	int obj_height = arr[0].GetHeight();
-	// detect left/right side collision of block
-	bool collUp = inRange(player.GetTop()+10, obj_top, obj_bottom);
-	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
-	bool collDown = inRange(player.GetTop() + player.GetHeight()-10, obj_top, obj_bottom);
-	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
-	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
-	// left side of block
-	if ((isCollideLeftSide == true) && (collUp == true  || collMid == true || collDown == true)) {
-		moveSpeed = 0;
-		player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
-		frame += 2;
-	}
-	// right side of block
-	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
-		moveSpeed = 0;
-		player.SetTopLeft(obj_right, player.GetTop());
-		frame += 2;
-	}
-	// upper side of block
-	bool Left = inRange(player.GetLeft() + player.GetWidth(), obj_left + 4, obj_right - 4);
-	bool Right = inRange(player.GetLeft(), obj_left + 4, obj_right - 4);
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_top + 29.99);
-	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
-		jumpSpeed = 0;
-		jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
-		double ground = obj_top - player.GetHeight();
-		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
-	}
-	else {
-		player.SetTopLeft(player.GetLeft(), player.GetTop());
-	}
-	// bottom side of block
-	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), obj_left + 15, obj_right + 15);
-	bool atRight = inRange(player.GetLeft(), obj_left + 15, obj_right - 15);
-	bool isCollideBottomBrick = inRange(player.GetTop(), (obj_top + (obj_height / 2)), obj_bottom);
-	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
-		jumpSpeed = 0;
-		player.SetTopLeft(player.GetLeft(), obj_bottom);
-		jumpSpeed += 1;
-	}
-	bool atLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 14.99);
-	bool atRightSide = inRange(player.GetLeft(), obj_right - 14.9, obj_right);
-	if (atLeftSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop()); }
-	if (atRightSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_right, player.GetTop()); }
-}
 
-// collision horizontal
-void CGameStateRun::check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
-	int obj_left = arr[0].GetLeft();
-	int obj_right = arr[arr.size() - 1].GetLeft() + arr[arr.size() - 1].GetWidth();
-	int obj_top = arr[0].GetTop();
-	int obj_bottom = arr[0].GetTop() + arr[0].GetHeight();
-	int obj_height = arr[0].GetHeight();
-
-	// detect left/right side collision of block
-	bool collUp = inRange(player.GetTop(), obj_top, obj_bottom);
-	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, obj_top, obj_bottom);
-	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
-	bool collDown = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_bottom);
-	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
-	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
-	// left side of block
-	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
-		moveSpeed = 0;
-		player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
-		frame += 2;
-	}
-	// right side of block
-	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
-		moveSpeed = 0;
-		player.SetTopLeft(obj_right, player.GetTop());
-		frame += 2;
-	}
-	// upper side of block
-	bool Left = inRange(player.GetLeft() + player.GetWidth(), obj_left + 4, obj_right - 4);
-	bool Right = inRange(player.GetLeft(), obj_left + 4, obj_right - 4);
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_top + 29.99);
-	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
-		jumpSpeed = 0;
-		jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
-		double ground = obj_top - player.GetHeight();
-		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
-	}
-	else {
-		player.SetTopLeft(player.GetLeft(), player.GetTop());
-	}
-	// bottom side of block
-	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), obj_left + 15, obj_right + 15);
-	bool atRight = inRange(player.GetLeft(), obj_left + 15, obj_right - 15);
-	bool isCollideBottomBrick = inRange(player.GetTop(), (obj_top + (obj_height / 2)), obj_top + obj_height);
-	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
-		jumpSpeed = 0;
-		player.SetTopLeft(player.GetLeft(), obj_bottom);
-		jumpSpeed += 1;
-	}
-	bool atLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 14.99);
-	bool atRightSide = inRange(player.GetLeft(), obj_right - 14.9, obj_right);
-	if (atLeftSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop()); }
-	if (atRightSide == true && isCollideBottomBrick == true) { player.SetTopLeft(obj_right, player.GetTop()); }
-}
-
-// check ground collision
-void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
-	int obj_left = arr[0].GetLeft();
-	int obj_right = arr[arr.size() - 1].GetLeft() + arr[arr.size() - 1].GetWidth();
-	int obj_top = arr[0].GetTop();
-	int obj_bottom = arr[0].GetTop() + arr[0].GetHeight();
-
-	bool Left = inRange(player.GetLeft() + player.GetWidth(), obj_left + 4, obj_right - 4);
-	bool Right = inRange(player.GetLeft(), obj_left + 4, obj_right - 4);
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_top + 300);
-	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
-		jumpSpeed = 0;
-		jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
-		double ground = obj_top - player.GetHeight();
-		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
-	}
-}
-
-// check enemy collision
-void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player) {
-	int enemy_left = enemy.GetLeft();
-	int enemy_right = enemy.GetLeft() + enemy.GetWidth();
-	int enemy_top = enemy.GetTop();
-	int enemy_bottom = enemy.GetTop() + enemy.GetHeight();
-	int enemy_height = enemy.GetHeight();
-
-	// detect left/right side collision of enemy
-	bool collUp = inRange(player.GetTop(), enemy_top, enemy_bottom);
-	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, enemy_top, enemy_bottom);
-	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, enemy_top, enemy_bottom);
-	bool collDown = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_bottom);
-	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_left + 5);
-	bool isCollideRightSide = inRange(player.GetLeft(), enemy_right - 5, enemy_right);
-	// left side of enemy
-	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
-		moveSpeed = 0; frame = 0;
-		jumpSpeed = 0; jumpBonusFrame = 0;
-		player.SetTopLeft(enemy_left - player.GetWidth(), player.GetTop());
-	}
-	// right side of enemy
-	if ((isCollideRightSide == true) && ((collUp == true || collUpMid == true || collMid == true || collDown == true))) {
-		moveSpeed = 0; frame = 0;
-		jumpSpeed = 0; jumpBonusFrame = 0;
-		player.SetTopLeft(enemy_right, player.GetTop());
-	}
-	// lower side of enemy
-	bool atLeft = inRange(player.GetLeft() + player.GetWidth(), enemy_left, enemy_right);
-	bool atRight = inRange(player.GetLeft(), enemy_left, enemy_right);
-	bool isCollideBottomBrick = inRange(player.GetTop(), (enemy_top + (enemy_height / 2)), enemy_top + enemy_height);
-	if ((atLeft == true || atRight == true) && isCollideBottomBrick == true) {
-		moveSpeed = 0; frame = 0;
-		jumpSpeed = 0; jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), enemy_bottom);
-	}
-	// uppper side of enemy
-	bool Left = inRange(player.GetLeft() + player.GetWidth(), enemy_left + 4, enemy_right - 4);
-	bool Right = inRange(player.GetLeft(), enemy_left + 4, enemy_right - 4);
-	bool isCollideUpperBrick = inRange(player.GetTop() + player.GetHeight(), enemy_top, enemy_top + 29.99);
-	if ((Left == true || Right == true) && (isCollideUpperBrick == true)) {
-		jumpSpeed = 0;
-		jumpBonusFrame = 0;
-		player.SetTopLeft(player.GetLeft(), enemy_top - player.GetHeight());
-		double ground = enemy_top - player.GetHeight();
-		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
-	}
-}
-*/
 
 // dead
 void CGameStateRun::player_dead() {
@@ -426,8 +266,8 @@ int CGameStateRun::far_from_start(int blockCount) {
 }
 
 
-/*-----------------------------------------------------------------------------------------------------*/
 /* ---- CGameStateRun ---- */
+/*-----------------------------------------------------------------------------------------------------*/
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
 }
@@ -466,8 +306,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (player.GetLeft() <= 0) {
 		player.SetTopLeft(0, player.GetTop());
 	}
-	// if player move to half of the screen the camera will move forward(camera)
-	else if (player.GetLeft() + player.GetWidth() >= 512) { 
+	if (player.GetLeft() + player.GetWidth() >= 512) { // right
 		int player_posX = 512 - player.GetWidth();
 		player.SetTopLeft(player_posX, player.GetTop());
 		// shift the image
@@ -495,7 +334,12 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				j.SetTopLeft(block_pos, j.GetTop()); 
 			} 
 		}
+		for (auto &i : environment_arr) {
+			int obj_pos = i.GetLeft() - 6;
+			i.SetTopLeft(obj_pos, i.GetTop());
+		}
 	}
+	
 }
 
 // move Horizontal
@@ -541,42 +385,125 @@ void CGameStateRun::moveVer()
 	ableToJump(jumpSpeed, jumpBonusFrame, fall_ground);
 }
 
+/* ---- Map ---- */
+/*-----------------------------------------------------------------------------------------------------*/
+void CGameStateRun::setMap1() {
+	int currentGroundBlock= 0; // track how many ground block were build
+	// phase 1
+	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
+
+	loadImage_environment("mountain", far_from_start(1), groundY_up - mountain_height); // mountain height = 132
+	loadImage_environment("cloud_eye", far_from_start(7), high_from_ground(9));
+
+	loadImage_multiple_hor(6, 1, far_from_start(9), high_from_ground(4));
+
+	loadImage_multiple_hor(1, 5, far_from_start(9 + 3), high_from_ground(4));
+
+	loadImage_multiple_hor(6, 1, far_from_start(9 + 5), high_from_ground(4 + 3));
+
+	// phase 2
+	currentGroundBlock += 17;
+	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); // ground
+	
+	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - grass_height); 
+	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - grass_height);
+
+	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
+
+	// phase 3 
+	currentGroundBlock += 15;
+	loadImage_ground(9, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); 
+	loadImage_environment("mountain", far_from_start(currentGroundBlock+2), groundY_up - mountain_height);
+	
+	// phase 4 
+	currentGroundBlock += 12;
+	loadImage_ground(11, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_environment("grass", far_from_start(currentGroundBlock + 3), groundY_up - grass_height);
+
+	loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock + 3), high_from_ground(4));
+	loadImage_multiple_hor(1, 5, far_from_start(currentGroundBlock + 6), high_from_ground(7));
+
+	// phase5
+	currentGroundBlock += 14;
+	
+	loadImage_ground(11, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	// loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock), high_from_ground(9));
+	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock+2), high_from_ground(4));
+
+	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 7), high_from_ground(12));
+
+	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 9), high_from_ground(4)); // checkpoint
+	loadImage_environment("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height);
+
+	// phase6
+	currentGroundBlock += 11;
+	loadImage_ground(17, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 3), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 6), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 9), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 6), high_from_ground(8));
+	
+	loadImage_environment("grass", far_from_start(currentGroundBlock + 10), groundY_up-grass_height);
+
+	loadImage_multiple_ver(4, 1, far_from_start(currentGroundBlock + 14), high_from_ground(1));
+	loadImage_multiple_ver(4, 2, far_from_start(currentGroundBlock + 15), high_from_ground(1));
+	loadImage_multiple_ver(4, 3, far_from_start(currentGroundBlock + 16), high_from_ground(1));
+
+	// phase7
+	currentGroundBlock += 20;
+	loadImage_ground(6, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_multiple_ver(4, 3, far_from_start(currentGroundBlock), high_from_ground(1));
+	loadImage_multiple_ver(4, 2, far_from_start(currentGroundBlock+1), high_from_ground(1));
+
+	// phase 8
+	currentGroundBlock += 7;
+	loadImage_ground(13, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	
+	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock+3), high_from_ground(4));
+	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock+6), high_from_ground(4));
+	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock+8), high_from_ground(4));
+
+	// phase 9
+	currentGroundBlock += 13;
+	loadImage_ground(9, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+
+	loadImage_multiple_hor(4, 9, far_from_start(currentGroundBlock), high_from_ground(1));
+	loadImage_multiple_hor(4, 8, far_from_start(currentGroundBlock+1), high_from_ground(2));
+	loadImage_multiple_hor(4, 7, far_from_start(currentGroundBlock+2), high_from_ground(3));
+	loadImage_multiple_hor(4, 6, far_from_start(currentGroundBlock+3), high_from_ground(4));
+
+	loadImage_multiple_hor(4, 5, far_from_start(currentGroundBlock + 4), high_from_ground(5));
+	loadImage_multiple_hor(4, 4, far_from_start(currentGroundBlock + 5), high_from_ground(6));
+	loadImage_multiple_hor(4, 3, far_from_start(currentGroundBlock + 6), high_from_ground(7));
+	loadImage_multiple_hor(4, 2, far_from_start(currentGroundBlock + 7), high_from_ground(8));
+
+	// phase 10
+	currentGroundBlock += 9;
+	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+6), high_from_ground(1));
+	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 6)+20, high_from_ground(10) - 20);
+
+	// phase 11
+	currentGroundBlock += 7;
+	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
+	loadImage_environment("grass", far_from_start(currentGroundBlock), groundY_up-grass_height);
+	loadImage_environment("endpoint_building", far_from_start(currentGroundBlock+5), groundY_up - endpoint_building_height);
+
+}
+/*-----------------------------------------------------------------------------------------------------*/
 
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
+	int n = 10;
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp" }, RGB(255, 242, 0));
 	player.SetFrameIndexOfBitmap(0);
-	player.SetTopLeft(600 + 60 - 13, groundY_up - player.GetHeight());
 	player.SetTopLeft(120, 500);
 	
+	setMap1();
 
-	// ground brick
-	loadImage_ground(8, groundX_up, groundY_up, groundX_mid, groundY_mid, groundX_down, groundY_down);
-	loadImage_ground(11, far_from_start(11), groundY_up, far_from_start(11), groundY_mid, far_from_start(11), groundY_down);
-
-	// front brick
-	loadImage_multiple_hor(2, 2, far_from_start(1), high_from_ground(1));
-
-	// lower sky brick 
-	loadImage_multiple_hor(1, 3, far_from_start(8), high_from_ground(3));
-
-	// stairs
-	loadImage_multiple_ver(1, 1, far_from_start(18), high_from_ground(1));
-	loadImage_multiple_ver(1, 2, far_from_start(19), high_from_ground(1));
-	loadImage_multiple_ver(1, 3, far_from_start(20), high_from_ground(1));
-	loadImage_multiple_ver(1, 4, far_from_start(21), high_from_ground(1));
-
-	// sky brick
-	loadImage_multiple_hor(2, 6, far_from_start(23), high_from_ground(6));
-
-	loadImage_ground(9, far_from_start(30), groundY_up, far_from_start(30), groundY_mid, far_from_start(30), groundY_down);
-	// stairs (opposite)
-	loadImage_multiple_ver(1, 4, far_from_start(30), high_from_ground(1));
-	loadImage_multiple_ver(1, 3, far_from_start(31), high_from_ground(1));
-	loadImage_multiple_ver(1, 2, far_from_start(32), high_from_ground(1));
-	loadImage_multiple_ver(1, 1, far_from_start(33), high_from_ground(1));
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -634,6 +561,7 @@ void CGameStateRun::OnShow()
 	show_ver();
 	show_hor();
 	show_enemy();
+	show_environment();
 
 	player.ShowBitmap();
 }
