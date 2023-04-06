@@ -94,6 +94,7 @@ namespace game_framework {
 
 		// collision
 		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		
 
 		// Load and show image 
