@@ -25,7 +25,33 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
+/* ----collider---- */
+/*-----------------------------------------------------------------------------------------------------
+class Collider {
+public:
+	Collider() = default;
+	~Collider() = default;
+	virtual bool touchTop() = 0;
+	virtual bool touchSide() = 0;
+	virtual bool touchBot() = 0;
+	virtual void Event() {}
+	virtual void move() {}
+};
+class ColliderFactory {
 
+};
+
+class normalLike : public Collider {
+public:
+	normalLike(int x, int y, std::string file, int speed) {
+		aaa.
+	}
+	
+	CMovingBitmap aaa;
+	
+	
+};*/
+/*-----------------------------------------------------------------------------------------------------*/
 
 /* ----CLASS---- */
 /*-----------------------------------------------------------------------------------------------------*/
@@ -166,8 +192,47 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 		jumpSpd -= 5; // v-=5(a)
 	}
 }
+// cheng chin brick collision
+void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player){
+	for (auto &i : arr) {
+		if (CMovingBitmap::IsOverlap(player, i)) {
+			int obj_left = i.GetLeft();
+			int obj_right = i.GetLeft() + i.GetWidth();
+			int obj_top = i.GetTop();
+			int obj_bottom = i.GetTop() + i.GetHeight();
+			int obj_mid_x = i.GetLeft() + (i.GetWidth() / 2);
+			int obj_mid_y = i.GetTop() + (i.GetHeight() / 2);
+			//head touch
+			if (inRange(player.GetTop() - 1, obj_mid_y, obj_bottom) && player.GetLeft() + 4 <= obj_right && player.GetLeft() + player.GetWidth() - 4 >= obj_left) {
+				jumpSpeed = 0;
+				player.SetTopLeft(player.GetLeft(), obj_bottom);
+				jumpSpeed += 1;
+			}
+			//foot touch
+			else if (inRange(player.GetTop() + player.GetHeight() + 1, obj_top, obj_mid_y) && player.GetLeft()+2 < obj_right && player.GetLeft() + player.GetWidth()-2 > obj_left) {
+				jumpSpeed = 0;
+				jumpBonusFrame = 0;
+				player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
+				double ground = obj_top - player.GetHeight();
+				CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+			}
+			//left touch
+			else if (inRange(player.GetLeft() - 1, obj_mid_x, obj_right) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 4 >= obj_top) {
+				moveSpeed = 0;
+				player.SetTopLeft(obj_right, player.GetTop());
+				frame += 2;
+			}
+			//right touch
+			else if (inRange(player.GetLeft() + player.GetWidth() + 1, obj_left, obj_mid_x) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 4 >= obj_top) {
+				moveSpeed = 0;
+				player.SetTopLeft(obj_left-player.GetWidth(), player.GetTop());
+				frame += 2;
+			}
+		}
+	}
+};
 
-// collision vertical
+/* collision vertical
 void CGameStateRun::check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
 	int obj_left = arr[0].GetLeft();
 	int obj_right = arr[0].GetLeft() + arr[0].GetWidth();
@@ -175,14 +240,13 @@ void CGameStateRun::check_collision_ver(std::vector<CMovingBitmap> &arr, CMoving
 	int obj_bottom = arr[0].GetTop() + arr[0].GetHeight();
 	int obj_height = arr[0].GetHeight();
 	// detect left/right side collision of block
-	bool collUp = inRange(player.GetTop(), obj_top, obj_bottom);
-	bool collUpMid = inRange((player.GetTop() + player.GetHeight()) / 4, obj_top, obj_bottom);
+	bool collUp = inRange(player.GetTop()+10, obj_top, obj_bottom);
 	bool collMid = inRange((player.GetTop() + player.GetHeight()) / 2, obj_top, obj_bottom);
-	bool collDown = inRange(player.GetTop() + player.GetHeight(), obj_top, obj_bottom);
+	bool collDown = inRange(player.GetTop() + player.GetHeight()-10, obj_top, obj_bottom);
 	bool isCollideLeftSide = inRange(player.GetLeft() + player.GetWidth(), obj_left, obj_left + 4);
 	bool isCollideRightSide = inRange(player.GetLeft(), obj_right - 4, obj_right);
 	// left side of block
-	if ((isCollideLeftSide == true) && (collUp == true || collUpMid == true || collMid == true || collDown == true)) {
+	if ((isCollideLeftSide == true) && (collUp == true  || collMid == true || collDown == true)) {
 		moveSpeed = 0;
 		player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
 		frame += 2;
@@ -345,6 +409,7 @@ void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &p
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 }
+*/
 
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
@@ -389,10 +454,9 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		frame = 0;
 	}
 
-	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
-	for (auto i : ver_block_arr) { CGameStateRun::check_collision_ver(i, player); } // collision check vertical
-	for (auto i : hor_block_arr) { CGameStateRun::check_collision_hor(i, player); } // collision check horizontal 
-	for (auto i : enemy_arr) { CGameStateRun::check_enemy_collision(i, player); } // collision enemy
+	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_collision_brick(i, player); } // collision ground
+	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
+	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal 
 
 	// player restriction
 	if (player.GetLeft() <= 0) {
@@ -433,23 +497,26 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 // move Horizontal
 void CGameStateRun::moveHor() {
 	if (keyRight == true) {//move right
-		if (frame % 10 == 0) {//every 10 frame
-			moveSpeed += 3;
+		if (moveSpeed == 0)
+			moveSpeed += 1;
+		if (frame % 5 == 0) {//every 10 frame
+			moveSpeed += 1;
 			if (moveSpeed < 0)
-				moveSpeed++;
+				moveSpeed+=3;
 		}
-		if (moveSpeed >= 6)//speed max = 6
-			moveSpeed = 6;
+		if (moveSpeed >= 10)//speed max = 6
+			moveSpeed = 10;
 	}
 	if (keyLeft == true) {//move left
-
-		if (frame % 10 == 0) {
-			moveSpeed -= 3;
+		if (moveSpeed == 0)
+			moveSpeed -= 1;
+		if (frame % 5 == 0) {
+			moveSpeed -= 1;
 			if (moveSpeed > 0)
-				moveSpeed--;
+				moveSpeed-=3;
 		}
-		if (moveSpeed <= -6)
-			moveSpeed = -6;
+		if (moveSpeed <= -10)
+			moveSpeed = -10;
 	}
 	if ((!keyRight && !keyLeft && moveSpeed != 0)) {// stop
 		if (frame % 5 == 0) {

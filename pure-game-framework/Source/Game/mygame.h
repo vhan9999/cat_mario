@@ -93,6 +93,7 @@ namespace game_framework {
 		int far_from_start(int blockCount);
 
 		// collision
+		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
@@ -108,12 +109,14 @@ namespace game_framework {
 		void show_hor();
 		void show_ver();
 		void show_enemy();
+		CMovingBitmap background;
+		CMovingBitmap player;
+		bool isDead = false;
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
 	private:
-		CMovingBitmap background;
-		CMovingBitmap player;
+		
 		int moveSpeed = 0;
 		int jumpSpeed = 0;
 		bool keyUp = false;
