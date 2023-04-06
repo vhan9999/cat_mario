@@ -94,10 +94,7 @@ namespace game_framework {
 
 		// collision
 		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		void check_collision_ver(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		void check_collision_hor(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		void check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &player);
+		
 
 		// Load and show image 
 		void build_block_ground(int type, int amt, int x, int y);
@@ -109,6 +106,7 @@ namespace game_framework {
 		void show_hor();
 		void show_ver();
 		void show_enemy();
+
 		CMovingBitmap background;
 		CMovingBitmap player;
 		bool isDead = false;
@@ -127,6 +125,7 @@ namespace game_framework {
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
+		void player_dead();
 		CMovingBitmap ground_brick;
 		CMovingBitmap brick;
 		CMovingBitmap brick2;

@@ -411,6 +411,10 @@ void CGameStateRun::check_enemy_collision(CMovingBitmap &enemy, CMovingBitmap &p
 }
 */
 
+// dead
+void CGameStateRun::player_dead() {
+	jumpSpeed = -19;
+}
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
 	return  groundY_up - (60 * blockCount);
