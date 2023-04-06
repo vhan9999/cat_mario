@@ -92,8 +92,11 @@ public:
 		else if (name == "checkpoint_flag") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" }, RGB(163, 73, 164));
 		}
+		else if (name == "endpoint_flag") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_flag.bmp" }, RGB(163, 73, 164));
+		}
 		else if (name == "endpoint_building") {
-			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point.bmp" }, RGB(163, 73, 164));
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_building.bmp" }, RGB(163, 73, 164));
 		}
 		new_obj.SetFrameIndexOfBitmap(0);
 		new_obj.SetTopLeft(x, y);
