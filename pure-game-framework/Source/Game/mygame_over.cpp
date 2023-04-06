@@ -42,11 +42,13 @@ void CGameStateOver::OnInit()
 	// 最終進度為100%
 	//
 	ShowInitProgress(100, "OK!");
-	
 	Sleep(1000);
+
+
+
+
 }
 
 void CGameStateOver::OnShow()
 {
-
 }
