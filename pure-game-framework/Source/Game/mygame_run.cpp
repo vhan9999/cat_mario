@@ -352,7 +352,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 			} 
 		}
 		for (auto &i : environment_arr) {
-			int obj_pos = i.GetLeft() - 6;
+			int obj_pos = i.GetLeft() - moveSpeed;
 			i.SetTopLeft(obj_pos, i.GetTop());
 		}
 	}
