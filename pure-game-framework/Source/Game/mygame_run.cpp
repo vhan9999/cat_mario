@@ -54,6 +54,20 @@ public:
 		return new_brick;
 	}
 
+	static CMovingBitmap createBlock2(std::string name, int x, int y) {
+		CMovingBitmap new_obj;
+		if (name == "pipeline_short") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_short.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "pipeline_mid") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_mid.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "pipeline_big") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_big.bmp" }, RGB(163, 73, 164));
+		}
+		new_obj.SetTopLeft(x, y);
+		return new_obj;
+	}
 
 	static CMovingBitmap createEnemy(std::string name, int x, int y) {
 		CMovingBitmap enemy;
@@ -156,6 +170,17 @@ void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) {
 	hor_block_arr.push_back(block_arr);
 }
 
+// load block2
+void CGameStateRun::loadImage_block2(std::string name, int x, int y) {
+	std::vector<CMovingBitmap> block_arr;
+	CMovingBitmap block;
+
+	block = ImageFactory::createBlock2(name, x, y);
+	block_arr.push_back(block);
+
+	ver_block2_arr.push_back(block_arr);
+}
+
 // load enemy
 void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
 	CMovingBitmap enemy = ImageFactory::createEnemy(name, x, y);
@@ -188,6 +213,10 @@ void CGameStateRun::show_enemy() {
 
 void CGameStateRun::show_environment() {
 	for (auto i : environment_arr) { i.ShowBitmap(); }
+}
+
+void CGameStateRun::show_block2() {
+	for (auto i : ver_block2_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
 // check value is in range [min, max] or not
@@ -295,7 +324,7 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-
+	
 }
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
@@ -317,7 +346,9 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
-	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal 
+	for (auto i : ver_block2_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check block2 
+	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal
+
 
 	// player restriction
 	if (player.GetLeft() <= 0) {
@@ -340,6 +371,12 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 			}
 		}
 		for (auto &i : ver_block_arr) { 
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - moveSpeed;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : ver_block2_arr) {
 			for (auto &j : i) {
 				int block_pos = j.GetLeft() - moveSpeed;
 				j.SetTopLeft(block_pos, j.GetTop());
@@ -423,7 +460,10 @@ void CGameStateRun::setMap1() {
 	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); // ground
 	
 	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - grass_height); 
+	loadImage_block2("pipeline_mid", far_from_start(currentGroundBlock + 3), groundY_up - 160);
+
 	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - grass_height);
+	loadImage_block2("pipeline_big", far_from_start(currentGroundBlock + 10), groundY_up - 180);
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
 
@@ -516,11 +556,10 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	int n = 10;
 	// player
 	player.LoadBitmapByString({ "resources/image/player/player_1.bmp" }, RGB(255, 242, 0));
-	player.SetFrameIndexOfBitmap(0);
 	player.SetTopLeft(120, 500);
 	
 	setMap1();
-
+			
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -576,10 +615,10 @@ void CGameStateRun::OnShow()
 {
 	show_ground();
 	show_ver();
+	show_block2();
 	show_hor();
 	show_enemy();
 	show_environment();
 
 	player.ShowBitmap();
 }
-
