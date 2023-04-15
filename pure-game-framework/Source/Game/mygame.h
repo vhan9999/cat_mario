@@ -126,11 +126,12 @@ namespace game_framework {
 		
 		int moveSpeed = 0;
 		int jumpSpeed = 0;
-		bool keyUp = false;
 		bool isBigJump = false;
+		bool keyUp = false;
 		bool keyRight = false;
 		bool keyLeft = false;
 		int frame = 0;
+		int animate_frame = 0;
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
@@ -150,6 +151,9 @@ namespace game_framework {
 		int mountain_height = 132;
 		int checkpoint_flag_height = 120;
 		int endpoint_building_height = 180;
+
+		// player image
+		std::vector<std::string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
 
 		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
