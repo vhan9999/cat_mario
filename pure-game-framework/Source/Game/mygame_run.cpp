@@ -236,20 +236,16 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 			player.SetFrameIndexOfBitmap(5);
 		}
 	}
+
+	// problem
 	if (player.GetTop() < ground) {// player in the air
-		if (keyRight == true) {
-			player.SetFrameIndexOfBitmap(4);
-		}
-		else if (keyLeft == true) {
-			player.SetFrameIndexOfBitmap(5);
-		}
 		jumpSpd += 1; // v += a
 	}
+
 	else if (keyUp == true && player.GetTop() == ground) {// jump while on the ground
 		jumpBns = 0; // for big jump 
 		jumpSpd = -19;// v0			
 	}
-
 
 	if (player.GetTop() + player.GetHeight() >= ground) {// player touch on the ground
 		if (player.GetFrameIndexOfBitmap() == 4) {
@@ -358,11 +354,11 @@ void CGameStateRun::moveHor() {
 		player.SetFrameIndexOfBitmap(0);
 
 		// change image while moving
-		if ((animate_frame % 5 == 0) && (player.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
+		if ((animate_frame % 6 == 2) && (player.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
 			player.SetFrameIndexOfBitmap(1);
 
 		}
-		else if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+		else if ((animate_frame % 1 == 0) && (player.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
 			player.SetFrameIndexOfBitmap(0);
 		}
 
@@ -381,11 +377,11 @@ void CGameStateRun::moveHor() {
 		player.SetFrameIndexOfBitmap(2);
 
 		// change image while moving
-		if ((animate_frame % 5 == 0) && (player.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
+		if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
 			player.SetFrameIndexOfBitmap(3);
 
 		}
-		else if ((animate_frame  % 6 == 0) && (player.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+		else if ((animate_frame % 4 == 0) && (player.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
 			player.SetFrameIndexOfBitmap(2);
 		}
 
@@ -415,8 +411,8 @@ void CGameStateRun::moveHor() {
 // jump
 void CGameStateRun::moveVer()
 {
-	double gnd = groundY_up; 
-	ableToJump(jumpSpeed, jumpBonusFrame, gnd);
+	double fall_gnd = 1500; 
+	ableToJump(jumpSpeed, jumpBonusFrame, fall_gnd);
 }
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
@@ -429,7 +425,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	// gravity and moving
 	if (player.GetTop() + jumpSpeed >= 1500) {// fall down
 		player.SetTopLeft(player.GetLeft() + moveSpeed, 1500);
-		jumpSpeed = 0;
+		jumpSpeed = 0; moveSpeed = 0;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
 		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
@@ -616,7 +612,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (nChar == VK_LEFT) { 
+	if (nChar == VK_LEFT) {
 		keyLeft = true;
 		keyRight = false;
 	}
