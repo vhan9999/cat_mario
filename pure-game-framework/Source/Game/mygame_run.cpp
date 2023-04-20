@@ -354,11 +354,11 @@ void CGameStateRun::moveHor() {
 		player.SetFrameIndexOfBitmap(0);
 
 		// change image while moving
-		if ((animate_frame % 6 == 2) && (player.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
+		if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
 			player.SetFrameIndexOfBitmap(1);
 
 		}
-		else if ((animate_frame % 1 == 0) && (player.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+		else if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
 			player.SetFrameIndexOfBitmap(0);
 		}
 
