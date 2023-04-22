@@ -26,7 +26,18 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
+// Audio
+/*-----------------------------------------------------------------------------------------------------*/
+int dead_audio_flag = 0; // player_dead_audio control flag
 
+CAudio *field_music = CAudio::Instance();
+CAudio *player_jump_audio = CAudio::Instance();
+CAudio *player_dead_audio = CAudio::Instance(); 
+
+/*-----------------------------------------------------------------------------------------------------*/
+
+bool player_fall = false;
+bool player_on_air = false;
 
 // Image
 class ImageFactory {
@@ -116,7 +127,6 @@ public:
 		return new_obj;
 	}
 };
-
 /*-----------------------------------------------------------------------------------------------------*/
 
 
@@ -237,9 +247,15 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 		}
 	}
 
-	// problem
 	if (player.GetTop() < ground) {// player in the air
+		if ((player.GetFrameIndexOfBitmap() == 0 || player.GetFrameIndexOfBitmap() == 1) && (player_on_air==true)) {
+			player.SetFrameIndexOfBitmap(4);
+		}
+		if ((player.GetFrameIndexOfBitmap() == 2 || player.GetFrameIndexOfBitmap() == 3) && (player_on_air == true)) {
+			player.SetFrameIndexOfBitmap(5);
+		}
 		jumpSpd += 1; // v += a
+		player_on_air = true;
 	}
 
 	else if (keyUp == true && player.GetTop() == ground) {// jump while on the ground
@@ -248,6 +264,7 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 	}
 
 	if (player.GetTop() + player.GetHeight() >= ground) {// player touch on the ground
+		player_on_air = false;
 		if (player.GetFrameIndexOfBitmap() == 4) {
 			player.SetFrameIndexOfBitmap(0);
 		}
@@ -258,6 +275,8 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 	if (jumpBns == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpd -= 5; // v-=5(a)
 	}
+	if ((player_on_air == false) && (keyUp==true)) { player_jump_audio->Play(1, false); } // player jump audio
+
 }
 // cheng chin brick collision
 void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player){
@@ -318,10 +337,6 @@ void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMov
 	}
 }
 
-// dead
-void CGameStateRun::player_dead() {
-	jumpSpeed = -19;
-}
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
 	return  groundY_up - (60 * blockCount);
@@ -411,7 +426,7 @@ void CGameStateRun::moveHor() {
 // jump
 void CGameStateRun::moveVer()
 {
-	double fall_gnd = 1500; 
+	double fall_gnd = 1500;
 	ableToJump(jumpSpeed, jumpBonusFrame, fall_gnd);
 }
 
@@ -421,21 +436,28 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	animate_frame += 1;
 	moveHor();
 	moveVer();
-
+	
 	// gravity and moving
-	if (player.GetTop() + jumpSpeed >= 1500) {// fall down
+	if (player.GetTop() + jumpSpeed >= 1500) {// fall down (dead)
 		player.SetTopLeft(player.GetLeft() + moveSpeed, 1500);
 		jumpSpeed = 0; moveSpeed = 0;
+		player_fall = true;
+		player_on_air = false;
+		dead_audio_flag += 1;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
 		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
 	}
+
+
 	if (frame + 1 < 0) {//到int的上限後 歸零 prevent int overflow
 		frame = 0;
 	}
 	if (animate_frame + 1 < 0) {
 		animate_frame = 0;
 	}
+
+
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
 	for (auto i : ver_block2_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check block2 
@@ -483,6 +505,15 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		for (auto &i : environment_arr) {
 			int obj_pos = i.GetLeft() - moveSpeed;
 			i.SetTopLeft(obj_pos, i.GetTop());
+		}
+	}
+
+	// player fall and dead audio
+	if (player_fall == true) {
+		field_music->Stop(0);
+		player_jump_audio->Stop(1);
+		if (dead_audio_flag == 1) {
+			player_dead_audio->Play(2);
 		}
 	}
 
@@ -602,13 +633,17 @@ void CGameStateRun::setMap1() {
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
-	int n = 10;
+	field_music->Load(0, "resources/audio/map_song/field.wav");
+	field_music->Play(0, true);
+	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
+	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
+	
 	// player
 	player.LoadBitmapByString(player_image, RGB(255, 242, 0));
 	player.SetTopLeft(120, groundY_up);
 	
 	setMap1();
-			
+
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {

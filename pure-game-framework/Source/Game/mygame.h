@@ -114,7 +114,6 @@ namespace game_framework {
 
 		CMovingBitmap background;
 		CMovingBitmap player;
-		bool isDead = false;
 		void show_environment();
 
 		// set Map
@@ -135,7 +134,6 @@ namespace game_framework {
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
-		void player_dead();
 		CMovingBitmap ground_brick;
 		CMovingBitmap brick;
 		CMovingBitmap brick2;
