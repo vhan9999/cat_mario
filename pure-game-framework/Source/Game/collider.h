@@ -53,5 +53,3 @@ private:
 	int _speed_y;
 
 };
-
-void move()

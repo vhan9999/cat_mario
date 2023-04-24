@@ -378,10 +378,6 @@ bool CGameStateRun::check_penetrate(CMovingBitmap &player) {
 	}
 	return false;
 }
-// dead
-void CGameStateRun::player_dead() {
-	jumpSpeed = -19;
-}
 
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
