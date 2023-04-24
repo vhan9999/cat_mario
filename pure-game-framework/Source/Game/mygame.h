@@ -105,15 +105,15 @@ namespace game_framework {
 		void loadImage_multiple_hor(int type, int amount, int x, int y);
 		void loadImage_enemy(std::string name, int x, int y);
 		void loadImage_environment(std::string name, int x, int y);
+		void loadImage_block2(std::string name, int x, int y);
 		void show_ground();
 		void show_hor();
 		void show_ver();
 		void show_enemy();
-
+		void show_block2();
 
 		CMovingBitmap background;
 		CMovingBitmap player;
-		bool isDead = false;
 		void show_environment();
 
 		// set Map
@@ -125,15 +125,18 @@ namespace game_framework {
 		
 		int moveSpeed = 0;
 		int jumpSpeed = 0;
-		bool keyUp = false;
 		bool isBigJump = false;
+		bool keyUp = false;
 		bool keyRight = false;
 		bool keyLeft = false;
 		int frame = 0;
+		int animate_frame = 0;
+		bool player_fall = false;
+		bool player_on_air = false;
+
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
-		void player_dead();
 		CMovingBitmap ground_brick;
 		CMovingBitmap brick;
 		CMovingBitmap brick2;
@@ -144,16 +147,28 @@ namespace game_framework {
 		int groundY_down = 836;
 		int current_ground_arr_flag = -1; // to track number of element ground block were built
 
+		// Audio
+		int dead_audio_flag = 0; // player_dead_audio control flag
+
+		CAudio *field_music = CAudio::Instance();
+		CAudio *player_jump_audio = CAudio::Instance();
+		CAudio *player_dead_audio = CAudio::Instance();
+
 		// height of image
 		int grass_height = 50;
 		int mountain_height = 132;
 		int checkpoint_flag_height = 120;
 		int endpoint_building_height = 180;
 
+		// player image
+		std::vector<std::string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
+
 		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block arr
 		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
+		std::vector<std::vector<CMovingBitmap>> ver_block2_arr; // store block2 arr
+
 		std::vector<CMovingBitmap> enemy_arr; // enemy array
 		std::vector<CMovingBitmap> environment_arr; // environment array
 	};

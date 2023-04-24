@@ -26,8 +26,6 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
-
-
 // Image
 class ImageFactory {
 public:
@@ -54,6 +52,20 @@ public:
 		return new_brick;
 	}
 
+	static CMovingBitmap createBlock2(std::string name, int x, int y) {
+		CMovingBitmap new_obj;
+		if (name == "pipeline_short") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_short.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "pipeline_mid") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_mid.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "pipeline_big") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_big.bmp" }, RGB(163, 73, 164));
+		}
+		new_obj.SetTopLeft(x, y);
+		return new_obj;
+	}
 
 	static CMovingBitmap createEnemy(std::string name, int x, int y) {
 		CMovingBitmap enemy;
@@ -102,7 +114,6 @@ public:
 		return new_obj;
 	}
 };
-
 /*-----------------------------------------------------------------------------------------------------*/
 
 
@@ -156,6 +167,17 @@ void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) {
 	hor_block_arr.push_back(block_arr);
 }
 
+// load block2
+void CGameStateRun::loadImage_block2(std::string name, int x, int y) {
+	std::vector<CMovingBitmap> block_arr;
+	CMovingBitmap block;
+
+	block = ImageFactory::createBlock2(name, x, y);
+	block_arr.push_back(block);
+
+	ver_block2_arr.push_back(block_arr);
+}
+
 // load enemy
 void CGameStateRun::loadImage_enemy(std::string name, int x, int y) {
 	CMovingBitmap enemy = ImageFactory::createEnemy(name, x, y);
@@ -190,6 +212,10 @@ void CGameStateRun::show_environment() {
 	for (auto i : environment_arr) { i.ShowBitmap(); }
 }
 
+void CGameStateRun::show_block2() {
+	for (auto i : ver_block2_arr) { for (auto j : i) { j.ShowBitmap(); } }
+}
+
 // check value is in range [min, max] or not
 bool CGameStateRun::inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
@@ -198,16 +224,46 @@ bool CGameStateRun::inRange(double num, double min, double max) {
 // able to jump
 void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 	jumpBns++; // frame
-	if (player.GetTop() < ground) {// player in the air
-		jumpSpd += 1; // v += a 
+
+	if (keyUp == true) {
+		if (player.GetFrameIndexOfBitmap() == 0 || player.GetFrameIndexOfBitmap() == 1) {
+			player.SetFrameIndexOfBitmap(4);
+		}
+		if (player.GetFrameIndexOfBitmap() == 2 || player.GetFrameIndexOfBitmap() == 3) {
+			player.SetFrameIndexOfBitmap(5);
+		}
 	}
-	else if (keyUp && player.GetTop() == ground) {// touch ground jump
+
+	if (player.GetTop() < ground) {// player in the air
+		if ((player.GetFrameIndexOfBitmap() == 0 || player.GetFrameIndexOfBitmap() == 1) && (player_on_air==true)) {
+			player.SetFrameIndexOfBitmap(4);
+		}
+		if ((player.GetFrameIndexOfBitmap() == 2 || player.GetFrameIndexOfBitmap() == 3) && (player_on_air == true)) {
+			player.SetFrameIndexOfBitmap(5);
+		}
+		jumpSpd += 1; // v += a
+		player_on_air = true;
+	}
+
+	else if (keyUp == true && player.GetTop() == ground) {// jump while on the ground
 		jumpBns = 0; // for big jump 
-		jumpSpd = -19;//v0
+		jumpSpd = -19;// v0			
+	}
+
+	if (player.GetTop() + player.GetHeight() >= ground) {// player touch on the ground
+		player_on_air = false;
+		if (player.GetFrameIndexOfBitmap() == 4) {
+			player.SetFrameIndexOfBitmap(0);
+		}
+		if (player.GetFrameIndexOfBitmap() == 5) {
+			player.SetFrameIndexOfBitmap(2);
+		}
 	}
 	if (jumpBns == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpd -= 5; // v-=5(a)
 	}
+	if ((player_on_air == false) && (keyUp==true)) { player_jump_audio->Play(1, false); } // player jump audio
+
 }
 // cheng chin brick collision
 void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player){
@@ -268,10 +324,6 @@ void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMov
 	}
 }
 
-// dead
-void CGameStateRun::player_dead() {
-	jumpSpeed = -19;
-}
 // high from ground
 int CGameStateRun::high_from_ground(int blockCount) {
 	return  groundY_up - (60 * blockCount);
@@ -295,29 +347,109 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
+	
+}
 
+// move Horizontal
+void CGameStateRun::moveHor() {
+	if (keyRight == true) {//move right
+		player.SetFrameIndexOfBitmap(0);
+
+		// change image while moving
+		if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
+			player.SetFrameIndexOfBitmap(1);
+
+		}
+		else if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+			player.SetFrameIndexOfBitmap(0);
+		}
+
+		// move forward
+		if (moveSpeed == 0)
+			moveSpeed += 1;
+		if (frame % 5 == 0) {//every 10 frame
+			moveSpeed += 1;
+			if (moveSpeed < 0)
+				moveSpeed += 3;
+		}
+		if (moveSpeed >= 10)//speed max = 6
+			moveSpeed = 10;
+	}
+	if (keyLeft == true) {//move left
+		player.SetFrameIndexOfBitmap(2);
+
+		// change image while moving
+		if ((animate_frame % 6 == 0) && (player.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
+			player.SetFrameIndexOfBitmap(3);
+
+		}
+		else if ((animate_frame % 4 == 0) && (player.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+			player.SetFrameIndexOfBitmap(2);
+		}
+
+		// move backward
+		if (moveSpeed == 0)
+			moveSpeed -= 1;
+		if (frame % 5 == 0) {
+			moveSpeed -= 1;
+			if (moveSpeed > 0)
+				moveSpeed -= 3;
+		}
+		if (moveSpeed <= -10)
+			moveSpeed = -10;
+	}
+	if ((!keyRight && !keyLeft)) {// stop
+		if (frame % 5 == 0) {
+			if (moveSpeed >= 1)
+				moveSpeed -= 1;
+			else if (moveSpeed <= -1)
+				moveSpeed += 1;
+			else
+				moveSpeed = 0;
+		}
+	}
+}
+
+// jump
+void CGameStateRun::moveVer()
+{
+	double fall_gnd = 1500;
+	ableToJump(jumpSpeed, jumpBonusFrame, fall_gnd);
 }
 
 void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 {
-	frame++;//用來判斷幀數
+	frame += 1;//用來判斷幀數
+	animate_frame += 1;
 	moveHor();
 	moveVer();
+	
 	// gravity and moving
-	if (player.GetTop() + jumpSpeed >= 1500) {// fall down
+	if (player.GetTop() + jumpSpeed >= 1500) {// fall down (dead)
 		player.SetTopLeft(player.GetLeft() + moveSpeed, 1500);
-		jumpSpeed = 0;
+		jumpSpeed = 0; moveSpeed = 0;
+		player_fall = true;
+		player_on_air = false;
+		dead_audio_flag += 1;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
 		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
 	}
-	if (frame + 1 < 0) {//到int的上限後 歸零
+
+
+	if (frame + 1 < 0) {//到int的上限後 歸零 prevent int overflow
 		frame = 0;
 	}
+	if (animate_frame + 1 < 0) {
+		animate_frame = 0;
+	}
+
 
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
-	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal 
+	for (auto i : ver_block2_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check block2 
+	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal
+
 
 	// player restriction
 	if (player.GetLeft() <= 0) {
@@ -339,72 +471,46 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
-		for (auto &i : ver_block_arr) { 
+		for (auto &i : ver_block_arr) {
 			for (auto &j : i) {
 				int block_pos = j.GetLeft() - moveSpeed;
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
-		for (auto &i : hor_block_arr) { 
-			for (auto &j : i) { 
+		for (auto &i : ver_block2_arr) {
+			for (auto &j : i) {
 				int block_pos = j.GetLeft() - moveSpeed;
-				j.SetTopLeft(block_pos, j.GetTop()); 
-			} 
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
+		}
+		for (auto &i : hor_block_arr) {
+			for (auto &j : i) {
+				int block_pos = j.GetLeft() - moveSpeed;
+				j.SetTopLeft(block_pos, j.GetTop());
+			}
 		}
 		for (auto &i : environment_arr) {
 			int obj_pos = i.GetLeft() - moveSpeed;
 			i.SetTopLeft(obj_pos, i.GetTop());
 		}
 	}
-	
-}
 
-// move Horizontal
-void CGameStateRun::moveHor() {
-	if (keyRight == true) {//move right
-		if (moveSpeed == 0)
-			moveSpeed += 1;
-		if (frame % 5 == 0) {//every 10 frame
-			moveSpeed += 1;
-			if (moveSpeed < 0)
-				moveSpeed+=3;
-		}
-		if (moveSpeed >= 10)//speed max = 6
-			moveSpeed = 10;
-	}
-	if (keyLeft == true) {//move left
-		if (moveSpeed == 0)
-			moveSpeed -= 1;
-		if (frame % 5 == 0) {
-			moveSpeed -= 1;
-			if (moveSpeed > 0)
-				moveSpeed-=3;
-		}
-		if (moveSpeed <= -10)
-			moveSpeed = -10;
-	}
-	if ((!keyRight && !keyLeft)) {// stop
-		if (frame % 5 == 0) {
-			if (moveSpeed >= 1)
-				moveSpeed -= 1;
-			else if (moveSpeed <= -1)
-				moveSpeed += 1;
-			else
-				moveSpeed = 0;
+	// player fall and dead audio
+	if (player_fall == true) {
+		field_music->Stop(0);
+		player_jump_audio->Stop(1);
+		if (dead_audio_flag == 1) {
+			player_dead_audio->Play(2);
 		}
 	}
-}
 
-// jump
-void CGameStateRun::moveVer()
-{
-	double fall_ground = 1500; 
-	ableToJump(jumpSpeed, jumpBonusFrame, fall_ground);
 }
 
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
+	field_music->Play(0, true);
+
 	int currentGroundBlock= 0; // track how many ground block were build
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
@@ -423,7 +529,10 @@ void CGameStateRun::setMap1() {
 	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); // ground
 	
 	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - grass_height); 
+	loadImage_block2("pipeline_mid", far_from_start(currentGroundBlock + 3), groundY_up - 160);
+
 	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - grass_height);
+	loadImage_block2("pipeline_big", far_from_start(currentGroundBlock + 10), groundY_up - 180);
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
 
@@ -498,8 +607,8 @@ void CGameStateRun::setMap1() {
 	// phase 10
 	currentGroundBlock += 9;
 	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+6), high_from_ground(1));
-	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 6)+20, high_from_ground(10) - 20);
+	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+5), high_from_ground(1));
+	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 5)+20, high_from_ground(10) - 20);
 
 	// phase 11
 	currentGroundBlock += 7;
@@ -513,43 +622,43 @@ void CGameStateRun::setMap1() {
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
-	int n = 10;
+	field_music->Load(0, "resources/audio/map_song/field.wav");
+	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
+	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
+	
 	// player
-	player.LoadBitmapByString({ "resources/image/player/player_1.bmp" }, RGB(255, 242, 0));
-	player.SetFrameIndexOfBitmap(0);
-	player.SetTopLeft(120, 500);
+	player.LoadBitmapByString(player_image, RGB(255, 242, 0));
+	player.SetTopLeft(120, groundY_up);
 	
 	setMap1();
 
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (nChar == 0x25) {
+	if (nChar == VK_LEFT) {
 		keyLeft = true;
 		keyRight = false;
 	}
-	if (nChar == 0x27) {
+	if (nChar == VK_RIGHT) {
 		keyRight = true;
 		keyLeft = false;
 	}
-	if (nChar == 0x26) {
+	if (nChar == VK_UP) {
 		keyUp = true;
 	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == 0x27) {
+	if (nChar == VK_RIGHT) {
 		keyRight = false;
 	}
-	if (nChar == 0x25) {
+	if (nChar == VK_LEFT) {
 		keyLeft = false;
 	}
-	if (nChar == 0x26) {
+	if (nChar == VK_UP) {
 		keyUp = false;
 	}
-
-
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作 left mouse button (down)
@@ -576,10 +685,10 @@ void CGameStateRun::OnShow()
 {
 	show_ground();
 	show_ver();
+	show_block2();
 	show_hor();
 	show_enemy();
 	show_environment();
 
 	player.ShowBitmap();
 }
-

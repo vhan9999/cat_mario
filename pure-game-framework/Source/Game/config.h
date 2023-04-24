@@ -20,7 +20,7 @@
 //! 是否允許以 Ctrl-Q 暫停遊戲
 #define ENABLE_GAME_PAUSE	 false		
 //! 啟動音效介面
-#define ENABLE_AUDIO		 true		
+#define ENABLE_AUDIO		 true
  //! 是否關閉 toolbar
 #define ENABLE_TOOLBAR       false     
 //! 是否關閉 menu
