@@ -37,16 +37,18 @@ void CGameStateOver::OnInit()
 	//
 	// 開始載入資料
 	//
-	Sleep(1000);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+	Sleep(1000);	// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
 	//
 	// 最終進度為100%
 	//
 	ShowInitProgress(100, "OK!");
-
 	Sleep(1000);
+
+
+
+
 }
 
 void CGameStateOver::OnShow()
 {
-
 }
