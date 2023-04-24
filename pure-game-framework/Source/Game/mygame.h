@@ -95,7 +95,7 @@ namespace game_framework {
 		// collision
 		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		
+		bool check_penetrate(CMovingBitmap &player);
 
 		// Load and show image 
 		void build_block_ground(int type, int amt, int x, int y);
@@ -117,11 +117,8 @@ namespace game_framework {
 
 		// set Map
 		void setMap1();
-	protected:
-		void OnMove();									// 移動遊戲元素
-		void OnShow();	// 顯示這個狀態的遊戲畫面
-	private:
-		
+
+		//private
 		int moveSpeed = 0;
 		int jumpSpeed = 0;
 		bool keyUp = false;
@@ -155,6 +152,12 @@ namespace game_framework {
 		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
 		std::vector<CMovingBitmap> enemy_arr; // enemy array
 		std::vector<CMovingBitmap> environment_arr; // environment array
+	protected:
+		void OnMove();									// 移動遊戲元素
+		void OnShow();	// 顯示這個狀態的遊戲畫面
+	private:
+		
+		
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

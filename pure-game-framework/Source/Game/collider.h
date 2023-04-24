@@ -12,7 +12,7 @@
 using namespace game_framework;
 class Collider : public CGameStateRun{
 public:
-	Collider() = default;
+	Collider() : CGameStateRun();
 	~Collider() = default;
 	virtual void Event() = 0;
 	virtual void move() {}
@@ -53,3 +53,5 @@ private:
 	int _speed_y;
 
 };
+
+void move()

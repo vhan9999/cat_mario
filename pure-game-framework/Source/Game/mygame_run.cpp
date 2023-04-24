@@ -267,7 +267,47 @@ void CGameStateRun::check_ground_collision(std::vector<CMovingBitmap> &arr, CMov
 		CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
 	}
 }
-
+bool CGameStateRun::check_penetrate(CMovingBitmap &player) {
+	if (jumpSpeed >= 10) {
+		for (auto i : upper_ground_brick_arr) {
+			for (auto &j : i) {
+				if (player.GetTop() + player.GetHeight() <= j.GetTop() && player.GetTop() + player.GetHeight() + jumpSpeed >= j.GetTop() && player.GetLeft() + 2 < j.GetLeft()+j.GetWidth() && player.GetLeft() + player.GetWidth() - 2 > j.GetLeft()) {
+					jumpSpeed = 0;
+					jumpBonusFrame = 0;
+					player.SetTopLeft(player.GetLeft() + moveSpeed, j.GetTop() - player.GetHeight());
+					double ground = j.GetTop() - player.GetHeight();
+					CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+					return true;
+				}
+			}
+		} // collision ground
+		for (auto i : ver_block_arr) { 
+			for (auto &j : i) {
+				if (player.GetTop() + player.GetHeight() <= j.GetTop() && player.GetTop() + player.GetHeight() + jumpSpeed >= j.GetTop() && player.GetLeft() + 2 < j.GetLeft() + j.GetWidth() && player.GetLeft() + player.GetWidth() - 2 > j.GetLeft()) {
+					jumpSpeed = 0;
+					jumpBonusFrame = 0;
+					player.SetTopLeft(player.GetLeft() + moveSpeed, j.GetTop() - player.GetHeight());
+					double ground = j.GetTop() - player.GetHeight();
+					CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+					return true;
+				}
+			}
+		} // collision check vertical
+		for (auto i : hor_block_arr) {
+			for (auto &j : i) {
+				if (player.GetTop() + player.GetHeight() <= j.GetTop() && player.GetTop() + player.GetHeight() + jumpSpeed >= j.GetTop() && player.GetLeft() + 2 < j.GetLeft() + j.GetWidth() && player.GetLeft() + player.GetWidth() - 2 > j.GetLeft()) {
+					jumpSpeed = 0;
+					jumpBonusFrame = 0;
+					player.SetTopLeft(player.GetLeft() + moveSpeed, j.GetTop() - player.GetHeight());
+					double ground = j.GetTop() - player.GetHeight();
+					CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+					return true;
+				}
+			}
+		} // collision check horizontal 
+	}
+	return false;
+}
 // dead
 void CGameStateRun::player_dead() {
 	jumpSpeed = -19;
@@ -309,13 +349,14 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		jumpSpeed = 0;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
-		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
+		if(!check_penetrate(player))
+			player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
 	}
 	if (frame + 1 < 0) {//到int的上限後 歸零
 		frame = 0;
 	}
 
-	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
+	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_collision_brick(i, player);} // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
 	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal 
 
