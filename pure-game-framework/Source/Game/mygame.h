@@ -131,6 +131,9 @@ namespace game_framework {
 		bool keyLeft = false;
 		int frame = 0;
 		int animate_frame = 0;
+		bool player_fall = false;
+		bool player_on_air = false;
+
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
@@ -143,6 +146,13 @@ namespace game_framework {
 		int groundX_down = 0;
 		int groundY_down = 836;
 		int current_ground_arr_flag = -1; // to track number of element ground block were built
+
+		// Audio
+		int dead_audio_flag = 0; // player_dead_audio control flag
+
+		CAudio *field_music = CAudio::Instance();
+		CAudio *player_jump_audio = CAudio::Instance();
+		CAudio *player_dead_audio = CAudio::Instance();
 
 		// height of image
 		int grass_height = 50;

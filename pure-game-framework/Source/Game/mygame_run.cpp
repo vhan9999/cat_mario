@@ -26,19 +26,6 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
-// Audio
-/*-----------------------------------------------------------------------------------------------------*/
-int dead_audio_flag = 0; // player_dead_audio control flag
-
-CAudio *field_music = CAudio::Instance();
-CAudio *player_jump_audio = CAudio::Instance();
-CAudio *player_dead_audio = CAudio::Instance(); 
-
-/*-----------------------------------------------------------------------------------------------------*/
-
-bool player_fall = false;
-bool player_on_air = false;
-
 // Image
 class ImageFactory {
 public:
@@ -522,6 +509,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
+	field_music->Play(0, true);
+
 	int currentGroundBlock= 0; // track how many ground block were build
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
@@ -618,8 +607,8 @@ void CGameStateRun::setMap1() {
 	// phase 10
 	currentGroundBlock += 9;
 	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+6), high_from_ground(1));
-	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 6)+20, high_from_ground(10) - 20);
+	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+5), high_from_ground(1));
+	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 5)+20, high_from_ground(10) - 20);
 
 	// phase 11
 	currentGroundBlock += 7;
@@ -634,7 +623,6 @@ void CGameStateRun::setMap1() {
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
 	field_music->Load(0, "resources/audio/map_song/field.wav");
-	field_music->Play(0, true);
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
 	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
 	
