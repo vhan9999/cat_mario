@@ -30,7 +30,7 @@ void CGameStateInit::OnInit()
 	//
 	// 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
 	//
-	game_menu.LoadBitmapByString({ "resources/image/logo/game_menu_ver2.bmp" });
+	game_menu.LoadBitmapByString({ "resources/image/logo/game_menu.bmp" });
 	game_menu.SetFrameIndexOfBitmap(0);
 	game_menu.SetTopLeft(0, 0);
 	Sleep(1000);
