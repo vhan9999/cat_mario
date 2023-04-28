@@ -26,6 +26,8 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 /*-----------------------------------------------------------------------------------------------------*/
 
+/* ----CLASS---- */
+/*-----------------------------------------------------------------------------------------------------*/
 // Image
 class ImageFactory {
 public:
@@ -52,7 +54,7 @@ public:
 		return new_brick;
 	}
 
-	static CMovingBitmap createBlock2(std::string name, int x, int y) {
+	static CMovingBitmap createInteractBlock(std::string name, int x, int y) {
 		CMovingBitmap new_obj;
 		if (name == "pipeline_short") {
 			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_short.bmp" }, RGB(163, 73, 164));
@@ -114,6 +116,37 @@ public:
 		return new_obj;
 	}
 };
+
+// Interact block
+class InteractBlock{
+	private:
+		std::string _image_name;
+		CMovingBitmap _image_object;
+		std::vector<CMovingBitmap> object_arr;
+		int _x, _y;
+		bool _isDangerous;
+		bool _isInteract;
+	public:
+		InteractBlock(std::string image_name, int x, int y, bool isDangerous, bool isInteract): _image_name(image_name), _x(x), _y(y), _isDangerous(isDangerous), _isInteract(isInteract) {}
+		~InteractBlock(){}
+		// setter
+		void setImageObject() { _image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);}
+		// getter
+		CMovingBitmap getImageObject() { return _image_object; }
+		int getObjectHeight() { return _image_object.GetHeight(); }
+		int getObjectWidth() { return _image_object.GetWidth(); }
+		//function
+		void loadImage() {
+			std::vector<CMovingBitmap> block_arr;
+			CMovingBitmap block;
+
+			block = ImageFactory::createInteractBlock(_image_name, _x, _y);
+			block_arr.push_back(block);
+
+			interact_block_arr.push_back(block_arr);
+		}
+		
+};		
 /*-----------------------------------------------------------------------------------------------------*/
 
 
@@ -167,15 +200,15 @@ void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) {
 	hor_block_arr.push_back(block_arr);
 }
 
-// load block2
+// load interact block
 void CGameStateRun::loadImage_block2(std::string name, int x, int y) {
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap block;
 
-	block = ImageFactory::createBlock2(name, x, y);
+	block = ImageFactory::createInteractBlock(name, x, y);
 	block_arr.push_back(block);
 
-	ver_block2_arr.push_back(block_arr);
+	interact_block_arr.push_back(block_arr);
 }
 
 // load enemy
@@ -212,8 +245,8 @@ void CGameStateRun::show_environment() {
 	for (auto i : environment_arr) { i.ShowBitmap(); }
 }
 
-void CGameStateRun::show_block2() {
-	for (auto i : ver_block2_arr) { for (auto j : i) { j.ShowBitmap(); } }
+void CGameStateRun::show_interact_block() {
+	for (auto i : interact_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
 // check value is in range [min, max] or not
@@ -265,7 +298,7 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 	if ((player_on_air == false) && (keyUp==true)) { player_jump_audio->Play(1, false); } // player jump audio
 
 }
-// cheng chin brick collision
+// brick collision
 void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player){
 	for (auto &i : arr) {
 		if (CMovingBitmap::IsOverlap(player, i)) {
@@ -447,7 +480,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
-	for (auto i : ver_block2_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check block2 
+	for (auto i : interact_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check block2 
 	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal
 
 
@@ -477,7 +510,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
-		for (auto &i : ver_block2_arr) {
+		for (auto &i : interact_block_arr) {
 			for (auto &j : i) {
 				int block_pos = j.GetLeft() - moveSpeed;
 				j.SetTopLeft(block_pos, j.GetTop());
@@ -685,7 +718,7 @@ void CGameStateRun::OnShow()
 {
 	show_ground();
 	show_ver();
-	show_block2();
+	show_interact_block();
 	show_hor();
 	show_enemy();
 	show_environment();
