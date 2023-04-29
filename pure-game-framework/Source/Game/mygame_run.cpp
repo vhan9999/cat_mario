@@ -9,6 +9,7 @@
 #include "stdio.h"
 #include <vector>
 #include <crtdbg.h>
+#include <string>
 using namespace game_framework;
 
 
@@ -28,6 +29,17 @@ using namespace game_framework;
 
 /* ----CLASS---- */
 /*-----------------------------------------------------------------------------------------------------*/
+// Audio
+/*-----------------------------------------------------------------------------------------------------*/
+CAudio *field_music = CAudio::Instance();
+CAudio *player_jump_audio = CAudio::Instance();
+CAudio *player_dead_audio = CAudio::Instance(); 
+
+/*-----------------------------------------------------------------------------------------------------*/
+
+int current_checkpoint_x;
+int current_checkpoint_y;
+
 // Image
 class ImageFactory {
 public:
@@ -44,8 +56,6 @@ public:
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick4.bmp" }, RGB(163, 73, 164));
 		case 5: // brick5
 			new_brick.LoadBitmapByString({ "resources/image/object/block1/brown_brick5.bmp" }, RGB(163, 73, 164));
-		case 6: // item brick
-			new_brick.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp" }, RGB(163, 73, 164));
 		default:
 			break;
 		}
@@ -64,6 +74,15 @@ public:
 		}
 		else if (name == "pipeline_big") {
 			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_big.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "item_block") {
+			new_obj.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "checkpoint_flag") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "endpoint_flag") {
+			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_flag.bmp" }, RGB(163, 73, 164));
 		}
 		new_obj.SetTopLeft(x, y);
 		return new_obj;
@@ -102,12 +121,6 @@ public:
 		else if (name == "cloud_eye") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/cloud_eye.bmp" }, RGB(163, 73, 164));
 		}
-		else if (name == "checkpoint_flag") {
-			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" }, RGB(163, 73, 164));
-		}
-		else if (name == "endpoint_flag") {
-			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_flag.bmp" }, RGB(163, 73, 164));
-		}
 		else if (name == "endpoint_building") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/end_point_building.bmp" }, RGB(163, 73, 164));
 		}
@@ -118,35 +131,48 @@ public:
 };
 
 // Interact block
-class InteractBlock{
-	private:
-		std::string _image_name;
-		CMovingBitmap _image_object;
-		std::vector<CMovingBitmap> object_arr;
-		int _x, _y;
-		bool _isDangerous;
-		bool _isInteract;
-	public:
-		InteractBlock(std::string image_name, int x, int y, bool isDangerous, bool isInteract): _image_name(image_name), _x(x), _y(y), _isDangerous(isDangerous), _isInteract(isInteract) {}
-		~InteractBlock(){}
-		// setter
-		void setImageObject() { _image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);}
-		// getter
-		CMovingBitmap getImageObject() { return _image_object; }
-		int getObjectHeight() { return _image_object.GetHeight(); }
-		int getObjectWidth() { return _image_object.GetWidth(); }
-		//function
-		void loadImage() {
-			std::vector<CMovingBitmap> block_arr;
-			CMovingBitmap block;
+class InteractBlock {
+private:
+	std::string _image_name;
+	CMovingBitmap _image_object;
+	int _x, _y;
+	bool _isDangerous;
+	bool _isInteract;
+public:
+	static std::vector<CMovingBitmap> interact_block_arr;
+	InteractBlock(std::string image_name, int x, int y, bool isDangerous, bool isInteract) : _image_name(image_name), _x(x), _y(y), _isDangerous(isDangerous), _isInteract(isInteract) {
+		_image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);
+		interact_block_arr.push_back(_image_object);
+	}
+	~InteractBlock() {}
+	// getter
+	int getObjectHeight() { return _image_object.GetHeight(); }
+	int getObjectWidth() { return _image_object.GetWidth(); }
+	//function
+	static void showImage() {
+		for (auto i : interact_block_arr) { i.ShowBitmap(); }
+	}
+};
+std::vector<CMovingBitmap> InteractBlock::interact_block_arr = {};
 
-			block = ImageFactory::createInteractBlock(_image_name, _x, _y);
-			block_arr.push_back(block);
-
-			interact_block_arr.push_back(block_arr);
-		}
-		
-};		
+// Environment
+class EnvironmentBlock {
+private:
+	std::string _image_name;
+	CMovingBitmap _image_object;
+	int _x, _y;
+public:
+	static std::vector<CMovingBitmap> environment_block_arr;
+	EnvironmentBlock(std::string image_name, int x, int y):_image_name(image_name), _x(x), _y(y){
+		_image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);
+		environment_block_arr.push_back(_image_object);
+	}
+	~EnvironmentBlock(){}
+	static void showImage() {
+		for (auto i : environment_block_arr) { i.ShowBitmap(); }
+	}
+};
+std::vector<CMovingBitmap> EnvironmentBlock::environment_block_arr = {};
 /*-----------------------------------------------------------------------------------------------------*/
 
 
@@ -176,8 +202,8 @@ void CGameStateRun::loadImage_ground(int amount, int x_up, int y_up, int x_down,
 	build_block_ground(5, amount, x_down, y_down); // ground brick down
 }
 
-// load multiple vertical block
-void CGameStateRun::loadImage_multiple_ver(int type, int amount, int x, int y) { // build block multiple (vertical)
+// load block multiple (vertical)
+void CGameStateRun::loadImage_multiple_ver(int type, int amount, int x, int y) { 
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -188,8 +214,8 @@ void CGameStateRun::loadImage_multiple_ver(int type, int amount, int x, int y) {
 	ver_block_arr.push_back(block_arr);
 }
 
-// load multiple vertical horizontal
-void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) { // build block multiple (horizontal)
+// load block multiple (horizontal)
+void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) { 
 	std::vector<CMovingBitmap> block_arr;
 	CMovingBitmap brick;
 	for (int i = 0; i < amount; i++) { // ground brick up
@@ -198,17 +224,6 @@ void CGameStateRun::loadImage_multiple_hor(int type, int amount, int x, int y) {
 		x += 60;
 	}
 	hor_block_arr.push_back(block_arr);
-}
-
-// load interact block
-void CGameStateRun::loadImage_block2(std::string name, int x, int y) {
-	std::vector<CMovingBitmap> block_arr;
-	CMovingBitmap block;
-
-	block = ImageFactory::createInteractBlock(name, x, y);
-	block_arr.push_back(block);
-
-	interact_block_arr.push_back(block_arr);
 }
 
 // load enemy
@@ -243,10 +258,6 @@ void CGameStateRun::show_enemy() {
 
 void CGameStateRun::show_environment() {
 	for (auto i : environment_arr) { i.ShowBitmap(); }
-}
-
-void CGameStateRun::show_interact_block() {
-	for (auto i : interact_block_arr) { for (auto j : i) { j.ShowBitmap(); } }
 }
 
 // check value is in range [min, max] or not
@@ -461,11 +472,12 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (player.GetTop() + jumpSpeed >= 1500) {// fall down (dead)
 		player.SetTopLeft(player.GetLeft() + moveSpeed, 1500);
 		jumpSpeed = 0; moveSpeed = 0;
-		player_fall = true;
+		game_over = true;
 		player_on_air = false;
 		dead_audio_flag += 1;
+		if (dead_audio_flag == 10) { dead_audio_flag = 5; }
 	}
-	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
+	else if (moveSpeed != 0 || jumpSpeed != 0) {// move
 		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
 	}
 
@@ -480,9 +492,8 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
-	for (auto i : interact_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check block2 
 	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal
-
+	CGameStateRun::check_collision_brick(InteractBlock::interact_block_arr, player);
 
 	// player restriction
 	if (player.GetLeft() <= 0) {
@@ -491,7 +502,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	if (player.GetLeft() + player.GetWidth() > 512) { // right
 		int player_posX = 512 - player.GetWidth();
 		player.SetTopLeft(player_posX, player.GetTop());
-		// shift the image
+		// shift image left 
 		for (auto &i : upper_ground_brick_arr) {
 			for (auto &j : i) {
 				int block_pos = j.GetLeft() - moveSpeed;
@@ -510,40 +521,84 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
-		for (auto &i : interact_block_arr) {
-			for (auto &j : i) {
-				int block_pos = j.GetLeft() - moveSpeed;
-				j.SetTopLeft(block_pos, j.GetTop());
-			}
-		}
 		for (auto &i : hor_block_arr) {
 			for (auto &j : i) {
 				int block_pos = j.GetLeft() - moveSpeed;
 				j.SetTopLeft(block_pos, j.GetTop());
 			}
 		}
+		for (auto &i:InteractBlock::interact_block_arr) {
+			int block_pos = i.GetLeft() - moveSpeed;
+			i.SetTopLeft(block_pos, i.GetTop());
+		}
 		for (auto &i : environment_arr) {
 			int obj_pos = i.GetLeft() - moveSpeed;
 			i.SetTopLeft(obj_pos, i.GetTop());
 		}
+		shift_amount += moveSpeed; // for calculate returning checkpoint
 	}
 
-	// player fall and dead audio
-	if (player_fall == true) {
+	// game over
+	if (game_over == true) {
 		field_music->Stop(0);
 		player_jump_audio->Stop(1);
-		if (dead_audio_flag == 1) {
-			player_dead_audio->Play(2);
+		if (dead_audio_flag == 1) { 
+			player_dead_audio->Play(2); 
+			game_over_count -= 1;
+			Sleep(2000);
+			game_over_image.SetFrameIndexOfBitmap(0); // game over image
+
+			// shift image right (go back to checkpoint)
+			for (auto &i : upper_ground_brick_arr) {
+				for (auto &j : i) {
+					int block_pos = j.GetLeft() + shift_amount;
+					j.SetTopLeft(block_pos, j.GetTop());
+				}
+			}
+			for (auto &i : rem_ground_brick_arr) {
+				for (auto &j : i) {
+					int block_pos = j.GetLeft() + shift_amount;
+					j.SetTopLeft(block_pos, j.GetTop());
+				}
+			}
+			for (auto &i : ver_block_arr) {
+				for (auto &j : i) {
+					int block_pos = j.GetLeft() + shift_amount;
+					j.SetTopLeft(block_pos, j.GetTop());
+				}
+			}
+			for (auto &i : hor_block_arr) {
+				for (auto &j : i) {
+					int block_pos = j.GetLeft() + shift_amount;
+					j.SetTopLeft(block_pos, j.GetTop());
+				}
+			}
+			for (auto &i : InteractBlock::interact_block_arr) {
+				int block_pos = i.GetLeft() + shift_amount;
+				i.SetTopLeft(block_pos, i.GetTop());
+			}
+			for (auto &i : environment_arr) {
+				int obj_pos = i.GetLeft() + shift_amount;
+				i.SetTopLeft(obj_pos, i.GetTop());
+			}
+		}
+		else {
+			Sleep(2000);
+			game_over_image.SetFrameIndexOfBitmap(1); 
+			field_music->Play(0, true); // play field music
+			player.SetFrameIndexOfBitmap(0); 
+			player.SetTopLeft(current_checkpoint_x, current_checkpoint_y); // player start at current checkpoint
+			// reset value
+			shift_amount = 0;
+			dead_audio_flag = 0; 
+			game_over = false;
 		}
 	}
-
 }
 
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
 void CGameStateRun::setMap1() {
-	field_music->Play(0, true);
-
 	int currentGroundBlock= 0; // track how many ground block were build
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
@@ -551,21 +606,19 @@ void CGameStateRun::setMap1() {
 	loadImage_environment("mountain", far_from_start(1), groundY_up - mountain_height); // mountain height = 132
 	loadImage_environment("cloud_eye", far_from_start(7), high_from_ground(9));
 
-	loadImage_multiple_hor(6, 1, far_from_start(9), high_from_ground(4));
-
+	InteractBlock item_block1("item_block", far_from_start(9), high_from_ground(4), false, true);
 	loadImage_multiple_hor(1, 5, far_from_start(9 + 3), high_from_ground(4));
-
-	loadImage_multiple_hor(6, 1, far_from_start(9 + 5), high_from_ground(4 + 3));
+	InteractBlock item_block2("item_block", far_from_start(9+5), high_from_ground(4+3), false, true);
 
 	// phase 2
 	currentGroundBlock += 17;
 	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down); // ground
 	
 	loadImage_environment("grass", far_from_start(currentGroundBlock+2), groundY_up - grass_height); 
-	loadImage_block2("pipeline_mid", far_from_start(currentGroundBlock + 3), groundY_up - 160);
+	InteractBlock pipeline1("pipeline_mid", far_from_start(currentGroundBlock + 3), groundY_up - 180, false, false);
 
 	loadImage_environment("grass", far_from_start(currentGroundBlock +9), groundY_up - grass_height);
-	loadImage_block2("pipeline_big", far_from_start(currentGroundBlock + 10), groundY_up - 180);
+	InteractBlock pipeline2("pipeline_big", far_from_start(currentGroundBlock + 10), groundY_up - 240, false, false);
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
 
@@ -586,22 +639,23 @@ void CGameStateRun::setMap1() {
 	currentGroundBlock += 14;
 	
 	loadImage_ground(11, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-	// loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock), high_from_ground(9));
+	loadImage_multiple_hor(1, 3, far_from_start(currentGroundBlock), high_from_ground(9));
 	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock+2), high_from_ground(4));
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 7), high_from_ground(12));
 
 	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 9), high_from_ground(4)); // checkpoint
-	loadImage_environment("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height);
+	InteractBlock cp_flag("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height, false, true);
 
 	// phase6
 	currentGroundBlock += 11;
 	loadImage_ground(17, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 	
-	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 3), high_from_ground(4));
-	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 6), high_from_ground(4));
-	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 9), high_from_ground(4));
-	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock + 6), high_from_ground(8));
+	InteractBlock item_block3("item_block", far_from_start(currentGroundBlock + 3), high_from_ground(4), false, true);
+	InteractBlock item_block4("item_block", far_from_start(currentGroundBlock + 6), high_from_ground(4), false, true);
+	InteractBlock item_block5("item_block", far_from_start(currentGroundBlock + 9), high_from_ground(4), false, true);
+	InteractBlock item_block6("item_block", far_from_start(currentGroundBlock + 6), high_from_ground(8), false, true);
+
 	
 	loadImage_environment("grass", far_from_start(currentGroundBlock + 10), groundY_up-grass_height);
 
@@ -620,8 +674,9 @@ void CGameStateRun::setMap1() {
 	loadImage_ground(13, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 	
 	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock+3), high_from_ground(4));
-	loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock+6), high_from_ground(4));
+	// loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock+6), high_from_ground(4));
 	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock+8), high_from_ground(4));
+	InteractBlock pipeline3("pipeline_short", far_from_start(currentGroundBlock+11), groundY_up - 120, false, false);
 
 	// phase 9
 	currentGroundBlock += 13;
@@ -640,15 +695,15 @@ void CGameStateRun::setMap1() {
 	// phase 10
 	currentGroundBlock += 9;
 	loadImage_ground(7, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+5), high_from_ground(1));
-	loadImage_environment("endpoint_flag", far_from_start(currentGroundBlock + 5)+20, high_from_ground(10) - 20);
+	loadImage_multiple_hor(4, 1, far_from_start(currentGroundBlock+4), high_from_ground(1));
+	InteractBlock ep_flag("endpoint_flag", far_from_start(currentGroundBlock + 4)+20, high_from_ground(10) - 20, false, true);
 
 	// phase 11
 	currentGroundBlock += 7;
-	loadImage_ground(15, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-	loadImage_environment("grass", far_from_start(currentGroundBlock), groundY_up-grass_height);
-	loadImage_environment("endpoint_building", far_from_start(currentGroundBlock+5), groundY_up - endpoint_building_height);
+	loadImage_ground(10, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 
+	loadImage_environment("grass", far_from_start(currentGroundBlock-2), groundY_up-grass_height);
+	loadImage_environment("endpoint_building", far_from_start(currentGroundBlock+2), groundY_up - endpoint_building_height);
 }
 /*-----------------------------------------------------------------------------------------------------*/
 
@@ -656,13 +711,25 @@ void CGameStateRun::setMap1() {
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
 	field_music->Load(0, "resources/audio/map_song/field.wav");
+	field_music->Play(0, true);
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
 	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
 	
 	// player
 	player.LoadBitmapByString(player_image, RGB(255, 242, 0));
-	player.SetTopLeft(120, groundY_up);
+	player.SetTopLeft(120, groundY_up-player.GetHeight());
 	
+	// set initial checkpoint
+	current_checkpoint_x = 120;
+	current_checkpoint_y = groundY_up - player.GetHeight();
+
+	// game over
+	game_over_image.LoadBitmapByString({ "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" }, RGB(163, 73, 164));
+	game_over_image.SetFrameIndexOfBitmap(1);
+	game_over_image.SetTopLeft(0, 0);
+
+
+
 	setMap1();
 
 }
@@ -718,10 +785,18 @@ void CGameStateRun::OnShow()
 {
 	show_ground();
 	show_ver();
-	show_interact_block();
 	show_hor();
 	show_enemy();
 	show_environment();
-
+	InteractBlock::showImage();
+	game_over_image.ShowBitmap();
+	
+	if (game_over == true) {
+		CDC *pDC = CDDraw::GetBackCDC();
+		CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
+		CTextDraw::Print(pDC, 500, 400, std::to_string(game_over_count));
+		CDDraw::ReleaseBackCDC();
+	}
+	
 	player.ShowBitmap();
 }

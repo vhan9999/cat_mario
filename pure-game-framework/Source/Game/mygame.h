@@ -92,6 +92,8 @@ namespace game_framework {
 		bool inRange(double num, double min, double max);
 		int high_from_ground(int blockCount);
 		int far_from_start(int blockCount);
+		
+		bool player_on_air = false;
 
 		// collision
 		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
@@ -105,16 +107,21 @@ namespace game_framework {
 		void loadImage_multiple_hor(int type, int amount, int x, int y);
 		void loadImage_enemy(std::string name, int x, int y);
 		void loadImage_environment(std::string name, int x, int y);
-		void loadImage_block2(std::string name, int x, int y);
 		void show_ground();
 		void show_hor();
 		void show_ver();
 		void show_enemy();
-		void show_interact_block();
+		void show_environment();
 
 		CMovingBitmap background;
 		CMovingBitmap player;
-		void show_environment();
+		CMovingBitmap game_over_image;
+		
+		int shift_amount=0;
+
+		// game over
+		int game_over_count = 2;
+		int dead_audio_flag = 0; // player_dead_audio control flag
 
 		// set Map
 		void setMap1();
@@ -129,11 +136,9 @@ namespace game_framework {
 		bool keyUp = false;
 		bool keyRight = false;
 		bool keyLeft = false;
+		bool game_over = false;
 		int frame = 0;
 		int animate_frame = 0;
-		bool player_fall = false;
-		bool player_on_air = false;
-
 		int jumpBonusFrame;
 		void moveHor();
 		void moveVer();
@@ -146,13 +151,6 @@ namespace game_framework {
 		int groundX_down = 0;
 		int groundY_down = 836;
 		int current_ground_arr_flag = -1; // to track number of element ground block were built
-
-		// Audio
-		int dead_audio_flag = 0; // player_dead_audio control flag
-
-		CAudio *field_music = CAudio::Instance();
-		CAudio *player_jump_audio = CAudio::Instance();
-		CAudio *player_dead_audio = CAudio::Instance();
 
 		// height of image
 		int grass_height = 50;
