@@ -206,6 +206,9 @@ namespace game_framework {
 		delayCount = delay;
 	}
 	
+	void CMovingBitmap::SetDanger(bool danger_val) {
+		danger = danger_val;
+	}
 	//! 顯示圖片。
 	/*!
 		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
@@ -256,7 +259,6 @@ namespace game_framework {
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Top() is called !!!");
 		return location.top;
 	}
-
 	//! 取得當前圖片寬度。
 	/*!
 		\return 取得當前圖片寬度。
@@ -307,6 +309,10 @@ namespace game_framework {
 	*/
 	bool CMovingBitmap::IsBitmapLoaded() {
 		return isBitmapLoaded;
+	}
+
+	bool CMovingBitmap::GetDanger() {
+		return danger;
 	}
 
 	//! 回傳物件的幀數。

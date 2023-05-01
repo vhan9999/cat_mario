@@ -76,7 +76,7 @@ public:
 			new_obj.LoadBitmapByString({ "resources/image/object/block2/pipeline_big.bmp" }, RGB(163, 73, 164));
 		}
 		else if (name == "item_block") {
-			new_obj.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp" }, RGB(163, 73, 164));
+			new_obj.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
 		}
 		else if (name == "checkpoint_flag") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" , "resources/image/object/environment/blank.bmp" }, RGB(163, 73, 164));
@@ -137,10 +137,10 @@ private:
 	CMovingBitmap _image_object;
 	int _x, _y;
 	bool _isDangerous;
-	bool _isInteract;
 public:
 	static std::vector<CMovingBitmap> interact_block_arr;
-	InteractBlock(std::string image_name, int x, int y, bool isDangerous, bool isInteract) : _image_name(image_name), _x(x), _y(y), _isDangerous(isDangerous), _isInteract(isInteract) {
+	InteractBlock(std::string image_name, int x, int y, bool isDangerous, bool isInteract) : _image_name(image_name), _x(x), _y(y){
+		_image_object.SetDanger(_isDangerous);
 		_image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);
 		interact_block_arr.push_back(_image_object);
 	}
@@ -321,25 +321,74 @@ void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovi
 			int obj_mid_y = i.GetTop() + (i.GetHeight() / 2);
 			//head touch
 			if (inRange(player.GetTop() - 1, obj_mid_y, obj_bottom) && player.GetLeft() + 10 <= obj_right && player.GetLeft() + player.GetWidth() - 10 >= obj_left) {
-				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") { 
+				jumpSpeed = 0;
+				player.SetTopLeft(player.GetLeft(), obj_bottom);
+				jumpSpeed += 1;
+				
+			}
+			//foot touch
+			else if (inRange(player.GetTop() + player.GetHeight() + 1, obj_top, obj_mid_y) && player.GetLeft() + 2 < obj_right && player.GetLeft() + player.GetWidth() - 2 > obj_left) {
+				jumpSpeed = 0;
+				jumpBonusFrame = 0;
+				player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
+				double ground = obj_top - player.GetHeight();
+				CGameStateRun::ableToJump(jumpSpeed, jumpBonusFrame, ground); // can jump on block
+			}
+			//left touch
+			else if (inRange(player.GetLeft() - 1, obj_mid_x, obj_right) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 5 >= obj_top) {
+				moveSpeed = 0;
+				player.SetTopLeft(obj_right, player.GetTop());
+				frame += 2;
+				
+			}
+			//right touch
+			else if (inRange(player.GetLeft() + player.GetWidth() + 1, obj_left, obj_mid_x) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 5 >= obj_top) {
+				moveSpeed = 0;
+				player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
+				frame += 2;
+				
+			}
+		}
+	}
+}
+
+// check interact brick collision
+void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player) {
+	for (auto &i : arr) {
+		if (CMovingBitmap::IsOverlap(player, i)) {
+			int obj_left = i.GetLeft();
+			int obj_right = i.GetLeft() + i.GetWidth();
+			int obj_top = i.GetTop();
+			int obj_bottom = i.GetTop() + i.GetHeight();
+			int obj_mid_x = i.GetLeft() + (i.GetWidth() / 2);
+			int obj_mid_y = i.GetTop() + (i.GetHeight() / 2);
+			//head touch
+			if (inRange(player.GetTop() - 1, obj_mid_y, obj_bottom) && player.GetLeft() + 10 <= obj_right && player.GetLeft() + player.GetWidth() - 10 >= obj_left) {
+				// checkpoint flag
+				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.SetFrameIndexOfBitmap(1);
 					shift_amount = 0;
-					current_checkpoint_x = 420;
-					current_checkpoint_y = high_from_ground(5);
-					return; 
+					current_checkpoint_x = 120;
+					current_checkpoint_y = groundY_up - player.GetHeight();
+					return;
+				}
+				else if (i.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") {
+					i.SetFrameIndexOfBitmap(1);
 				}
 				jumpSpeed = 0;
 				player.SetTopLeft(player.GetLeft(), obj_bottom);
 				jumpSpeed += 1;
+
 			}
 			//foot touch
 			else if (inRange(player.GetTop() + player.GetHeight() + 1, obj_top, obj_mid_y) && player.GetLeft() + 2 < obj_right && player.GetLeft() + player.GetWidth() - 2 > obj_left) {
-				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") { 
+				// checkpoint flag
+				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.SetFrameIndexOfBitmap(1);
 					shift_amount = 0;
-					current_checkpoint_x = 420;
-					current_checkpoint_y = high_from_ground(5);
-					return; 
+					current_checkpoint_x = 120;
+					current_checkpoint_y = groundY_up - player.GetHeight();
+					return;
 				}
 				jumpSpeed = 0;
 				jumpBonusFrame = 0;
@@ -349,30 +398,35 @@ void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovi
 			}
 			//left touch
 			else if (inRange(player.GetLeft() - 1, obj_mid_x, obj_right) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 5 >= obj_top) {
+				// checkpoint flag
 				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.SetFrameIndexOfBitmap(1);
 					shift_amount = 0;
-					current_checkpoint_x = 420;
-					current_checkpoint_y = high_from_ground(5);
+					current_checkpoint_x = 120;
+					current_checkpoint_y = groundY_up - player.GetHeight();
 					return;
 				}
-				moveSpeed = 0;
-				player.SetTopLeft(obj_right, player.GetTop());
-				frame += 2;
-
+				else {
+					moveSpeed = 0;
+					player.SetTopLeft(obj_right, player.GetTop());
+					frame += 2;
+				}
 			}
 			//right touch
 			else if (inRange(player.GetLeft() + player.GetWidth() + 1, obj_left, obj_mid_x) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 5 >= obj_top) {
+				// checkpoint flag
 				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.SetFrameIndexOfBitmap(1);
 					shift_amount = 0;
-					current_checkpoint_x = 420;
-					current_checkpoint_y = high_from_ground(5);
+					current_checkpoint_x = 120;
+					current_checkpoint_y = groundY_up - player.GetHeight();
 					return;
 				}
-				moveSpeed = 0;
-				player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
-				frame += 2;
+				else {
+					moveSpeed = 0;
+					player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
+					frame += 2;
+				}
 			}
 		}
 	}
@@ -522,7 +576,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
 	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal
-	CGameStateRun::check_collision_brick(InteractBlock::interact_block_arr, player);
+	CGameStateRun::check_collision_interact_brick(InteractBlock::interact_block_arr, player); // collision interact block
 
 	// player restriction
 	if (player.GetLeft() <= 0) {

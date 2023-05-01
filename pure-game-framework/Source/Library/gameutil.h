@@ -96,6 +96,7 @@ namespace game_framework {
 		void  SetAnimation(int delay, bool _once);
 		void  SetFrameIndexOfBitmap(int frame);
 		void  SetTopLeft(int, int);			// 將圖的左上角座標移至 (x,y)
+		void SetDanger(bool isdanger); // set danger value (for interact object)
 
 		/* Show the bitmap with or without factor. */
 		void  ShowBitmap();					// 將圖貼到螢幕
@@ -105,9 +106,12 @@ namespace game_framework {
 		int   GetFrameIndexOfBitmap();
 		int   GetFrameSizeOfBitmap();
 		int   GetTop();
+		
 		int   GetLeft();
 		int   GetHeight();
 		int   GetWidth();
+		bool GetDanger(); // get danger value (for interact object)
+
 		string GetImageFileName();
 		COLORREF GetFilterColor();
 
@@ -136,6 +140,9 @@ namespace game_framework {
 		bool isBitmapLoaded = false;	// whether a bitmap has been loaded
 		//! 儲存物件動畫是否為單次動畫
 		bool isOnce = false;
+		// check interact obj is danger or not
+		bool danger;
+		
 		CRect    location;			// location of the bitmap
 		vector<unsigned> surfaceID;
 		clock_t last_time = clock();

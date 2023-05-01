@@ -97,8 +97,8 @@ namespace game_framework {
 
 		// collision
 		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
+		void check_collision_interact_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
 		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		
 
 		// Load and show image 
 		void build_block_ground(int type, int amt, int x, int y);
@@ -126,7 +126,7 @@ namespace game_framework {
 		// set Map
 		void setMap1();
 	protected:
-		void OnMove();									// 移動遊戲元素
+		void OnMove();  // 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
 	private:
 		
