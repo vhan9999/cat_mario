@@ -112,6 +112,7 @@ namespace game_framework {
 		void show_ver();
 		void show_enemy();
 		void show_environment();
+		void show_animation();
 
 		CMovingBitmap background;
 		CMovingBitmap player;
@@ -167,6 +168,11 @@ namespace game_framework {
 		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
 		std::vector<std::vector<CMovingBitmap>> interact_block_arr; // store block2 arr
 
+		// animation
+		std::vector<CMovingBitmap> animation_arr;
+
+
+		// 
 		std::vector<CMovingBitmap> enemy_arr; // enemy array
 		std::vector<CMovingBitmap> environment_arr; // environment array
 	};

@@ -209,6 +209,10 @@ namespace game_framework {
 	void CMovingBitmap::SetDanger(bool danger_val) {
 		danger = danger_val;
 	}
+
+	void CMovingBitmap::SetSpawn(std::string _spawn) {
+		spawn = _spawn;
+	}
 	//! 顯示圖片。
 	/*!
 		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
@@ -269,6 +273,9 @@ namespace game_framework {
 		return location.right - location.left;
 	}
 	
+	std::string CMovingBitmap::GetSpawn() {
+		return spawn;
+	}
 	//! 啟動單次動畫。
 	/*!
 		將動畫設為初始幀，並且初始化單次動畫的參數值。

@@ -97,7 +97,7 @@ namespace game_framework {
 		void  SetFrameIndexOfBitmap(int frame);
 		void  SetTopLeft(int, int);			// 將圖的左上角座標移至 (x,y)
 		void SetDanger(bool isdanger); // set danger value (for interact object)
-
+		void SetSpawn(std::string spawn);
 		/* Show the bitmap with or without factor. */
 		void  ShowBitmap();					// 將圖貼到螢幕
 		void  ShowBitmap(double factor);	// 將圖貼到螢幕 factor < 1時縮小，>1時放大。注意：需要VGA卡硬體的支援，否則會很慢
@@ -111,6 +111,7 @@ namespace game_framework {
 		int   GetHeight();
 		int   GetWidth();
 		bool GetDanger(); // get danger value (for interact object)
+		std::string GetSpawn();
 
 		string GetImageFileName();
 		COLORREF GetFilterColor();
@@ -142,7 +143,9 @@ namespace game_framework {
 		bool isOnce = false;
 		// check interact obj is danger or not
 		bool danger;
-		
+
+		std::string spawn;
+
 		CRect    location;			// location of the bitmap
 		vector<unsigned> surfaceID;
 		clock_t last_time = clock();
