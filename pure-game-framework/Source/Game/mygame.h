@@ -92,7 +92,7 @@ namespace game_framework {
 		bool inRange(double num, double min, double max);
 		int high_from_ground(int blockCount);
 		int far_from_start(int blockCount);
-		
+
 		bool player_on_air = false;
 
 		// collision
@@ -114,11 +114,16 @@ namespace game_framework {
 		void show_environment();
 		void show_animation();
 
-		CMovingBitmap background;
+		// animation
+		void setAnimation();
+
+		// audio
+		void setAudio();
+		
+		//object
 		CMovingBitmap player;
 		CMovingBitmap game_over_image;
-		
-		int shift_amount=0;
+
 
 		// game over
 		int game_over_count = 2;
@@ -130,7 +135,11 @@ namespace game_framework {
 		void OnMove();  // 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
 	private:
-		
+		// animation
+		bool animation_flag = false;
+		CMovingBitmap coin_animation;
+		bool coin_animation_flag = false;
+		int shift_amount = 0;
 		int moveSpeed = 0;
 		int jumpSpeed = 0;
 		bool isBigJump = false;
@@ -171,8 +180,6 @@ namespace game_framework {
 		// animation
 		std::vector<CMovingBitmap> animation_arr;
 
-
-		// 
 		std::vector<CMovingBitmap> enemy_arr; // enemy array
 		std::vector<CMovingBitmap> environment_arr; // environment array
 	};

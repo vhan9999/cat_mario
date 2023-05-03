@@ -143,7 +143,7 @@ private:
 	std::string _spawn_name;
 public:
 	static std::vector<CMovingBitmap> interact_block_arr;
-	InteractBlock(std::string image_name, int x, int y, bool isDangerous, std::string spawn) : _image_name(image_name), _x(x), _y(y), _isDangerous(isDangerous), _spawn_name(spawn){
+	InteractBlock(std::string image_name, int x, int y, bool isDangerous, std::string spawn) : _image_name(image_name), _x(x), _y(y), _isDangerous(isDangerous), _spawn_name(spawn) {
 		_image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);
 		_image_object.SetDanger(_isDangerous);
 		_image_object.SetSpawn(_spawn_name);
@@ -333,7 +333,7 @@ void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovi
 				jumpSpeed = 0;
 				player.SetTopLeft(player.GetLeft(), obj_bottom);
 				jumpSpeed += 1;
-				
+
 			}
 			//foot touch
 			else if (inRange(player.GetTop() + player.GetHeight() + 1, obj_top, obj_mid_y) && player.GetLeft() + 2 < obj_right && player.GetLeft() + player.GetWidth() - 2 > obj_left) {
@@ -348,14 +348,14 @@ void CGameStateRun::check_collision_brick(std::vector<CMovingBitmap> &arr, CMovi
 				moveSpeed = 0;
 				player.SetTopLeft(obj_right, player.GetTop());
 				frame += 2;
-				
+
 			}
 			//right touch
 			else if (inRange(player.GetLeft() + player.GetWidth() + 1, obj_left, obj_mid_x) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 5 >= obj_top) {
 				moveSpeed = 0;
 				player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
 				frame += 2;
-				
+
 			}
 		}
 	}
@@ -384,21 +384,17 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 					return;
 				}
 				// item block 
-				else if ((i.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.GetSpawn()=="coin")) {
-					if(i.GetFrameIndexOfBitmap() == 0){
+				else if ((i.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.GetSpawn() == "coin")) {
+					if (i.GetFrameIndexOfBitmap() == 0) {
 						i.SetFrameIndexOfBitmap(1); // change image
 						coin_audio->Play(3, false); // coin audio
-						// coin animation (bug)
-						CMovingBitmap coin;
-						coin.LoadBitmapByString({ "resources/animation/object/coin/coin1.bmp", "resources/animation/object/coin/coin2.bmp", "resources/animation/object/coin/coin3.bmp", "resources/animation/object/coin/coin4.bmp", "resources/animation/object/coin/coin5.bmp", "resources/animation/object/coin/coin6.bmp", "resources/animation/object/coin/coin7.bmp", "resources/animation/object/coin/coin8.bmp" }, RGB(163, 73, 164));
-						coin.SetFrameIndexOfBitmap(0);
-						coin.SetTopLeft(i.GetLeft(), i.GetTop() - 168);
-						animation_arr.push_back(coin);
-
-						coin.SetAnimation(800, false);
-						if (coin.GetFrameIndexOfBitmap() == 7) {
-							coin.SetAnimation(800, true);
-						}
+						
+						// enable coin animation
+						coin_animation.SetFrameIndexOfBitmap(0);
+						coin_animation.SetTopLeft(i.GetLeft(), i.GetTop() - 168);
+						animation_arr.push_back(coin_animation); 
+						animation_flag = true;
+						coin_animation_flag = true;
 					}
 				}
 				jumpSpeed = 0;
@@ -643,13 +639,20 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 			int obj_pos = i.GetLeft() - moveSpeed;
 			i.SetTopLeft(obj_pos, i.GetTop());
 		}
-		for (auto &i : animation_arr) {
-			int obj_pos = i.GetLeft() - moveSpeed;
-			i.SetTopLeft(obj_pos, i.GetTop());
+		// shift animation left
+		if(animation_flag == true){
+			int coin_pos = coin_animation.GetLeft() - moveSpeed;
+			coin_animation.SetTopLeft(coin_pos, coin_animation.GetTop());
 		}
+
 		shift_amount += moveSpeed; // for calculate returning checkpoint
 	}
-
+	if (coin_animation_flag == true && animation_flag == true) {
+		coin_animation.SetAnimation(20, false);
+		if (coin_animation.GetFrameIndexOfBitmap() == 7) {
+			coin_animation.SetAnimation(20, true);
+		}
+	}
 	// game over
 	if (game_over == true) {
 		field_music->Stop(0);
@@ -659,7 +662,14 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 			game_over_count -= 1;
 			Sleep(2000);
 			game_over_image.SetFrameIndexOfBitmap(0); // game over image
-
+			
+			animation_flag = false;
+			// reset interact block
+			for (auto &i : InteractBlock::interact_block_arr) {
+				if(i.GetImageFileName() != "resources/image/object/environment/checkpoint_reached.bmp" && i.GetImageFileName() != "resources/image/object/environment/blank.bmp"){
+					i.SetFrameIndexOfBitmap(0);
+				}
+			}
 			// shift image right (go back to checkpoint)
 			for (auto &i : upper_ground_brick_arr) {
 				for (auto &j : i) {
@@ -693,9 +703,9 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				int obj_pos = i.GetLeft() + shift_amount;
 				i.SetTopLeft(obj_pos, i.GetTop());
 			}
-			for (auto &i : animation_arr) {
-			int obj_pos = i.GetLeft() + shift_amount;
-				i.SetTopLeft(obj_pos, i.GetTop());
+			if (animation_flag == true) {
+				int coin_pos = coin_animation.GetLeft() + shift_amount;
+				coin_animation.SetTopLeft(coin_pos, coin_animation.GetTop());
 			}
 		}
 		else {
@@ -760,7 +770,7 @@ void CGameStateRun::setMap1() {
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 7), high_from_ground(12));
 
-	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 9), high_from_ground(4)); 
+	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 9), high_from_ground(4));
 	InteractBlock cp_flag("checkpoint_flag", far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height, false, ""); // checkpoint
 
 	// phase6
@@ -822,18 +832,24 @@ void CGameStateRun::setMap1() {
 	loadImage_environment("endpoint_building", far_from_start(currentGroundBlock + 2), groundY_up - endpoint_building_height);
 }
 
-void setAudio() {
+void CGameStateRun::setAudio() {
 	field_music->Load(0, "resources/audio/map_song/field.wav");
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
 	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
 	coin_audio->Load(3, "resources/audio/interact_audio/coin.wav");
 }
 
+void CGameStateRun::setAnimation() {
+	// coin
+	coin_animation.LoadBitmapByString({ "resources/animation/object/coin/coin1.bmp", "resources/animation/object/coin/coin2.bmp", "resources/animation/object/coin/coin3.bmp", "resources/animation/object/coin/coin4.bmp", "resources/animation/object/coin/coin5.bmp", "resources/animation/object/coin/coin6.bmp", "resources/animation/object/coin/coin7.bmp", "resources/animation/object/coin/coin8.bmp" }, RGB(163, 73, 164));
+}
 /*-----------------------------------------------------------------------------------------------------*/
 // init
 void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value and image
 {
 	setAudio();
+	setAnimation();
+
 	field_music->Play(0, true);
 	// player
 	player.LoadBitmapByString(player_image, RGB(255, 242, 0));
@@ -900,12 +916,15 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
+
 	show_ground();
 	show_ver();
 	show_hor();
 	show_enemy();
 	show_environment();
-	show_animation();
+	if (animation_flag == true) {
+		coin_animation.ShowBitmap();
+	}
 
 	InteractBlock::showImage();
 	game_over_image.ShowBitmap();
