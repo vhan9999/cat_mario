@@ -37,8 +37,9 @@
  *      2. Replace the demonstration of animation as a new bouncing ball.
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
-
-
+#ifndef MYGAME_H
+#define MYGAME_H
+#include "colliders.h"
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// Constants
@@ -49,12 +50,12 @@ namespace game_framework {
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2
 	};
-
+	class EventCtrl;
+	class mapSetting;
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
 	// 每個Member function的Implementation都要弄懂
 	/////////////////////////////////////////////////////////////////////////////
-
 	class CGameStateInit : public CGameState {
 	public:
 		CGameStateInit(CGame *g);
@@ -87,100 +88,17 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-
-		void ableToJump(int &jumpSpd, int &jumpBns, double &ground);
-		bool inRange(double num, double min, double max);
-		int high_from_ground(int blockCount);
-		int far_from_start(int blockCount);
-
-		bool player_on_air = false;
-
-		// collision
-		void check_collision_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		void check_collision_interact_brick(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-		void check_ground_collision(std::vector<CMovingBitmap> &arr, CMovingBitmap &player);
-
-		// Load and show image 
-		void build_block_ground(int type, int amt, int x, int y);
-		void loadImage_ground(int amount, int x_up, int y_up, int x_down, int y_down);
-		void loadImage_multiple_ver(int type, int amount, int x, int y);
-		void loadImage_multiple_hor(int type, int amount, int x, int y);
-		void loadImage_enemy(std::string name, int x, int y);
-		void loadImage_environment(std::string name, int x, int y);
-		void show_ground();
-		void show_hor();
-		void show_ver();
-		void show_enemy();
-		void show_environment();
-		void show_animation();
-
-		// animation
-		void setAnimation();
-
-		// audio
-		void setAudio();
-		
-		//object
-		CMovingBitmap player;
-		CMovingBitmap game_over_image;
-
-
-		// game over
-		int game_over_count = 2;
-		int dead_audio_flag = 0; // player_dead_audio control flag
-
-		// set Map
-		void setMap1();
+		void EventCtrl();
+		void MapSetting(int map);
+		void Touching();
 	protected:
-		void OnMove();  // 移動遊戲元素
-		void OnShow();	// 顯示這個狀態的遊戲畫面
+		void OnMove();									// 移動遊戲元素
+		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
-		// animation
-		bool animation_flag = false;
-		CMovingBitmap coin_animation;
-		bool coin_animation_flag = false;
-		int shift_amount = 0;
-		int moveSpeed = 0;
-		int jumpSpeed = 0;
-		bool isBigJump = false;
-		bool keyUp = false;
-		bool keyRight = false;
-		bool keyLeft = false;
-		bool game_over = false;
-		int frame = 0;
-		int animate_frame = 0;
-		int jumpBonusFrame;
-		void moveHor();
-		void moveVer();
-		CMovingBitmap ground_brick;
-		CMovingBitmap brick;
-		CMovingBitmap brick2;
-		CMovingBitmap sky_brick;
-		int groundX_up = 0;
-		int groundY_up = 776;
-		int groundX_down = 0;
-		int groundY_down = 836;
-		int current_ground_arr_flag = -1; // to track number of element ground block were built
-
-		// height of image
-		int grass_height = 50;
-		int mountain_height = 132;
-		int checkpoint_flag_height = 120;
-		int endpoint_building_height = 180;
-
-		// player image
-		std::vector<std::string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
-
-		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
-		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr
-		std::vector<std::vector<CMovingBitmap>> ver_block_arr; // vertical block arr
-		std::vector<std::vector<CMovingBitmap>> hor_block_arr; // horizontal block arr
-		std::vector<std::vector<CMovingBitmap>> interact_block_arr; // store block2 arr
-
-		// animation
-		std::vector<CMovingBitmap> animation_arr;
-
-		std::vector<CMovingBitmap> enemy_arr; // enemy array
+		Player player;
+		CAudio *field_music = CAudio::Instance();
+		std::vector<Brick> enemys_arr; // enemy array
+		std::vector<Brick> bricks_arr;
 		std::vector<CMovingBitmap> environment_arr; // environment array
 	};
 
@@ -202,3 +120,4 @@ namespace game_framework {
 	};
 
 }
+#endif

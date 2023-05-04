@@ -1,5 +1,4 @@
 //#define	 INITGUID
-#pragma once
 #include "stdafx.h"
 #include "../Core/game.h"
 #include "../Core/MainFrm.h"
@@ -43,7 +42,7 @@ namespace game_framework {
 	int CMovingBitmap::GetHeight()
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Height() is called !!!");
-		return location.bottom - location.top;
+		return locations[frameIndex].bottom - locations[frameIndex].top;
 	}
 
 	//! 取得 CMovingBitmap 物件的左上角的 x 軸座標值。
@@ -54,7 +53,7 @@ namespace game_framework {
 	int CMovingBitmap::GetLeft()
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Left() is called !!!");
-		return location.left;
+		return locations[frameIndex].left;
 	}
 
 	//! 讀取圖片資源。
@@ -131,11 +130,12 @@ namespace game_framework {
 	*/
 	void CMovingBitmap::LoadBitmapByString(vector<string> filepaths, COLORREF color)
 	{
+
 		for (int i = 0; i < (int)filepaths.size(); i++) {
 			LoadBitmap((char*)filepaths[i].c_str(), color);
 		}
 	}
-
+	
 	//! 讀取空白圖片資源。
 	/*!
 		讀取一個特定大小的白色點陣圖。
@@ -185,12 +185,15 @@ namespace game_framework {
 	void CMovingBitmap::SetTopLeft(int x, int y)
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before SetTopLeft() is called !!!");
-		int dx = location.left - x;
-		int dy = location.top - y;
-		location.left = x;
-		location.top = y;
-		location.right -= dx;
-		location.bottom -= dy;
+
+		for (int i = 0; i < int(locations.size()); i++) {
+			int dx = locations[i].left - x;
+			int dy = locations[i].top - y;
+			locations[i].left = x;
+			locations[i].top = y;
+			locations[i].right -= dx;
+			locations[i].bottom -= dy;
+		}
 	}
 
 	//! 設置圖片是否為動畫。
@@ -206,13 +209,6 @@ namespace game_framework {
 		delayCount = delay;
 	}
 	
-	void CMovingBitmap::SetDanger(bool danger_val) {
-		danger = danger_val;
-	}
-
-	void CMovingBitmap::SetSpawn(std::string _spawn) {
-		spawn = _spawn;
-	}
 	//! 顯示圖片。
 	/*!
 		僅能在 `onShow()` 時呼叫，且圖片需要被讀取。
@@ -220,7 +216,7 @@ namespace game_framework {
 	void CMovingBitmap::ShowBitmap()
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before ShowBitmap() is called !!!");
-		CDDraw::BltBitmapToBack(surfaceID[frameIndex], location.left, location.top);
+		CDDraw::BltBitmapToBack(surfaceID[frameIndex], locations[frameIndex].left, locations[frameIndex].top);
 		ShowBitmapBySetting();
 	}
 
@@ -232,7 +228,7 @@ namespace game_framework {
 	void CMovingBitmap::ShowBitmap(double factor)
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before ShowBitmap() is called !!!");
-		CDDraw::BltBitmapToBack(surfaceID[frameIndex], location.left, location.top, factor);
+		CDDraw::BltBitmapToBack(surfaceID[frameIndex], locations[frameIndex].left, locations[frameIndex].top, factor);
 		ShowBitmapBySetting();
 	}
 
@@ -261,8 +257,9 @@ namespace game_framework {
 	int CMovingBitmap::GetTop()
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Top() is called !!!");
-		return location.top;
+		return locations[frameIndex].top;
 	}
+
 	//! 取得當前圖片寬度。
 	/*!
 		\return 取得當前圖片寬度。
@@ -270,12 +267,9 @@ namespace game_framework {
 	int CMovingBitmap::GetWidth()
 	{
 		GAME_ASSERT(isBitmapLoaded, "A bitmap must be loaded before Width() is called !!!");
-		return location.right - location.left;
+		return locations[frameIndex].right - locations[frameIndex].left;
 	}
 	
-	std::string CMovingBitmap::GetSpawn() {
-		return spawn;
-	}
 	//! 啟動單次動畫。
 	/*!
 		將動畫設為初始幀，並且初始化單次動畫的參數值。
@@ -318,10 +312,6 @@ namespace game_framework {
 		return isBitmapLoaded;
 	}
 
-	bool CMovingBitmap::GetDanger() {
-		return danger;
-	}
-
 	//! 回傳物件的幀數。
 	/*!
 		\return 回傳物件的幀數。
@@ -337,11 +327,12 @@ namespace game_framework {
 	void CMovingBitmap::InitializeRectByBITMAP(BITMAP bitmapSize) {
 		const unsigned NX = 0;
 		const unsigned NY = 0;
-
-		location.left = NX;
-		location.top = NY;
-		location.right = NX + bitmapSize.bmWidth;
-		location.bottom = NY + bitmapSize.bmHeight;
+		CRect newCrect;
+		newCrect.left = NX;
+		newCrect.top = NY;
+		newCrect.right = NX + bitmapSize.bmWidth;
+		newCrect.bottom = NY + bitmapSize.bmHeight;
+		locations.push_back(newCrect);
 	}
 
 	//! 根據使用者設定的參數來顯示圖片。
@@ -386,7 +377,7 @@ namespace game_framework {
 	*/
 	bool CMovingBitmap::IsOverlap(CMovingBitmap bmp1, CMovingBitmap bmp2) {
 		CRect rect;
-		BOOL isOverlap = rect.IntersectRect(bmp1.location, bmp2.location);
+		BOOL isOverlap = rect.IntersectRect(bmp1.locations[bmp1.GetFrameIndexOfBitmap()], bmp2.locations[bmp2.GetFrameIndexOfBitmap()]);
 		return isOverlap;
 	}
 
