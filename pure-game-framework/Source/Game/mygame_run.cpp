@@ -421,11 +421,12 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 					player.SetFrameIndexOfBitmap(6);
 					moveSpeed = 0;
 					// enable animation
+					audio->Play(4, false);
 					interact_pipe_animation.SetFrameIndexOfBitmap(0);
 					interact_pipe_animation.SetTopLeft(i.GetLeft()+30, i.GetTop() - 68);
 					animation_arr.push_back(interact_pipe_animation);
 					animation_flag = true;
-					interact_pipe_animation_flag = true;
+					interact_pipe_animation_flag = true;  
 					is_dangerous_pipe = i.GetDanger();
 					return;
 				}
@@ -892,7 +893,7 @@ void CGameStateRun::setAudio() {
 	audio->Load(1, "resources/audio/player_audio/jump.wav"); // jump audio
 	audio->Load(2, "resources/audio/player_audio/death.wav"); // death audio
 	audio->Load(3, "resources/audio/interact_audio/coin.wav"); // coin audio
-	// audio->Load(4, "resources/audio/interact_audio/pipe_interact.wav");
+	audio->Load(4, "resources/audio/interact_audio/dokan.wav"); // pipeline interact
 }
 
 void CGameStateRun::setAnimation() {
@@ -993,8 +994,8 @@ void CGameStateRun::OnShow()
 	show_enemy();
 	show_environment();
 	if (animation_flag == true) {
-		coin_animation.ShowBitmap();
-		interact_pipe_animation.ShowBitmap();
+		if (coin_animation_flag == true) { coin_animation.ShowBitmap();}
+		if (interact_pipe_animation_flag == true) { interact_pipe_animation.ShowBitmap();}
 	}
 
 	InteractBlock::showImage();
