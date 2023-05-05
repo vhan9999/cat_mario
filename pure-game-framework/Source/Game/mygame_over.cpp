@@ -43,10 +43,6 @@ void CGameStateOver::OnInit()
 	//
 	ShowInitProgress(100, "OK!");
 	Sleep(1000);
-
-
-
-
 }
 
 void CGameStateOver::OnShow()

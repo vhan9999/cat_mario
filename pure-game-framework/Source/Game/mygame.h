@@ -130,7 +130,7 @@ namespace game_framework {
 		int dead_audio_flag = 0; // player_dead_audio control flag
 
 		// set Map
-		void setMap1();
+		void setMap1(CMovingBitmap &player);
 	protected:
 		void OnMove();  // 移動遊戲元素
 		void OnShow();	// 顯示這個狀態的遊戲畫面
@@ -138,15 +138,22 @@ namespace game_framework {
 		// animation
 		bool animation_flag = false;
 		CMovingBitmap coin_animation;
+		CMovingBitmap interact_pipe_animation;
 		bool coin_animation_flag = false;
+		bool interact_pipe_animation_flag = false;
+		bool is_dangerous_pipe = false;
+		bool player_fly_animation = false;
+
 		int shift_amount = 0;
 		int moveSpeed = 0;
 		int jumpSpeed = 0;
 		bool isBigJump = false;
 		bool keyUp = false;
-		bool keyRight = false;
+		bool keyDown = false;
 		bool keyLeft = false;
+		bool keyRight = false;
 		bool game_over = false;
+		bool is_player_hit_enemy = false;
 		int frame = 0;
 		int animate_frame = 0;
 		int jumpBonusFrame;
@@ -169,7 +176,7 @@ namespace game_framework {
 		int endpoint_building_height = 180;
 
 		// player image
-		std::vector<std::string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
+		std::vector<std::string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp", "resources/image/player/player_blank_image.bmp" };
 
 		std::vector<std::vector<CMovingBitmap>> upper_ground_brick_arr; // ground block arr
 		std::vector<std::vector<CMovingBitmap>> rem_ground_brick_arr; // ground block arr

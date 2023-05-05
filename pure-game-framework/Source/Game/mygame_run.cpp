@@ -31,10 +31,7 @@ using namespace game_framework;
 /*-----------------------------------------------------------------------------------------------------*/
 // Audio
 /*-----------------------------------------------------------------------------------------------------*/
-CAudio *field_music = CAudio::Instance();
-CAudio *player_jump_audio = CAudio::Instance();
-CAudio *player_dead_audio = CAudio::Instance();
-CAudio *coin_audio = CAudio::Instance();
+CAudio *audio = CAudio::Instance();
 /*-----------------------------------------------------------------------------------------------------*/
 
 int current_checkpoint_x;
@@ -77,6 +74,9 @@ public:
 		}
 		else if (name == "item_block") {
 			new_obj.LoadBitmapByString({ "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }, RGB(163, 73, 164));
+		}
+		else if (name == "cloud_eye") {
+			new_obj.LoadBitmapByString({ "resources/image/enemy/cloud_eye.bmp", "resources/image/enemy/cloud_devil.bmp" }, RGB(163, 73, 164));
 		}
 		else if (name == "checkpoint_flag") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/checkpoint_reached.bmp" , "resources/image/object/environment/blank.bmp" }, RGB(163, 73, 164));
@@ -127,10 +127,13 @@ public:
 		else if (name == "coin") {
 			new_obj.LoadBitmapByString({ "resources/image/object/environment/coin.bmp" }, RGB(163, 73, 164));
 		}
+
 		new_obj.SetFrameIndexOfBitmap(0);
 		new_obj.SetTopLeft(x, y);
 		return new_obj;
 	}
+
+	
 };
 
 // Interact block
@@ -147,6 +150,7 @@ public:
 		_image_object = ImageFactory::createInteractBlock(_image_name, _x, _y);
 		_image_object.SetDanger(_isDangerous);
 		_image_object.SetSpawn(_spawn_name);
+		_image_object.SetFrameIndexOfBitmap(0);
 		interact_block_arr.push_back(_image_object);
 	}
 	~InteractBlock() {}
@@ -302,8 +306,8 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 		jumpBns = 0; // for big jump 
 		jumpSpd = -19;// v0			
 	}
-
-	if (player.GetTop() + player.GetHeight() >= ground) {// player touch on the ground
+	
+	if (player.GetTop() >= ground) {// player touch on the ground
 		player_on_air = false;
 		if (player.GetFrameIndexOfBitmap() == 4) {
 			player.SetFrameIndexOfBitmap(0);
@@ -312,10 +316,11 @@ void CGameStateRun::ableToJump(int &jumpSpd, int &jumpBns, double &ground) {
 			player.SetFrameIndexOfBitmap(2);
 		}
 	}
+	
 	if (jumpBns == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpd -= 5; // v-=5(a)
 	}
-	if ((player_on_air == false) && (keyUp == true)) { player_jump_audio->Play(1, false); } // player jump audio
+	if ((player_on_air == false) && (keyUp == true)) { audio->Play(1, false); } // player jump audio
 
 }
 // brick collision
@@ -373,7 +378,7 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 			int obj_mid_y = i.GetTop() + (i.GetHeight() / 2);
 
 			bool is_collide_block = true;
-			//head touch
+			// head touch
 			if (inRange(player.GetTop() - 1, obj_mid_y, obj_bottom) && player.GetLeft() + 10 <= obj_right && player.GetLeft() + player.GetWidth() - 10 >= obj_left) {
 				// checkpoint flag
 				if (i.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
@@ -387,7 +392,7 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 				else if ((i.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.GetSpawn() == "coin")) {
 					if (i.GetFrameIndexOfBitmap() == 0) {
 						i.SetFrameIndexOfBitmap(1); // change image
-						coin_audio->Play(3, false); // coin audio
+						audio->Play(3, false); // coin audio
 						
 						// enable coin animation
 						coin_animation.SetFrameIndexOfBitmap(0);
@@ -411,6 +416,19 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 					current_checkpoint_y = groundY_up - player.GetHeight();
 					return;
 				}
+				// interact pipe
+				else if (keyDown == true && i.GetImageFileName() == "resources/image/object/block2/pipeline_big.bmp") {
+					player.SetFrameIndexOfBitmap(6);
+					moveSpeed = 0;
+					// enable animation
+					interact_pipe_animation.SetFrameIndexOfBitmap(0);
+					interact_pipe_animation.SetTopLeft(i.GetLeft()+30, i.GetTop() - 68);
+					animation_arr.push_back(interact_pipe_animation);
+					animation_flag = true;
+					interact_pipe_animation_flag = true;
+					is_dangerous_pipe = i.GetDanger();
+					return;
+				}
 				jumpSpeed = 0;
 				jumpBonusFrame = 0;
 				player.SetTopLeft(player.GetLeft(), obj_top - player.GetHeight());
@@ -427,11 +445,10 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 					current_checkpoint_y = groundY_up - player.GetHeight();
 					return;
 				}
-				else {
-					moveSpeed = 0;
-					player.SetTopLeft(obj_right, player.GetTop());
-					frame += 2;
-				}
+				moveSpeed = 0;
+				player.SetTopLeft(obj_right, player.GetTop());
+				frame += 2;
+				
 			}
 			//right touch
 			else if (inRange(player.GetLeft() + player.GetWidth() + 1, obj_left, obj_mid_x) && player.GetTop() <= obj_bottom && player.GetTop() + player.GetHeight() - 5 >= obj_top) {
@@ -443,11 +460,9 @@ void CGameStateRun::check_collision_interact_brick(std::vector<CMovingBitmap> &a
 					current_checkpoint_y = groundY_up - player.GetHeight();
 					return;
 				}
-				else {
-					moveSpeed = 0;
-					player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
-					frame += 2;
-				}
+				moveSpeed = 0;
+				player.SetTopLeft(obj_left - player.GetWidth(), player.GetTop());
+				frame += 2;
 			}
 		}
 	}
@@ -585,6 +600,13 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		player.SetTopLeft(player.GetLeft() + moveSpeed, player.GetTop() + jumpSpeed);
 	}
 
+	if (player.GetTop() <= -500) { // player fly to high (dead)
+		jumpSpeed = 0;  moveSpeed = 0;
+		game_over = true;
+		player_on_air = false;
+		dead_audio_flag += 1;
+		if (dead_audio_flag == 10) { dead_audio_flag = 5; }
+	}
 
 	if (frame + 1 < 0) {//到int的上限後 歸零 prevent int overflow
 		frame = 0;
@@ -593,7 +615,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		animate_frame = 0;
 	}
 
-
+	
 	for (auto i : upper_ground_brick_arr) { CGameStateRun::check_ground_collision(i, player); } // collision ground
 	for (auto i : ver_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check vertical
 	for (auto i : hor_block_arr) { CGameStateRun::check_collision_brick(i, player); } // collision check horizontal
@@ -641,29 +663,54 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 		}
 		// shift animation left
 		if(animation_flag == true){
+			// coin 
 			int coin_pos = coin_animation.GetLeft() - moveSpeed;
 			coin_animation.SetTopLeft(coin_pos, coin_animation.GetTop());
+			// interact pipe
+			int ani_pos = interact_pipe_animation.GetLeft() - moveSpeed;
+			interact_pipe_animation.SetTopLeft(ani_pos, interact_pipe_animation.GetTop());
 		}
 
 		shift_amount += moveSpeed; // for calculate returning checkpoint
 	}
+	// start coin animation
 	if (coin_animation_flag == true && animation_flag == true) {
 		coin_animation.SetAnimation(20, false);
 		if (coin_animation.GetFrameIndexOfBitmap() == 7) {
 			coin_animation.SetAnimation(20, true);
 		}
 	}
+	// start pipe_interact animation
+	if (interact_pipe_animation_flag == true && animation_flag == true) {
+		if (is_dangerous_pipe == true) {
+			interact_pipe_animation.SetAnimation(40, false);
+			if (interact_pipe_animation.GetFrameIndexOfBitmap() == 19) {
+				interact_pipe_animation.SetAnimation(40, true);
+				player_fly_animation = true;
+			}
+
+			if (player_fly_animation == true) {
+				player.SetFrameIndexOfBitmap(4);
+				jumpSpeed -= 2;
+			}
+		}
+		else {
+			interact_pipe_animation.SetAnimation(40, false);
+			if (interact_pipe_animation.GetFrameIndexOfBitmap() == 16) {
+				interact_pipe_animation.SetAnimation(40, true);
+			}
+		}
+	}
 	// game over
 	if (game_over == true) {
-		field_music->Stop(0);
-		player_jump_audio->Stop(1);
+		audio->Stop(0);
+		audio->Stop(1);
 		if (dead_audio_flag == 1) {
-			player_dead_audio->Play(2);
+			audio->Play(2);
 			game_over_count -= 1;
 			Sleep(2000);
 			game_over_image.SetFrameIndexOfBitmap(0); // game over image
 			
-			animation_flag = false;
 			// reset interact block
 			for (auto &i : InteractBlock::interact_block_arr) {
 				if(i.GetImageFileName() != "resources/image/object/environment/checkpoint_reached.bmp" && i.GetImageFileName() != "resources/image/object/environment/blank.bmp"){
@@ -703,15 +750,23 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 				int obj_pos = i.GetLeft() + shift_amount;
 				i.SetTopLeft(obj_pos, i.GetTop());
 			}
+			// reset animation
 			if (animation_flag == true) {
+				// coin
 				int coin_pos = coin_animation.GetLeft() + shift_amount;
 				coin_animation.SetTopLeft(coin_pos, coin_animation.GetTop());
+				// interact pipe
+				int ani_pos = interact_pipe_animation.GetLeft() + shift_amount;
+				interact_pipe_animation.SetTopLeft(ani_pos, interact_pipe_animation.GetTop());
 			}
+			animation_flag = false;
+			interact_pipe_animation_flag = false;
+			player_fly_animation = false;
 		}
 		else {
 			Sleep(2000);
 			game_over_image.SetFrameIndexOfBitmap(1);
-			field_music->Play(0, true); // play field music
+			audio->Play(0, true); // play field music
 			player.SetFrameIndexOfBitmap(0);
 			player.SetTopLeft(current_checkpoint_x, current_checkpoint_y); // player start at current checkpoint
 			// reset value
@@ -724,7 +779,7 @@ void CGameStateRun::OnMove()  // 移動遊戲元素 move (always loop)
 
 /* ---- Map ---- */
 /*-----------------------------------------------------------------------------------------------------*/
-void CGameStateRun::setMap1() {
+void CGameStateRun::setMap1(CMovingBitmap &player) {
 	int currentGroundBlock = 0; // track how many ground block were build
 	// phase 1
 	loadImage_ground(17, groundX_up, groundY_up, groundX_down, groundY_down);
@@ -744,7 +799,7 @@ void CGameStateRun::setMap1() {
 	InteractBlock pipeline1("pipeline_mid", far_from_start(currentGroundBlock + 3), groundY_up - 180, false, "");
 
 	loadImage_environment("grass", far_from_start(currentGroundBlock + 9), groundY_up - grass_height);
-	InteractBlock pipeline2("pipeline_big", far_from_start(currentGroundBlock + 10), groundY_up - 240, false, "");
+	InteractBlock pipeline2("pipeline_big", far_from_start(currentGroundBlock + 10), groundY_up - 240, true, "");
 
 	loadImage_environment("cloud_eye", far_from_start(currentGroundBlock + 6), high_from_ground(10));
 
@@ -800,8 +855,9 @@ void CGameStateRun::setMap1() {
 	loadImage_ground(13, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
 
 	loadImage_multiple_hor(1, 2, far_from_start(currentGroundBlock + 3), high_from_ground(4));
-	// loadImage_multiple_hor(6, 1, far_from_start(currentGroundBlock+6), high_from_ground(4));
 	loadImage_multiple_hor(1, 1, far_from_start(currentGroundBlock + 8), high_from_ground(4));
+	// cloud eye
+	InteractBlock cloud_eye1("cloud_eye", far_from_start(currentGroundBlock + 7), high_from_ground(9), true, "");
 	InteractBlock pipeline3("pipeline_short", far_from_start(currentGroundBlock + 11), groundY_up - 120, false, "");
 
 	// phase 9
@@ -827,21 +883,29 @@ void CGameStateRun::setMap1() {
 	// phase 11
 	currentGroundBlock += 7;
 	loadImage_ground(10, far_from_start(currentGroundBlock), groundY_up, far_from_start(currentGroundBlock), groundY_down);
-
 	loadImage_environment("grass", far_from_start(currentGroundBlock - 2), groundY_up - grass_height);
 	loadImage_environment("endpoint_building", far_from_start(currentGroundBlock + 2), groundY_up - endpoint_building_height);
 }
 
 void CGameStateRun::setAudio() {
-	field_music->Load(0, "resources/audio/map_song/field.wav");
-	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
-	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
-	coin_audio->Load(3, "resources/audio/interact_audio/coin.wav");
+	audio->Load(0, "resources/audio/map_song/field.wav"); // field song
+	audio->Load(1, "resources/audio/player_audio/jump.wav"); // jump audio
+	audio->Load(2, "resources/audio/player_audio/death.wav"); // death audio
+	audio->Load(3, "resources/audio/interact_audio/coin.wav"); // coin audio
+	// audio->Load(4, "resources/audio/interact_audio/pipe_interact.wav");
 }
 
 void CGameStateRun::setAnimation() {
 	// coin
 	coin_animation.LoadBitmapByString({ "resources/animation/object/coin/coin1.bmp", "resources/animation/object/coin/coin2.bmp", "resources/animation/object/coin/coin3.bmp", "resources/animation/object/coin/coin4.bmp", "resources/animation/object/coin/coin5.bmp", "resources/animation/object/coin/coin6.bmp", "resources/animation/object/coin/coin7.bmp", "resources/animation/object/coin/coin8.bmp" }, RGB(163, 73, 164));
+	// interact pipe
+	interact_pipe_animation.LoadBitmapByString({"resources/animation/interact_pipe/animate_1.bmp", "resources/animation/interact_pipe/animate_2.bmp", "resources/animation/interact_pipe/animate_3.bmp",
+												"resources/animation/interact_pipe/animate_4.bmp", "resources/animation/interact_pipe/animate_5.bmp", "resources/animation/interact_pipe/animate_6.bmp",
+												"resources/animation/interact_pipe/animate_7.bmp", "resources/animation/interact_pipe/animate_8.bmp", "resources/animation/interact_pipe/animate_9.bmp",
+												"resources/animation/interact_pipe/animate_10.bmp", "resources/animation/interact_pipe/animate_11.bmp", "resources/animation/interact_pipe/animate_12.bmp",
+												"resources/animation/interact_pipe/animate_13.bmp", "resources/animation/interact_pipe/animate_14.bmp", "resources/animation/interact_pipe/animate_15.bmp",
+												"resources/animation/interact_pipe/animate_16.bmp", "resources/animation/interact_pipe/animate_17.bmp", "resources/animation/interact_pipe/animate_18.bmp",
+												"resources/animation/interact_pipe/animate_19.bmp", "resources/animation/interact_pipe/animate_20.bmp" }, RGB(255, 242, 0));
 }
 /*-----------------------------------------------------------------------------------------------------*/
 // init
@@ -850,7 +914,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	setAudio();
 	setAnimation();
 
-	field_music->Play(0, true);
+	audio->Play(0, true);
 	// player
 	player.LoadBitmapByString(player_image, RGB(255, 242, 0));
 	player.SetTopLeft(120, groundY_up - player.GetHeight());
@@ -864,7 +928,7 @@ void CGameStateRun::OnInit() // 遊戲的初值及圖形設定 set initial value
 	game_over_image.SetFrameIndexOfBitmap(1);
 	game_over_image.SetTopLeft(0, 0);
 
-	setMap1();
+	setMap1(player);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -875,6 +939,9 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	if (nChar == VK_RIGHT) {
 		keyRight = true;
 		keyLeft = false;
+	}
+	if (nChar == VK_DOWN) {
+		keyDown = true;
 	}
 	if (nChar == VK_UP) {
 		keyUp = true;
@@ -891,6 +958,9 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	if (nChar == VK_UP) {
 		keyUp = false;
+	}
+	if (nChar == VK_DOWN) {
+		keyDown = false;
 	}
 }
 
@@ -924,6 +994,7 @@ void CGameStateRun::OnShow()
 	show_environment();
 	if (animation_flag == true) {
 		coin_animation.ShowBitmap();
+		interact_pipe_animation.ShowBitmap();
 	}
 
 	InteractBlock::showImage();
