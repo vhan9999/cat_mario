@@ -28,6 +28,9 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	player.move();
+	for (auto &i : enemys_arr) {
+		i.emove();
+	}
 	Touching();
 }
 
@@ -98,5 +101,9 @@ void CGameStateRun::OnShow()
 	player.coll.ShowBitmap();
 	for (auto i : bricks_arr) {
 		i.coll.ShowBitmap();
+	}
+	for (auto i : enemys_arr) {
+		if(!i.is_dead)
+			i.coll.ShowBitmap();
 	}
 }

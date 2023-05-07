@@ -66,13 +66,16 @@
     <ClCompile Include="Source\Game\player.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\mapSetting.cpp">
+    <ClCompile Include="Source\Game\enemys.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\eventCtrl.cpp">
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\touch.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\eventCtrl.cpp">
+    <ClCompile Include="Source\Game\mapSetting.cpp">
       <Filter>object</Filter>
     </ClCompile>
   </ItemGroup>

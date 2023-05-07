@@ -97,7 +97,7 @@ namespace game_framework {
 	private:
 		Player player;
 		CAudio *field_music = CAudio::Instance();
-		std::vector<Brick> enemys_arr; // enemy array
+		std::vector<Enemy> enemys_arr; // enemy array
 		std::vector<Brick> bricks_arr;
 		std::vector<CMovingBitmap> environment_arr; // environment array
 	};

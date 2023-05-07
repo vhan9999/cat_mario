@@ -245,6 +245,7 @@
     </ClCompile>
     <ClCompile Include="Source\Game\bricks.cpp" />
     <ClCompile Include="Source\Game\colliders.cpp" />
+    <ClCompile Include="Source\Game\enemys.cpp" />
     <ClCompile Include="Source\Game\eventCtrl.cpp" />
     <ClCompile Include="Source\Game\mapSetting.cpp" />
     <ClCompile Include="Source\Game\mygame_initialize.cpp" />
