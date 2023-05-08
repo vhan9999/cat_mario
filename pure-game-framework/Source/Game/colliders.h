@@ -78,7 +78,16 @@ namespace game_framework {
 		void emove();
 
 		
-
+		fdsdfssadfdsfdsafdsf
+			fsd
+			sdf
+			fsda
+			fdsa
+			sadf
+			fsdasdfasdf
+			sadf
+			sd
+			fsadf
 		bool step_enemy_enemy_dead = false;//true -> enemy dead
 		bool step_enemy_player_dead = false;
 		bool step_enemy_jump = false;
