@@ -88,18 +88,43 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+
 		void EventCtrl();
-		void MapSetting(int map);
+
+		// collision
 		void Touching();
+
+		// brick
+		void build_brick(std::string brick_color, int brick_type, int amt, int x, int y);
+		void build_ground(std::string brick_color, int amt, int x_Up, int y_Up, int x_Down, int y_Down);
+		// environment
+		void build_envionment(std::string name, int x, int y);
+
+		// map
+		void MapSetting(int map);
+		void shiftMapImage();
+
+		// high from ground
+		int high_from_ground(int blockCount);
+
+		// far from start
+		int far_from_start(int blockCount);
 	protected:
-		void OnMove();									// 移動遊戲元素
+		void OnMove();								// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
+		std::vector<Brick> enemys_arr; // enemy array
+		std::vector<Brick> bricks_arr; // bricks_array
+		std::vector<Environment> environment_arr; // environment array
+
 		Player player;
 		CAudio *field_music = CAudio::Instance();
-		std::vector<Enemy> enemys_arr; // enemy array
-		std::vector<Brick> bricks_arr;
-		std::vector<CMovingBitmap> environment_arr; // environment array
+
+		// variable
+		int groundX_up = 0;
+		int groundY_up = 776;
+		int groundX_down = 0;
+		int groundY_down = 836;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
