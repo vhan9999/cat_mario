@@ -10,7 +10,7 @@
 
 
 namespace game_framework {
-	class Collider{
+	class Collider {
 	public:
 		Collider() = default;
 		Collider(int posx, int posy, std::vector<std::string> image);
@@ -55,35 +55,23 @@ namespace game_framework {
 
 	class Brick : public Collider {
 	public:
-		Brick(){}
+		Brick() = default;
 		Brick(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
 		~Brick() = default;
-
-
-		bool head_touch_break = false; // break and animation
-		bool foot_touch_break = false;
-		bool invisible = false;
-		bool foot_touch_fall = false;
-		bool head_touch_change = false;//change picture 
-		bool have_coin = false;
-		bool have_item = false;
-		std::string item;
+		bool _downBreak = false; //head touch -> break
+		bool _upBreak = false;
+		bool _invisible = false;
+		bool _upFall = false;
+		bool _haveItem = false;
+		std::string _item;
 	};
 
-	class Enemy : public Collider {
+	class Environment : public Collider {
 	public:
-		Enemy() {}
-		Enemy(int posx, int posy , std::vector<std::string> image) : Collider(posx, posy, image) {}
-		~Enemy() = default;
-		void emove();
+		Environment() = default;
+		Environment(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
+		~Environment() = default;
 
-		
-
-		bool step_enemy_enemy_dead = false;//true -> enemy dead
-		bool step_enemy_player_dead = false;
-		bool step_enemy_jump = false;
-		bool steel = true;
-		bool is_dead = false;
 	};
 }
 
