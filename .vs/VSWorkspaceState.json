@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\pure-game-framework"
+    "\\pure-game-framework",
+    "\\pure-game-framework\\Resources",
+    "\\pure-game-framework\\Source"
   ],
   "SelectedNode": "\\pure-game-framework\\game.sln",
   "PreviewInSolutionExplorer": false
