@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\pure-game-framework",
-    "\\pure-game-framework\\Source",
-    "\\pure-game-framework\\Source\\Library"
+    "\\pure-game-framework"
   ],
-  "SelectedNode": "\\pure-game-framework\\Source\\Library\\audio.h",
+  "SelectedNode": "\\pure-game-framework\\game.sln",
   "PreviewInSolutionExplorer": false
 }
