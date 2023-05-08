@@ -88,6 +88,7 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+
 		void EventCtrl();
 		void MapSetting();
 		void Touching();
@@ -103,12 +104,11 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		Player player;
-		CAudio *field_music = CAudio::Instance();
-		
+		CAudio *map_audio = CAudio::Instance();
 		int current_map = 1;
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array
-		std::vector<Brick> bricks_arr;
+		std::vector<Brick> bricks_arr; // bricks array
 		std::vector<Environment> environment_arr; // environment array
 	};
 

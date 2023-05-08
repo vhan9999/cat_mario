@@ -32,6 +32,7 @@ namespace game_framework {
 		void moveVer();
 		void ableToJump(double &ground);
 		void ani();
+		void load_voice();
 		void voice();
 
 		int frame = 0;

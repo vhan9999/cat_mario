@@ -35,17 +35,21 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	shiftMapImage();
 }
 
+
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
 	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
 	player = Player(0, 0, player_image);
-	MapSetting();
+	player.load_voice();
 
+	map_audio->Load(0, "resources/audio/map_song/field.wav");
+	map_audio->Play(0, true);
+	
+	MapSetting();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	if (nChar == VK_LEFT) {
-		
 		player.keyLeft = true;
 		player.keyRight = false;
 	}

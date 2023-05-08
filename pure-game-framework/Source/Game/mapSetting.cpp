@@ -41,6 +41,7 @@ int high_from_ground(int blockCount) { return  776 - (60 * blockCount); }
 // far from start
 int far_from_start(int blockCount) { return 60 * blockCount; }
 
+
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
 		/*
@@ -52,7 +53,6 @@ void CGameStateRun::MapSetting(){
 		*/
 
 		int currentGroundBlock = 0; // track how many ground blocks were build
-
 		Brick brick;
 		Environment env;
 

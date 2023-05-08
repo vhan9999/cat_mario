@@ -2,11 +2,17 @@
 #include "colliders.h"
 
 using namespace game_framework;
+
+void Player::load_voice() {
+	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
+	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
+}
+
 void Player::move() {
 	ani();
+	voice();
 	moveHor();
 	moveVer();
-	voice();
 	// gravity and moving
 	if (coll.GetTop() + jumpSpeed >= 1500) {// fall down (dead)
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500);
@@ -112,7 +118,6 @@ void Player::ableToJump(double &ground) {
 		jumpSpeed -= 5; // v-=5(a)
 	}
 	
-
 }
 void Player::ani() {
 	animate_frame += 1;
@@ -139,10 +144,13 @@ void Player::ani() {
 			coll.SetFrameIndexOfBitmap(2);
 		}
 	}
-	if (animate_frame == 200) {
+	if (animate_frame >= 200) {
 		animate_frame = 0;
 	}
 }
 void Player::voice() {
-	
+
+	if ((player_on_air == false) && (keyUp == true)) {
+		player_jump_audio->Play(1, false);
+	}
 }
