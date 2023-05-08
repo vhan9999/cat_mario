@@ -86,6 +86,14 @@ namespace game_framework {
 		bool is_dead = false;
 		bool able_touch = true;
 	};
+
+	class Environment : public Collider {
+	public:
+		Environment() = default;
+		Environment(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
+		~Environment() = default;
+
+	};
 }
 
 #endif

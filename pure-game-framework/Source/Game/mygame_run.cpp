@@ -32,6 +32,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		i.emove();
 	}
 	Touching();
+	shiftMapImage();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -98,13 +99,13 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	if(!player.isDead)
-		player.coll.ShowBitmap();
-	for (auto i : bricks_arr) {
-		i.coll.ShowBitmap();
-	}
+	for (auto i : environment_arr) { i.coll.ShowBitmap(); }
+	for (auto i : bricks_arr) { i.coll.ShowBitmap();}
+
 	for (auto i : enemys_arr) {
 		if(!i.is_dead)
 			i.coll.ShowBitmap();
 	}
+	if (!player.isDead)
+		player.coll.ShowBitmap();
 }
