@@ -28,23 +28,20 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	player.move();
-	for (auto &i : enemys_arr) {
-		i.emove();
-	}
 	Touching();
+	shiftMapImage();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
 	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
-	player = Player(0, 0, player_image);
-	MapSetting(1);
+	player = Player(200, groundY_up - 68, player_image);
 
+	MapSetting(1);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	if (nChar == VK_LEFT) {
-		
 		player.keyLeft = true;
 		player.keyRight = false;
 	}
@@ -98,12 +95,9 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
+	for (auto i : environment_arr) { i.coll.ShowBitmap(); }
+	for (auto i : bricks_arr) { i.coll.ShowBitmap(); }
+
 	player.coll.ShowBitmap();
-	for (auto i : bricks_arr) {
-		i.coll.ShowBitmap();
-	}
-	for (auto i : enemys_arr) {
-		if(!i.is_dead)
-			i.coll.ShowBitmap();
-	}
+
 }
