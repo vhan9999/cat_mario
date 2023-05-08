@@ -12,15 +12,19 @@
 //! 是否顯示loading(OnInit)的進度
 #define SHOW_LOAD_PROGRESS   true		
 // 遊戲畫面預設的背景顏色(黑色)
-#define DEFAULT_BG_COLOR	 RGB(152, 189, 246)	
+#define DEFAULT_BG_COLOR	 RGB(152, 189, 246)	// background color
 //! 每33ms跑一次Move及Show(每秒30次)
+<<<<<<< HEAD
 #define GAME_CYCLE_TIME		 14    
+=======
+#define GAME_CYCLE_TIME		 15	    
+>>>>>>> parent of 868a275 (player and block touch done)
 //! 是否在debug mode顯示cycle time
 #define SHOW_GAME_CYCLE_TIME false		
 //! 是否允許以 Ctrl-Q 暫停遊戲
 #define ENABLE_GAME_PAUSE	 false		
 //! 啟動音效介面
-#define ENABLE_AUDIO		 true		
+#define ENABLE_AUDIO		 true
  //! 是否關閉 toolbar
 #define ENABLE_TOOLBAR       false     
 //! 是否關閉 menu

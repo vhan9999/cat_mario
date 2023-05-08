@@ -6,6 +6,7 @@
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
+#include <crtdbg.h>
 
 using namespace game_framework;
 
@@ -36,16 +37,22 @@ void CGameStateOver::OnInit()
 	//
 	// 開始載入資料
 	//
+<<<<<<< HEAD
 	Sleep(1000);		// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+=======
+	Sleep(1000);	// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+>>>>>>> parent of 868a275 (player and block touch done)
 	//
 	// 最終進度為100%
 	//
 	ShowInitProgress(100, "OK!");
-
 	Sleep(1000);
+
+
+
+
 }
 
 void CGameStateOver::OnShow()
 {
-
 }

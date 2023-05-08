@@ -2,8 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\pure-game-framework",
+<<<<<<< HEAD
     "\\pure-game-framework\\Resources",
     "\\pure-game-framework\\Source"
+=======
+    "\\pure-game-framework\\Source",
+    "\\pure-game-framework\\Source\\Game"
+>>>>>>> parent of 868a275 (player and block touch done)
   ],
   "SelectedNode": "\\pure-game-framework\\game.sln",
   "PreviewInSolutionExplorer": false

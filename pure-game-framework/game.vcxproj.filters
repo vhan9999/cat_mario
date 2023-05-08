@@ -14,9 +14,6 @@
     <Filter Include="MyGame">
       <UniqueIdentifier>{0c798913-b7d2-4e26-8241-0f83266cd626}</UniqueIdentifier>
     </Filter>
-    <Filter Include="object">
-      <UniqueIdentifier>{45591691-4aeb-4594-8595-2450634636ad}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="RES\GAME.RC2">
@@ -57,6 +54,7 @@
     <ClCompile Include="Source\Game\mygame_run.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Source\Game\colliders.cpp">
       <Filter>object</Filter>
     </ClCompile>
@@ -78,6 +76,8 @@
     <ClCompile Include="Source\Game\mapSetting.cpp">
       <Filter>object</Filter>
     </ClCompile>
+=======
+>>>>>>> parent of 868a275 (player and block touch done)
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Library\audio.h">
@@ -113,8 +113,8 @@
     <ClInclude Include="Source\Game\config.h">
       <Filter>MyGame</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\colliders.h">
-      <Filter>object</Filter>
+    <ClInclude Include="Source\Game\collider.h">
+      <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\ImageFactory.h">
       <Filter>object</Filter>
