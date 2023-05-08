@@ -13,7 +13,7 @@ using namespace game_framework;
 // 這個class為遊戲的結束狀態(Game Over)
 /////////////////////////////////////////////////////////////////////////////
 
-CGameStateOver::CGameStateOver(CGame *g) : CGameState(g)
+CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
 {
 }
 
@@ -36,7 +36,7 @@ void CGameStateOver::OnInit()
 	//
 	// 開始載入資料
 	//
-	Sleep(1000);		// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+	Sleep(1000);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
 	//
 	// 最終進度為100%
 	//
