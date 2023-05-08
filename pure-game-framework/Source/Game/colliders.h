@@ -66,13 +66,22 @@ namespace game_framework {
 		std::string _item;
 	};
 
+	class Enemy : public Collider {
+	public:
+		Enemy() = default;
+		Enemy(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
+		~Enemy() = default;
+		bool step_enemy_enemy_dead = false;//true -> enemy dead
+		bool step_enemy_player_dead = false;
+		bool step_enemy_jump = false;
+		bool steel = true;
+		bool is_dead = false;
+	};
 	class Environment : public Collider {
 	public:
 		Environment() = default;
 		Environment(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
 		~Environment() = default;
-
-	};
 }
 
 #endif
