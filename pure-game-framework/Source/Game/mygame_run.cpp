@@ -7,6 +7,7 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 #include "colliders.h"
+#include <string>
 #include <typeinfo>
 
 using namespace game_framework;
@@ -28,6 +29,8 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	player.move();
+	// player.dead_check(); check player is dead or not
+
 	for (auto &i : enemys_arr) {
 		i.emove();
 	}
@@ -35,17 +38,21 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	shiftMapImage();
 }
 
-
+// CMovingBitmap game_over;
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
 	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
-	player = Player(0, 0, player_image);
-	player.load_voice();
+	vector<string> game_over_image = { "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" };
 
-	map_audio->Load(0, "resources/audio/map_song/field.wav");
-	map_audio->Play(0, true);
-	
-	MapSetting();
+	player = Player(200, groundY_up-68, player_image); // player initial posiiton
+	player.load_voice();
+	player.map_audio->Play(0, true); // load map1 song
+ 
+	/*
+	game_over.LoadBitmapByString(game_over_image, RGB(163, 73, 164));
+	game_over.SetFrameIndexOfBitmap(1);
+	*/
+	MapSetting();// set map
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -110,6 +117,20 @@ void CGameStateRun::OnShow()
 		if(!i.is_dead)
 			i.coll.ShowBitmap();
 	}
-	if (!player.isDead)
+	if (!player.isDead) {
 		player.coll.ShowBitmap();
+	}
+	
+	/* display game over screen
+	if (player.isDead == true) {
+		Sleep(1500);
+		game_over.SetFrameIndexOfBitmap(0);
+		game_over.ShowBitmap();
+
+		CDC *pDC = CDDraw::GetBackCDC();
+		CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
+		CTextDraw::Print(pDC, 500, 400, std::to_string(player.dead_count));
+		CDDraw::ReleaseBackCDC();
+	}
+	*/
 }

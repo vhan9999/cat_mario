@@ -34,6 +34,7 @@ namespace game_framework {
 		void ani();
 		void load_voice();
 		void voice();
+		// void dead_check();
 
 		int frame = 0;
 		int animate_frame = 0;
@@ -41,16 +42,20 @@ namespace game_framework {
 		int jumpSpeed = 0;
 		int moveSpeed = 0;
 		int dead_audio_flag = 0;
+		int dead_count = 2;
 
 		bool keyUp = false;
 		bool keyDown = false;
 		bool keyLeft = false;
 		bool keyRight = false;
 		bool player_fall = false;
+
 		bool player_on_air = false;
 		bool isMove = false;
 		bool isDead = false;
+		int shift_amount = 0; // count how far player move from checkpoint 
 
+		CAudio *map_audio = CAudio::Instance();
 		CAudio *player_jump_audio = CAudio::Instance();
 		CAudio *player_dead_audio = CAudio::Instance();
 	};
@@ -93,7 +98,6 @@ namespace game_framework {
 		Environment() = default;
 		Environment(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
 		~Environment() = default;
-
 	};
 }
 

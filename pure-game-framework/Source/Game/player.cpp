@@ -4,6 +4,7 @@
 using namespace game_framework;
 
 void Player::load_voice() {
+	map_audio->Load(0, "resources/audio/map_song/field.wav");
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
 	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
 }
@@ -16,15 +17,15 @@ void Player::move() {
 	// gravity and moving
 	if (coll.GetTop() + jumpSpeed >= 1500) {// fall down (dead)
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500);
-		jumpSpeed = 0; moveSpeed = 0;
-		player_fall = true;
+		player_fall = true; 
 		player_on_air = false;
-		dead_audio_flag += 1;
 	}
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, coll.GetTop() + jumpSpeed);
 	}
+	
 }
+
 void Player::moveHor() {
 	frame += 1;
 	animate_frame += 1;
@@ -148,6 +149,26 @@ void Player::ani() {
 		animate_frame = 0;
 	}
 }
+
+/*
+// player dead check
+void Player::dead_check() {
+	
+	if (player_fall == true) { isDead = true; }
+
+	if (isDead == true) {
+		jumpSpeed = 0; moveSpeed = 0;
+		dead_audio_flag += 1;
+		if (dead_audio_flag == 1) {
+			map_audio->Stop(0);
+			player_jump_audio->Stop(1);
+			player_dead_audio->Play(2, false);
+		}
+		if (dead_audio_flag == 10) { dead_audio_flag = 5; }
+	}
+
+}
+*/
 void Player::voice() {
 
 	if ((player_on_air == false) && (keyUp == true)) {

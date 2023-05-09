@@ -99,13 +99,16 @@ namespace game_framework {
 		int groundY_up = 776;
 		int groundX_down = 0;
 		int groundY_down = 836;
+
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		Player player;
-		CAudio *map_audio = CAudio::Instance();
+		
 		int current_map = 1;
+
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array
 		std::vector<Brick> bricks_arr; // bricks array

@@ -33,6 +33,7 @@ void CGameStateRun::shiftMapImage() {
 			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
 		}
 	}
+	// player.shift_amount += player.moveSpeed; // shift amount = how far we move from checkpoint
 }
 
 // high from ground
@@ -238,7 +239,6 @@ void CGameStateRun::MapSetting(){
 		}
 		env = Environment(far_from_start(currentGroundBlock - 2), groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
 		env = Environment(far_from_start(currentGroundBlock + 2), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
-
 	}
 	else if(current_map == 2) {
 
