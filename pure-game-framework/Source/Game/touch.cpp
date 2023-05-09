@@ -39,6 +39,18 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && i.have_coin == true) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						player.coin_item_brick_audio->Play(3, false);
+
+						// enable coin animation
+						coin_animation.SetFrameIndexOfBitmap(0);
+						coin_animation.SetTopLeft(i.coll.GetLeft(), i.coll.GetTop() - 168);
+						animation_flag = true;
+						coin_animation_flag = true;
+					}
+				}
 				player.jumpSpeed = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_bottom);
 				player.jumpSpeed += 1;

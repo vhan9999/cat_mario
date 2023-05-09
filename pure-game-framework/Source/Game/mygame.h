@@ -100,6 +100,10 @@ namespace game_framework {
 		int groundX_down = 0;
 		int groundY_down = 836;
 
+		// animation
+		CMovingBitmap coin_animation;
+		bool animation_flag = false;
+		bool coin_animation_flag = false;
 
 	protected:
 		void OnMove();									// 移動遊戲元素

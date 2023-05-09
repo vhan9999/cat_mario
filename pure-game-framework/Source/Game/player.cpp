@@ -7,6 +7,7 @@ void Player::load_voice() {
 	map_audio->Load(0, "resources/audio/map_song/field.wav");
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
 	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
+	coin_item_brick_audio->Load(3, "resources/audio/interact_audio/coin.wav");
 }
 
 void Player::move() {
@@ -23,7 +24,6 @@ void Player::move() {
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, coll.GetTop() + jumpSpeed);
 	}
-	
 }
 
 void Player::moveHor() {

@@ -50,6 +50,7 @@ namespace game_framework {
 		bool keyRight = false;
 		bool player_fall = false;
 
+
 		bool player_on_air = false;
 		bool isMove = false;
 		bool isDead = false;
@@ -58,14 +59,17 @@ namespace game_framework {
 		CAudio *map_audio = CAudio::Instance();
 		CAudio *player_jump_audio = CAudio::Instance();
 		CAudio *player_dead_audio = CAudio::Instance();
+		CAudio *coin_item_brick_audio = CAudio::Instance();
+
+
 	};
 
 	class Brick : public Collider {
 	public:
 		Brick(){}
-		Brick(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {}
+		Brick(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {
+		}
 		~Brick() = default;
-
 
 		bool head_touch_break = false; // break and animation
 		bool foot_touch_break = false;
@@ -75,6 +79,7 @@ namespace game_framework {
 		bool have_coin = false;
 		bool have_item = false;
 		std::string item;
+
 	};
 
 	class Enemy : public Collider {
