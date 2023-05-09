@@ -60,7 +60,7 @@ namespace game_framework {
 		CAudio *player_jump_audio = CAudio::Instance();
 		CAudio *player_dead_audio = CAudio::Instance();
 		CAudio *coin_item_brick_audio = CAudio::Instance();
-
+		CAudio *pipe_interact_audio = CAudio::Instance();
 
 	};
 
@@ -78,6 +78,7 @@ namespace game_framework {
 		bool head_touch_change = false;//change picture 
 		bool have_coin = false;
 		bool have_item = false;
+		bool is_danger = false;
 		std::string item;
 
 	};

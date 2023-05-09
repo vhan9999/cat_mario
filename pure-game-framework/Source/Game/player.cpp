@@ -8,6 +8,7 @@ void Player::load_voice() {
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
 	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
 	coin_item_brick_audio->Load(3, "resources/audio/interact_audio/coin.wav");
+	pipe_interact_audio->Load(4, "resources/audio/interact_audio/dokan.wav");
 }
 
 void Player::move() {

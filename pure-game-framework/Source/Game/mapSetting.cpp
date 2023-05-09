@@ -36,6 +36,10 @@ void CGameStateRun::shiftMapImage() {
 			// coin 
 			int coin_pos = coin_animation.GetLeft() - player.moveSpeed;
 			coin_animation.SetTopLeft(coin_pos, coin_animation.GetTop());
+			// interact pipe
+			int pipe_pos = pipe_animation.GetLeft() - player.moveSpeed;
+			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
+
 		}
 	}
 	// player.shift_amount += player.moveSpeed; // shift amount = how far we move from checkpoint
@@ -88,7 +92,7 @@ void CGameStateRun::MapSetting(){
 
 		brick = Brick(far_from_start(currentGroundBlock + 2), groundY_up - pipeline_mid_height, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
 		env = Environment(far_from_start(currentGroundBlock + 1), groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
-		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 
 		/* phase3 */
 		currentGroundBlock += 15;

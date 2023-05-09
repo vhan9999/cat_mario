@@ -36,24 +36,22 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	}
 	Touching();
 
-	// start coin animation
-	if (coin_animation_flag == true && animation_flag == true) {
-		coin_animation.SetAnimation(20, false);
-		if (coin_animation.GetFrameIndexOfBitmap() == 7) {
-			coin_animation.SetAnimation(20, true);
-		}
-	}
 	shiftMapImage();
 }
 
 // CMovingBitmap game_over;
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp" };
+	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp", "resources/image/player/player_blank_image.bmp" };
 	vector<string> coin_image = { "resources/animation/object/coin/coin1.bmp", "resources/animation/object/coin/coin2.bmp",
 								"resources/animation/object/coin/coin3.bmp", "resources/animation/object/coin/coin4.bmp", 
 								"resources/animation/object/coin/coin5.bmp", "resources/animation/object/coin/coin6.bmp", 
 								"resources/animation/object/coin/coin7.bmp", "resources/animation/object/coin/coin8.bmp", };
+	vector<string> interact_pipe_image = { "resources/animation/interact_pipe/animate_1.bmp","resources/animation/interact_pipe/animate_2.bmp", "resources/animation/interact_pipe/animate_3.bmp","resources/animation/interact_pipe/animate_4.bmp", 
+	"resources/animation/interact_pipe/animate_5.bmp","resources/animation/interact_pipe/animate_6.bmp", "resources/animation/interact_pipe/animate_7.bmp","resources/animation/interact_pipe/animate_8.bmp", 
+	"resources/animation/interact_pipe/animate_9.bmp","resources/animation/interact_pipe/animate_10.bmp", "resources/animation/interact_pipe/animate_11.bmp","resources/animation/interact_pipe/animate_12.bmp", 
+	"resources/animation/interact_pipe/animate_13.bmp","resources/animation/interact_pipe/animate_14.bmp", "resources/animation/interact_pipe/animate_15.bmp","resources/animation/interact_pipe/animate_16.bmp",
+	"resources/animation/interact_pipe/animate_17.bmp","resources/animation/interact_pipe/animate_18.bmp", "resources/animation/interact_pipe/animate_19.bmp","resources/animation/interact_pipe/animate_20.bmp" };
 	vector<string> game_over_image = { "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" };
 	
 	player = Player(200, groundY_up-68, player_image); // player initial posiiton
@@ -61,6 +59,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	player.map_audio->Play(0, true); // load map1 song
 	
 	coin_animation.LoadBitmapByString(coin_image, RGB(163, 73, 164));
+	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
+
 	/*
 	game_over.LoadBitmapByString(game_over_image, RGB(163, 73, 164));
 	game_over.SetFrameIndexOfBitmap(1);
@@ -132,6 +132,7 @@ void CGameStateRun::OnShow()
 	}
 	if (animation_flag == true) {
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
+		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
 	if (!player.isDead) {
 		player.coll.ShowBitmap();
