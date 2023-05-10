@@ -39,10 +39,9 @@ void CGameStateRun::shiftMapImage() {
 			// interact pipe
 			int pipe_pos = pipe_animation.GetLeft() - player.moveSpeed;
 			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
-
 		}
+		player.shift_amount += player.moveSpeed;
 	}
-	// player.shift_amount += player.moveSpeed; // shift amount = how far we move from checkpoint
 }
 
 // high from ground
@@ -51,17 +50,15 @@ int high_from_ground(int blockCount) { return  776 - (60 * blockCount); }
 // far from start
 int far_from_start(int blockCount) { return 60 * blockCount; }
 
-
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		/*
+		
 		event_list = { {"player_dead",false} };
 		for (int i = 0; i < 10; i++) {
 			Brick a = Brick(i*60, 800, { "resources/image/object/block1/brown_brick.bmp" }); a.foot_touch_break = true; bricks_arr.push_back(a);
 		}
 		Enemy b = Enemy(0, 500, { "resources/image/enemy/normal.bmp" }); b.step_enemy_enemy_dead = true; b.speed_x = 2; enemys_arr.push_back(b);
-		*/
-
+		
 		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;
 		Environment env;
@@ -239,6 +236,7 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
 		brick = Brick(far_from_start(currentGroundBlock + 4), high_from_ground(1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick);
+		// endpoint flag
 		brick = Brick(far_from_start(currentGroundBlock + 4) + 20, high_from_ground(10) - 20, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
 
 		/* phase 11 */

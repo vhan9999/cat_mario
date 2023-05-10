@@ -35,7 +35,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		i.emove();
 	}
 	Touching();
-
+	player.check_finish();
 	shiftMapImage();
 }
 
@@ -65,6 +65,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	game_over.LoadBitmapByString(game_over_image, RGB(163, 73, 164));
 	game_over.SetFrameIndexOfBitmap(1);
 	*/
+	
 	MapSetting();// set map
 }
 
@@ -137,6 +138,12 @@ void CGameStateRun::OnShow()
 	if (!player.isDead) {
 		player.coll.ShowBitmap();
 	}
+
+	CDC *pDC = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::Print(pDC, 500, 400, std::to_string(player.shift_amount));
+	CDDraw::ReleaseBackCDC();
+
 	/* display game over screen
 	if (player.isDead == true) {
 		Sleep(1500);

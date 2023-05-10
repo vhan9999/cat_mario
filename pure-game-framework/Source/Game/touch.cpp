@@ -22,7 +22,7 @@ void CGameStateRun::Touching() {
 	for (auto &i : bricks_arr) {
 		CMovingBitmap &BC = i.coll;
 
-		if (player.jumpSpeed >= 30) {//predict penetrate
+		if (player.jumpSpeed >= 28) {//predict penetrate
 			if (PC.GetTop() + PC.GetHeight() <= BC.GetTop() && PC.GetTop() + PC.GetHeight() + player.jumpSpeed >= BC.GetTop() && PC.GetLeft() + 2 < BC.GetLeft() + BC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > BC.GetLeft()) {
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
@@ -65,6 +65,7 @@ void CGameStateRun::Touching() {
 					// enable animation
 					player.pipe_interact_audio->Play(4, false);
 					pipe_animation.SetFrameIndexOfBitmap(0);
+					player.coll.SetTopLeft(i.coll.GetLeft() + 30, i.coll.GetTop() - 68);
 					pipe_animation.SetTopLeft(i.coll.GetLeft() + 30, i.coll.GetTop() - 68);
 					animation_flag = true;
 					pipe_animation_flag = true;
@@ -85,6 +86,13 @@ void CGameStateRun::Touching() {
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop()+250);
+					player.jumpSpeed = 0;
+					animation_flag = true;
+					player.isFinish = true;
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
@@ -164,8 +172,6 @@ void CGameStateRun::Touching() {
 				else if (i.step_enemy_jump) {
 					player.jumpSpeed = -19;
 				}
-				
-				
 			}
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {

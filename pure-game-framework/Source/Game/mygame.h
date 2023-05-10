@@ -103,9 +103,12 @@ namespace game_framework {
 		// animation
 		CMovingBitmap coin_animation;
 		CMovingBitmap pipe_animation;
+		CMovingBitmap end_point_animation;
+
 		bool animation_flag = false;
 		bool coin_animation_flag = false;
 		bool pipe_animation_flag = false;
+
 
 	protected:
 		void OnMove();									// 移動遊戲元素
