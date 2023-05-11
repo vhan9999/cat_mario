@@ -20,6 +20,7 @@ CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
 
 void CGameStateOver::OnMove()
 {
+
 	dead_frame++;
 	if(dead_frame >= 100)
 		GotoGameState(GAME_STATE_RUN);
@@ -27,16 +28,19 @@ void CGameStateOver::OnMove()
 
 void CGameStateOver::OnBeginState()
 {
+	game_over_audio->Play(2, false);
+	Sleep(1500);
 	game_life.LoadBitmapByString({ "resources/image/logo/game_over1.bmp" });
 	game_life.SetFrameIndexOfBitmap(0);
 	game_life.SetTopLeft(0, 0);
 	dead_frame = 0;
 	lifes--;
+	Sleep(1500);
 }
 
 void CGameStateOver::OnInit()
 {
-	
+	game_over_audio->Load(2, "resources/audio/player_audio/death.wav");
 }
 void CGameStateOver::OnShow()
 {

@@ -116,7 +116,7 @@ namespace game_framework {
 	private:
 		Player player;
 		CAudio *field_music = CAudio::Instance();
-		
+
 		int current_map = 1;
 
 		std::map<std::string, bool> event_list;
@@ -135,6 +135,9 @@ namespace game_framework {
 		CGameStateOver(CGame *g);
 		void OnBeginState();							// 設定每次重玩所需的變數
 		void OnInit();
+
+		CAudio *game_over_audio = CAudio::Instance();
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面

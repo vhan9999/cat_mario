@@ -44,7 +44,6 @@ void CGameStateRun::shiftMapImage() {
 			int pipe_pos = pipe_animation.GetLeft() - player.moveSpeed;
 			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
 		}
-		player.shift_amount += player.moveSpeed;
 		player.distance_count += player.moveSpeed;
 	}
 }
@@ -63,7 +62,6 @@ void CGameStateRun::MapSetting(){
 		
 		Enemy c = Enemy(0, 500, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); c.coll.SetFrameIndexOfBitmap(1); c.step_enemy_enemy_dead = true; c.speed_x = 2; enemys_arr.push_back(c);
 		
-
 		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;
 		Environment env;
@@ -142,8 +140,9 @@ void CGameStateRun::MapSetting(){
 			bricks_arr.push_back(brick);
 		}
 
-		brick = Brick(far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height, { "resources/image/object/environment/checkpoint_reached.bmp", "resources/image/object/environment/blank.bmp" }); bricks_arr.push_back(brick);
-
+		if(player.reach_checkpoint == false){
+			brick = Brick(far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height, { "resources/image/object/environment/checkpoint_reached.bmp", "resources/image/object/environment/blank.bmp" }); bricks_arr.push_back(brick);
+		}
 		/* phase6 */
 		currentGroundBlock += 11;
 		for (int i = 0; i < 17; i++) {
