@@ -10,6 +10,7 @@ using namespace game_framework;
 Collider::Collider(int posx,int posy, std::vector<std::string> image) {
 	coll.LoadBitmapByString(image, RGB(163, 73, 164));
 	coll.SetTopLeft(posx, posy);
+	coll.SetFrameIndexOfBitmap(0);
 };
 Collider::~Collider() {};
 void Collider::move(){

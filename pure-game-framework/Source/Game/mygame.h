@@ -88,20 +88,41 @@ namespace game_framework {
 		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
 		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
 		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+
 		void EventCtrl();
 		void MapSetting();
 		void Touching();
+		void shiftMapImage(); // shift map image
+
+		// variable
+		int groundX_up = 0;
+		int groundY_up = 776;
+		int groundX_down = 0;
+		int groundY_down = 836;
+
+		// animation
+		CMovingBitmap coin_animation;
+		CMovingBitmap pipe_animation;
+		CMovingBitmap end_point_animation;
+
+		bool animation_flag = false;
+		bool coin_animation_flag = false;
+		bool pipe_animation_flag = false;
+
+
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		Player player;
 		CAudio *field_music = CAudio::Instance();
+		
 		int current_map = 1;
+
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array
-		std::vector<Brick> bricks_arr;
-		std::vector<CMovingBitmap> environment_arr; // environment array
+		std::vector<Brick> bricks_arr; // bricks array
+		std::vector<Environment> environment_arr; // environment array
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

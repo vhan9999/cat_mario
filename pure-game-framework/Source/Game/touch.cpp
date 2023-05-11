@@ -14,6 +14,7 @@ bool inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
 }
 
+bool isDanger = false;
 void CGameStateRun::Touching() {
 	CMovingBitmap &PC = player.coll;
 
@@ -39,12 +40,38 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
+				// item brick
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.have_coin == true)) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						player.coin_item_brick_audio->Play(3, false);
+
+						// enable coin animation
+						coin_animation.SetFrameIndexOfBitmap(0);
+						coin_animation.SetTopLeft(i.coll.GetLeft(), i.coll.GetTop() - 168);
+						animation_flag = true;
+						coin_animation_flag = true;
+					}
+				}
 				player.jumpSpeed = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_bottom);
 				player.jumpSpeed += 1;
 			}
 			//foot touch
 			else if (inRange(PC.GetTop() + PC.GetHeight() +1, obj_top, obj_mid_y) && PC.GetLeft() + 2 < obj_right && PC.GetLeft() + PC.GetWidth() - 2 > obj_left) {
+				if (player.keyDown == true && i.coll.GetImageFileName() == "resources/image/object/block2/pipeline_big.bmp") {
+					player.coll.SetFrameIndexOfBitmap(6);
+					player.moveSpeed = 0;
+					// enable animation
+					player.pipe_interact_audio->Play(4, false);
+					pipe_animation.SetFrameIndexOfBitmap(0);
+					player.coll.SetTopLeft(i.coll.GetLeft() + 30, i.coll.GetTop() - 68);
+					pipe_animation.SetTopLeft(i.coll.GetLeft() + 30, i.coll.GetTop() - 68);
+					animation_flag = true;
+					pipe_animation_flag = true;
+					isDanger = i.is_danger;
+					return;
+				}
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_top - PC.GetHeight());
@@ -53,24 +80,65 @@ void CGameStateRun::Touching() {
 			}
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop() + 250);
+					player.jumpSpeed = 0;
+					animation_flag = true;
+					player.isFinish = true;
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop()+250);
+					player.jumpSpeed = 0;
+					animation_flag = true;
+					player.isFinish = true;
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
 			}
 		}
 	}
-	
+	// check coin animation
+	if (coin_animation_flag == true && animation_flag == true) {
+		coin_animation.SetAnimation(20, false);
+		if (coin_animation.GetFrameIndexOfBitmap() == 7) {
+			coin_animation.SetAnimation(20, true);
+		}
+	}
+	bool player_fly = false;
+	// check pipe_interact animation
+	if (pipe_animation_flag == true && animation_flag == true) {
+		if (isDanger == true) {
+			pipe_animation.SetAnimation(40, false);
+			if (pipe_animation.GetFrameIndexOfBitmap() == 19) {
+				pipe_animation.SetAnimation(40, true);
+				player_fly = true;
+			}
+
+			if (player_fly == true) {
+				player.coll.SetFrameIndexOfBitmap(4);
+				player.jumpSpeed -= 2;
+			}
+		}
+		else {
+			pipe_animation.SetAnimation(40, false);
+			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
+				pipe_animation.SetAnimation(40, true);
+			}
+		}
+	}
+
 	//player&enemys touch
 	for (auto &i : enemys_arr) {
-		if (i.is_dead) {
-			continue;
-		}
+		if (i.is_dead) { continue;}
 		CMovingBitmap &EC = i.coll;
 
 		if (player.jumpSpeed >= 15) {//predict penetrate
@@ -202,5 +270,6 @@ void CGameStateRun::Touching() {
 		}
 		
 	}
+
 }
 
