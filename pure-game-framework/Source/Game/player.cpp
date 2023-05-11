@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "colliders.h"
-
+#include <string>
 using namespace game_framework;
 
 void Player::load_voice() {
@@ -26,6 +26,13 @@ void Player::move() {
 	else if (moveSpeed != 0 || jumpSpeed != 0) {// move
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, coll.GetTop() + jumpSpeed);
 	}
+	if (coll.GetTop() > 1500) {
+		isDead = true;
+	}
+	CDC *pDC = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::Print(pDC, 0, 0, std::to_string(shift_amount));
+	CDDraw::ReleaseBackCDC();
 }
 
 void Player::moveHor() {
@@ -75,6 +82,7 @@ void Player::moveHor() {
 		coll.SetTopLeft(player_posX, coll.GetTop());
 		// shift the image
 	}
+
 }
 void Player::moveVer() {
 	double fall_gnd = 1500;
@@ -217,6 +225,8 @@ void Player::resetValue() {
 	jumpSpeed = 0;
 	moveSpeed = 0;
 	dead_audio_flag = 0;
+	finish_audio_flag = 0;
+	shift_amount = 0;
 	keyUp = false;
 	keyDown = false;
 	keyLeft = false;
@@ -225,4 +235,11 @@ void Player::resetValue() {
 	player_on_air = false;
 	isMove = false;
 	isDead = false;
+	isFinish = false;
+	CAudio *map_audio = CAudio::Instance();
+	CAudio *player_jump_audio = CAudio::Instance();
+	CAudio *player_dead_audio = CAudio::Instance();
+	CAudio *coin_item_brick_audio = CAudio::Instance();
+	CAudio *pipe_interact_audio = CAudio::Instance();
+	CAudio *player_finish_audio = CAudio::Instance();
 }

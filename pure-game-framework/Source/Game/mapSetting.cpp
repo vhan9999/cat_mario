@@ -28,6 +28,10 @@ void CGameStateRun::shiftMapImage() {
 			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
 			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
 		}
+		for (auto &i : enemys_arr) {
+			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
+			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
+		}
 		for (auto &i : environment_arr) {
 			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
 			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
@@ -56,7 +60,7 @@ void CGameStateRun::MapSetting(){
 
 		Enemy b = Enemy(300, 500, { "resources/image/enemy/turtle_open.bmp", "resources/image/enemy/turtle_open_flip.bmp" ,"resources/image/enemy/turtle_close.bmp" ,"resources/image/enemy/turtle_close_flip.bmp" }); b.turtle = true; b.speed_x = 2; enemys_arr.push_back(b);
 		
-		Enemy c = Enemy(0, 500, { "resources/image/enemy/normal.bmp" }); b.step_enemy_enemy_dead = true; b.speed_x = 2; enemys_arr.push_back(b);
+		Enemy c = Enemy(0, 500, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); c.coll.SetFrameIndexOfBitmap(1); c.step_enemy_enemy_dead = true; c.speed_x = 2; enemys_arr.push_back(c);
 		
 
 		int currentGroundBlock = 0; // track how many ground blocks were build
