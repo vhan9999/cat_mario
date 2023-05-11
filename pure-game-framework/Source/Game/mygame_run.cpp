@@ -26,7 +26,7 @@ void CGameStateRun::OnBeginState()
 {
 	player.resetValue();
 	enemys_arr.clear();
-	enemys_arr.clear();
+	bricks_arr.clear();
 	environment_arr.clear();
 	event_list.clear();
 	MapSetting();
