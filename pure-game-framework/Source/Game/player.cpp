@@ -146,3 +146,21 @@ void Player::ani() {
 void Player::voice() {
 	
 }
+
+void Player::resetValue() {
+	frame = 0;
+	animate_frame = 0;
+	jumpBonusFrame = 0;
+	dead_frame = 0;
+	jumpSpeed = 0;
+	moveSpeed = 0;
+	dead_audio_flag = 0;
+	keyUp = false;
+	keyDown = false;
+	keyLeft = false;
+	keyRight = false;
+	player_fall = false;
+	player_on_air = false;
+	isMove = false;
+	isDead = false;
+}

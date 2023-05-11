@@ -21,7 +21,7 @@ void CGameStateRun::Touching() {
 	for (auto &i : bricks_arr) {
 		CMovingBitmap &BC = i.coll;
 
-		if (player.jumpSpeed >= 30) {//predict penetrate
+		if (player.jumpSpeed >= 28) {//predict penetrate
 			if (PC.GetTop() + PC.GetHeight() <= BC.GetTop() && PC.GetTop() + PC.GetHeight() + player.jumpSpeed >= BC.GetTop() && PC.GetLeft() + 2 < BC.GetLeft() + BC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > BC.GetLeft()) {
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
@@ -109,22 +109,50 @@ void CGameStateRun::Touching() {
 				else if (i.step_enemy_jump) {
 					player.jumpSpeed = -19;
 				}
-				
-				
+				else if (i.turtle) {
+					player.jumpSpeed = -19;
+					int current_bitmap = i.coll.GetFrameIndexOfBitmap();
+					if (current_bitmap == 0 || current_bitmap == 1) {
+						i.speed_x = 0;
+						i.coll.SetFrameIndexOfBitmap(current_bitmap + 2);
+					}
+					else {
+						if (player.coll.GetLeft() > i.coll.GetLeft()) {
+							i.speed_x = -5;
+							i.coll.SetFrameIndexOfBitmap(3);
+						}
+
+						else{
+							i.speed_x = 5;
+							i.coll.SetFrameIndexOfBitmap(2);
+						}
+					}
+				}
 			}
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
-				player.isDead = true;
+				
+				if (i.turtle) {
+					i.speed_x = -5;
+					i.coll.SetFrameIndexOfBitmap(3);
+				}
+				else
+					player.isDead = true;
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
-				player.isDead = true;
+				if (i.turtle) {
+					i.speed_x = 5;
+					i.coll.SetFrameIndexOfBitmap(2);
+				}
+				else
+					player.isDead = true;
 			}
 		}
 	}

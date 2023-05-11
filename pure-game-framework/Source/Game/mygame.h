@@ -119,6 +119,9 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		int counter;	// 倒數之計數器
+		int lifes = 2;
+		CMovingBitmap game_life;
+		int dead_frame = 0;
 	};
 
 }
