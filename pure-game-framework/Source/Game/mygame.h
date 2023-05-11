@@ -91,25 +91,17 @@ namespace game_framework {
 		void EventCtrl();
 		void MapSetting();
 		void Touching();
-		void shiftMapImage(); // shift map image
-
-		// variable
-		int groundX_up = 0;
-		int groundY_up = 776;
-		int groundX_down = 0;
-		int groundY_down = 836;
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		Player player;
 		CAudio *field_music = CAudio::Instance();
-		
 		int current_map = 1;
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array
 		std::vector<Brick> bricks_arr;
-		std::vector<Environment> environment_arr; // environment array
+		std::vector<CMovingBitmap> environment_arr; // environment array
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -127,6 +119,9 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		int counter;	// 倒數之計數器
+		int lifes = 2;
+		CMovingBitmap game_life;
+		int dead_frame = 0;
 	};
 
 }

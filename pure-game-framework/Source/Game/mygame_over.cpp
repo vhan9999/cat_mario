@@ -19,7 +19,9 @@ CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
 
 void CGameStateOver::OnMove()
 {
-	GotoGameState(GAME_STATE_INIT);
+	dead_frame++;
+	if(dead_frame >= 100)
+		GotoGameState(GAME_STATE_RUN);
 }
 
 void CGameStateOver::OnBeginState()
@@ -41,11 +43,12 @@ void CGameStateOver::OnInit()
 	// 最終進度為100%
 	//
 	ShowInitProgress(100, "OK!");
-
-	Sleep(1000);
+	game_life.LoadBitmapByString({ "resources/image/logo/game_over1.bmp" });
+	game_life.SetFrameIndexOfBitmap(0);
+	game_life.SetTopLeft(0, 0);
+	dead_frame = 0;
 }
-
 void CGameStateOver::OnShow()
 {
-
+	game_life.ShowBitmap();
 }

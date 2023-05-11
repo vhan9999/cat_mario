@@ -3,10 +3,6 @@
 
 using namespace game_framework;
 void Player::move() {
-	ani();
-	moveHor();
-	moveVer();
-	voice();
 	// gravity and moving
 	if (coll.GetTop() + jumpSpeed >= 1500) {// fall down (dead)
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500);
@@ -18,11 +14,13 @@ void Player::move() {
 	else if (moveSpeed != 0 || jumpSpeed != 0) {//move
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, coll.GetTop() + jumpSpeed);
 	}
+	moveHor();
+	moveVer();
+	ani();
+	voice();
 }
 void Player::moveHor() {
 	frame += 1;
-	animate_frame += 1;
-
 	if (keyRight == true) {
 		if (moveSpeed == 0)
 			moveSpeed += 1;
@@ -65,6 +63,7 @@ void Player::moveHor() {
 	if (coll.GetLeft() + coll.GetWidth() > 512) { // right
 		int player_posX = 512 - coll.GetWidth();
 		coll.SetTopLeft(player_posX, coll.GetTop());
+		// shift the image
 	}
 }
 void Player::moveVer() {
@@ -120,11 +119,11 @@ void Player::ani() {
 		coll.SetFrameIndexOfBitmap(0);
 
 		// change image while moving
-		if ((animate_frame % 5 == 0) && (coll.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
+		if ((animate_frame % 6 == 0) && (coll.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
 			coll.SetFrameIndexOfBitmap(1);
 
 		}
-		else if ((animate_frame % 10 == 0) && (coll.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+		else if ((animate_frame % 6 == 0) && (coll.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
 			coll.SetFrameIndexOfBitmap(0);
 		}
 	}
@@ -132,17 +131,36 @@ void Player::ani() {
 		coll.SetFrameIndexOfBitmap(2);
 
 		// change image while moving
-		if ((animate_frame % 5 == 0) && (coll.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
+		if ((animate_frame % 6 == 0) && (coll.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
 			coll.SetFrameIndexOfBitmap(3);
+
 		}
-		else if ((animate_frame % 10 == 0) && (coll.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+		else if ((animate_frame % 4 == 0) && (coll.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
 			coll.SetFrameIndexOfBitmap(2);
 		}
 	}
-	if (animate_frame == 200) {
+	if (animate_frame + 1 < 0) {
 		animate_frame = 0;
 	}
 }
 void Player::voice() {
 	
+}
+
+void Player::resetValue() {
+	frame = 0;
+	animate_frame = 0;
+	jumpBonusFrame = 0;
+	dead_frame = 0;
+	jumpSpeed = 0;
+	moveSpeed = 0;
+	dead_audio_flag = 0;
+	keyUp = false;
+	keyDown = false;
+	keyLeft = false;
+	keyRight = false;
+	player_fall = false;
+	player_on_air = false;
+	isMove = false;
+	isDead = false;
 }
