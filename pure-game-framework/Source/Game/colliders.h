@@ -48,6 +48,7 @@ namespace game_framework {
 		int finish_audio_flag = 0;
 		int dead_audio_flag = 0;
 		int shift_amount = 0; // track player distance far from checkpoint point
+		int enemy_shift_amount = 0;
 		int distance_count = 0; // track player distance far from initial point
 
 		bool keyUp = false;
@@ -101,7 +102,6 @@ namespace game_framework {
 		Enemy(int posx, int posy , std::vector<std::string> image) : Collider(posx, posy, image) {}
 		~Enemy() = default;
 		void emove();
-		
 
 		bool step_enemy_enemy_dead = false;//true -> enemy dead
 		bool step_enemy_player_dead = false;

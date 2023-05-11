@@ -100,6 +100,7 @@ void CGameStateRun::Touching() {
 						if (j.foot_touch_fall)
 							j.falling = true;
 					}
+				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);

@@ -30,7 +30,6 @@ void CGameStateRun::OnBeginState()
 	environment_arr.clear();
 	MapSetting();
 	if (player.reach_checkpoint == true) {
-		
 		for (auto &i : bricks_arr) {
 			int brick_pos = i.coll.GetLeft() - player.shift_amount;
 			i.coll.SetTopLeft(brick_pos, i.coll.GetTop());
@@ -40,7 +39,16 @@ void CGameStateRun::OnBeginState()
 			i.coll.SetTopLeft(env_pos, i.coll.GetTop());
 		}
 	}
+
+	if (player.reach_checkpoint == true) {
+		player.enemy_shift_amount = 3600;
+	}
+	else {
+		player.enemy_shift_amount = 0;
+	}
+
 	player.resetValue();
+
 	animation_flag = false;
 	coin_animation_flag = false;
 	pipe_animation_flag = false;
@@ -157,6 +165,7 @@ void CGameStateRun::OnShow()
 	for (auto i : enemys_arr) {
 		if (!i.is_dead)
 			i.coll.ShowBitmap();
+	}
 	for (auto i : environment_arr) {
 		i.coll.ShowBitmap();
 	}

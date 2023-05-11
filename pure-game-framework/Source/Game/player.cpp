@@ -229,4 +229,5 @@ void Player::resetValue() {
 	isMove = false;
 	isDead = false;
 	isFinish = false;
+
 }

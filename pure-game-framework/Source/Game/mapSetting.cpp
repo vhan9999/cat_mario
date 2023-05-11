@@ -45,6 +45,7 @@ void CGameStateRun::shiftMapImage() {
 			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
 		}
 		player.distance_count += player.moveSpeed;
+		player.enemy_shift_amount += player.moveSpeed;
 	}
 }
 
@@ -205,7 +206,6 @@ void CGameStateRun::MapSetting(){
 		}
 		brick = Brick(far_from_start(currentGroundBlock + 7), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 		Enemy cloud = Enemy(far_from_start(currentGroundBlock + 8), high_from_ground(8), { "resources/image/enemy/cloud_eye.bmp" ,"resources/image/enemy/cloud_devil.bmp" }); cloud.cloud = true; cloud.steel = false; cloud.step_enemy_player_dead = true; enemys_arr.push_back(cloud);
-		env = Environment(far_from_start(currentGroundBlock + 7), high_from_ground(9), { "resources/image/object/environment/cloud_eye.bmp" }); environment_arr.push_back(env);
 		brick = Brick(far_from_start(currentGroundBlock + 11), groundY_up - pipeline_short_height, { "resources/image/object/block2/pipeline_short.bmp" }); bricks_arr.push_back(brick);
 
 		/* phase 9 */

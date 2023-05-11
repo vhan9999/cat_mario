@@ -93,7 +93,7 @@ namespace game_framework {
 		void MapSetting();
 		void Touching();
 		void shiftMapImage(); // shift map image
-
+		
 		// variable
 		int groundX_up = 0;
 		int groundY_up = 776;
