@@ -29,7 +29,7 @@ void CGameStateRun::EventCtrl() {
 			Enemy down_seal_1(630, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_1.steel = false; down_seal_1.able_touch = false; down_seal_1.speed_y = 19; down_seal_1.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_1);
 			event_list["down_seal_1"] = true;
 		}
-		if (player.shift_amount >= 2600 && player.shift_amount <= 2700 && !event_list["three_fall_bricksss"]) {
+		if (player.shift_amount >= 2550 && player.shift_amount <= 2700 && !event_list["three_fall_bricksss"]) {
 			//three fall
 			Enemy normal3 = Enemy(1190, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal3.step_enemy_enemy_dead = true; normal3.speed_x = -2; enemys_arr.push_back(normal3);
 			Enemy normal4 = Enemy(1330, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal4.step_enemy_enemy_dead = true; normal4.speed_x = -2; enemys_arr.push_back(normal4);
@@ -37,6 +37,7 @@ void CGameStateRun::EventCtrl() {
 			for (auto &i : bricks_arr) {
 				if (i.is_fall) {
 					i.falling = true;
+					i.speed_y = 5;
 				}
 			}
 			event_list["three_fall_bricksss"] = true;

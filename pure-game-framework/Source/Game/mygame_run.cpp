@@ -137,13 +137,14 @@ void CGameStateRun::OnShow()
 {
 	if(!player.isDead)
 		player.coll.ShowBitmap();
+	for (auto i : enemys_arr) {
+		if (!i.is_dead)
+			i.coll.ShowBitmap();
+	}
 	for (auto i : bricks_arr) {
 		i.coll.ShowBitmap();
 	}
-	for (auto i : enemys_arr) {
-		if(!i.is_dead)
-			i.coll.ShowBitmap();
-	}
+	
 	if (animation_flag == true) {
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }

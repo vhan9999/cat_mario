@@ -106,6 +106,7 @@ namespace game_framework {
 		bool is_dead = false;
 		bool able_touch = true;
 		bool turtle = false;
+		bool cloud = false;
 	};
 
 	class Environment : public Collider {

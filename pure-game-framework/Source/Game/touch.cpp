@@ -45,10 +45,14 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
-				// item brick
+				if (i.invisible && player.jumpSpeed < 0) {
+					i.invisible = false;
+					i.coll.SetFrameIndexOfBitmap(1);
+				}
 				if (i.falling) {
 					player.isDead = true;
 				}
+				// item brick
 				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.have_coin == true)) {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
@@ -65,6 +69,8 @@ void CGameStateRun::Touching() {
 				PC.SetTopLeft(PC.GetLeft(), obj_bottom);
 				player.jumpSpeed += 1;
 			}
+			else if (i.invisible)
+				continue;
 			//foot touch
 			else if (inRange(PC.GetTop() + PC.GetHeight() +1, obj_top, obj_mid_y) && PC.GetLeft() + 2 < obj_right && PC.GetLeft() + PC.GetWidth() - 2 > obj_left) {
 				if (player.keyDown == true && i.coll.GetImageFileName() == "resources/image/object/block2/pipeline_big.bmp") {
@@ -173,6 +179,9 @@ void CGameStateRun::Touching() {
 			int obj_bottom = EC.GetTop() + EC.GetHeight();
 			int obj_mid_x = EC.GetLeft() + (EC.GetWidth() / 2);
 			int obj_mid_y = EC.GetTop() + (EC.GetHeight() / 2);
+			if (i.cloud) {
+				i.coll.SetFrameIndexOfBitmap(1);
+			}
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
 				player.isDead = true;
