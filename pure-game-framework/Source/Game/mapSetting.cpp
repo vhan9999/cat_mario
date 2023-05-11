@@ -56,11 +56,10 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} };
+		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} };
 
-		Enemy b = Enemy(300, 500, { "resources/image/enemy/turtle_open.bmp", "resources/image/enemy/turtle_open_flip.bmp" ,"resources/image/enemy/turtle_close.bmp" ,"resources/image/enemy/turtle_close_flip.bmp" }); b.turtle = true; b.speed_x = 2; enemys_arr.push_back(b);
-		
-		Enemy c = Enemy(0, 500, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); c.coll.SetFrameIndexOfBitmap(1); c.step_enemy_enemy_dead = true; c.speed_x = 2; enemys_arr.push_back(c);
+		Enemy normal1 = Enemy(600, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -1; enemys_arr.push_back(normal1);
+		Enemy normal2 = Enemy(920, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal2.step_enemy_enemy_dead = true; normal2.speed_x = -1; enemys_arr.push_back(normal2);
 		
 
 		int currentGroundBlock = 0; // track how many ground blocks were build

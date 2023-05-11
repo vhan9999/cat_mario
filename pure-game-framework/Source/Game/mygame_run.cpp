@@ -30,7 +30,7 @@ void CGameStateRun::OnBeginState()
 	environment_arr.clear();
 	event_list.clear();
 	MapSetting();
-	player.coll.SetTopLeft(0, 0);
+	player.coll.SetTopLeft(200, groundY_up - 68);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素

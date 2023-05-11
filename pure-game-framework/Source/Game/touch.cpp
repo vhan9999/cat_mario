@@ -202,12 +202,14 @@ void CGameStateRun::Touching() {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
+				player.isDead = true;
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
+				player.isDead = true;
 			}
 		}
 	}
@@ -264,7 +266,7 @@ void CGameStateRun::Touching() {
 	for (auto &i : enemys_arr) {
 		for (auto &j : enemys_arr) {
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
-				if (i.turtle) {
+				if (i.turtle&&!j.turtle) {
 					j.is_dead = true;
 				}
 				

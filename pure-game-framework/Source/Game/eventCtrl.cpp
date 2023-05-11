@@ -12,8 +12,8 @@ using namespace game_framework;
 
 void CGameStateRun::EventCtrl() {
 	if (current_map == 1) {
-		if (player.coll.GetLeft() >= 350 && !event_list["up_seal_1"]) {
-			Enemy up_seal_1(400, 1000, { {"resources/image/enemy/seal.bmp"} }); up_seal_1.steel = false; up_seal_1.able_touch = false; up_seal_1.speed_y = -19; up_seal_1.step_enemy_player_dead = true; enemys_arr.push_back(up_seal_1);
+		if (player.shift_amount >= 650 && !event_list["up_seal_1"]) {
+			Enemy up_seal_1(530, 600, { {"resources/image/enemy/seal.bmp"} }); up_seal_1.steel = false; up_seal_1.able_touch = false; up_seal_1.speed_y = -19; up_seal_1.step_enemy_player_dead = true; enemys_arr.push_back(up_seal_1);
 			event_list["up_seal_1"] = true;
 		}
 	}
