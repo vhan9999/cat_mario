@@ -28,6 +28,10 @@ void CGameStateRun::shiftMapImage() {
 			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
 			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
 		}
+		for (auto &i : enemys_arr) {
+			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
+			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
+		}
 		for (auto &i : environment_arr) {
 			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
 			i.coll.SetTopLeft(obj_pos, i.coll.GetTop());
@@ -52,13 +56,12 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		/*
-		event_list = { {"player_dead",false} };
-		for (int i = 0; i < 10; i++) {
-			Brick a = Brick(i*60, 800, { "resources/image/object/block1/brown_brick.bmp" }); a.foot_touch_break = true; bricks_arr.push_back(a);
-		}
-		Enemy b = Enemy(0, 500, { "resources/image/enemy/normal.bmp" }); b.step_enemy_enemy_dead = true; b.speed_x = 2; enemys_arr.push_back(b);
-		*/
+		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} };
+
+		Enemy b = Enemy(300, 500, { "resources/image/enemy/turtle_open.bmp", "resources/image/enemy/turtle_open_flip.bmp" ,"resources/image/enemy/turtle_close.bmp" ,"resources/image/enemy/turtle_close_flip.bmp" }); b.turtle = true; b.speed_x = 2; enemys_arr.push_back(b);
+		
+		Enemy c = Enemy(0, 500, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); c.coll.SetFrameIndexOfBitmap(1); c.step_enemy_enemy_dead = true; c.speed_x = 2; enemys_arr.push_back(c);
+		
 
 		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;

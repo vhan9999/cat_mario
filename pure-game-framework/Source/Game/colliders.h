@@ -20,6 +20,7 @@ namespace game_framework {
 		CMovingBitmap coll;
 		int speed_x = 0;
 		int speed_y = 0;
+		std::string name = "";
 	};
 
 	class Player : public Collider {
@@ -34,12 +35,14 @@ namespace game_framework {
 		void ani();
 		void load_voice();
 		void voice();
+		void resetValue();
 		void check_finish();
 		// void dead_check();
 
 		int frame = 0;
 		double animate_frame = 0;
 		int jumpBonusFrame = 0;
+		int dead_frame = 0;
 		int jumpSpeed = 0;
 		int moveSpeed = 0;
 		int dead_audio_flag = 0;
@@ -100,6 +103,7 @@ namespace game_framework {
 		bool steel = true;
 		bool is_dead = false;
 		bool able_touch = true;
+		bool turtle = false;
 	};
 
 	class Environment : public Collider {

@@ -7,4 +7,9 @@ void Enemy::emove() {
 	if (steel) {
 		speed_y = speed_y + 1;
 	}
+	if (coll.GetTop() > 1500 || coll.GetTop() < -300) {
+		speed_y = 0;
+		speed_x = 0;
+		steel = false;
+	}
 }

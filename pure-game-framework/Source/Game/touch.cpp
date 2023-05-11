@@ -141,7 +141,7 @@ void CGameStateRun::Touching() {
 		if (i.is_dead) { continue;}
 		CMovingBitmap &EC = i.coll;
 
-		if (player.jumpSpeed >= 15) {//predict penetrate
+		if (player.jumpSpeed >= 28) {//predict penetrate
 			if (PC.GetTop() + PC.GetHeight() <= EC.GetTop() && PC.GetTop() + PC.GetHeight() + player.jumpSpeed >= EC.GetTop() && PC.GetLeft() + 2 < EC.GetLeft() + EC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > EC.GetLeft()) {
 				player.jumpSpeed = 0;
 				PC.SetTopLeft(PC.GetLeft(), EC.GetTop() - PC.GetHeight());
@@ -177,20 +177,37 @@ void CGameStateRun::Touching() {
 				else if (i.step_enemy_jump) {
 					player.jumpSpeed = -19;
 				}
+				else if (i.turtle) {
+					player.jumpSpeed = -19;
+					int current_bitmap = i.coll.GetFrameIndexOfBitmap();
+					if (current_bitmap == 0 || current_bitmap == 1) {
+						i.speed_x = 0;
+						i.coll.SetFrameIndexOfBitmap(current_bitmap + 2);
+					}
+					else {
+						if (player.coll.GetLeft() > i.coll.GetLeft()) {
+							i.speed_x = -5;
+							i.coll.SetFrameIndexOfBitmap(2);
+						}
+
+						else{
+							i.speed_x = 5;
+							i.coll.SetFrameIndexOfBitmap(3);
+						}
+					}
+				}
 			}
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
-				player.isDead = true;
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
-				player.isDead = true;
 			}
 		}
 	}
@@ -230,15 +247,29 @@ void CGameStateRun::Touching() {
 				else if (inRange(EC.GetLeft(), obj_mid_x, obj_right) && EC.GetTop() <= obj_bottom && EC.GetTop() + EC.GetHeight() - 5 >= obj_top) {
 					j.speed_x = j.speed_x * (-1);
 					EC.SetTopLeft(obj_right, EC.GetTop());
+					if (j.coll.GetFrameIndexOfBitmap() % 2 == 0)
+						j.coll.SetFrameIndexOfBitmap(j.coll.GetFrameIndexOfBitmap() + 1);
 				}
 				//right touch
 				else if (inRange(EC.GetLeft() + EC.GetWidth() + 1, obj_left, obj_mid_x) && EC.GetTop() <= obj_bottom && EC.GetTop() + EC.GetHeight() - 5 >= obj_top) {
-					j.speed_x = 0;
+					j.speed_x = j.speed_x * (-1);
 					EC.SetTopLeft(obj_left - EC.GetWidth(), EC.GetTop());
+					if(j.coll.GetFrameIndexOfBitmap()%2 == 1)
+						j.coll.SetFrameIndexOfBitmap(j.coll.GetFrameIndexOfBitmap() - 1);
 				}
 			}
 		}
 		
+	}
+	for (auto &i : enemys_arr) {
+		for (auto &j : enemys_arr) {
+			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
+				if (i.turtle) {
+					j.is_dead = true;
+				}
+				
+			}
+		}
 	}
 
 }

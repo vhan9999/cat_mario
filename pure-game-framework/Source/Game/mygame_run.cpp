@@ -24,6 +24,13 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
+	player.resetValue();
+	enemys_arr.clear();
+	bricks_arr.clear();
+	environment_arr.clear();
+	event_list.clear();
+	MapSetting();
+	player.coll.SetTopLeft(0, 0);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
@@ -35,6 +42,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 		i.emove();
 	}
 	Touching();
+	EventCtrl();
 	player.check_finish();
 	shiftMapImage();
 }
@@ -124,9 +132,11 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	for (auto i : environment_arr) { i.coll.ShowBitmap(); }
-	for (auto i : bricks_arr) { i.coll.ShowBitmap();}
-
+	if(!player.isDead)
+		player.coll.ShowBitmap();
+	for (auto i : bricks_arr) {
+		i.coll.ShowBitmap();
+	}
 	for (auto i : enemys_arr) {
 		if(!i.is_dead)
 			i.coll.ShowBitmap();
@@ -134,9 +144,6 @@ void CGameStateRun::OnShow()
 	if (animation_flag == true) {
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
-	}
-	if (!player.isDead) {
-		player.coll.ShowBitmap();
 	}
 
 	/* display game over screen
