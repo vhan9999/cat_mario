@@ -40,13 +40,6 @@ void CGameStateRun::OnBeginState()
 		}
 	}
 
-	if (player.reach_checkpoint == true) {
-		player.enemy_shift_amount = 3600;
-	}
-	else {
-		player.enemy_shift_amount = 0;
-	}
-
 	player.resetValue();
 
 	animation_flag = false;

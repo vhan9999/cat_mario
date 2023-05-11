@@ -44,6 +44,7 @@ void Player::move() {
 	CTextDraw::ChangeFontLog(pDC1, 50, "Courier New", RGB(255, 255, 255), 20);
 	CTextDraw::Print(pDC1, 0, 60, "Shift amount : " + std::to_string(shift_amount));
 	CDDraw::ReleaseBackCDC();
+
 }
 
 void Player::moveHor() {
@@ -91,7 +92,6 @@ void Player::moveHor() {
 	if (coll.GetLeft() + coll.GetWidth() > 512) { // right
 		int player_posX = 512 - coll.GetWidth();
 		coll.SetTopLeft(player_posX, coll.GetTop());
-		// shift the image
 	}
 
 }
@@ -218,7 +218,14 @@ void Player::resetValue() {
 	moveSpeed = 0;
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
-	distance_count = 0;
+	if (reach_checkpoint == true) {
+		distance_count = 3600;
+		enemy_shift_amount = 3600;
+	}else{
+		distance_count = 0;
+		enemy_shift_amount = 0;
+	}
+
 	keyUp = false;
 	keyDown = false;
 	keyLeft = false;
