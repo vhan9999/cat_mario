@@ -31,6 +31,11 @@ void CGameStateRun::Touching() {
 				player.ableToJump(ground); // can jump on block
 			}
 		}
+		else if (i.speed_y >= 28) {//predict penetrate
+			if (BC.GetTop() + BC.GetHeight() <= PC.GetTop() && BC.GetTop() + BC.GetHeight() + i.speed_y >= PC.GetTop() && BC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && BC.GetLeft() + BC.GetWidth() - 2 > PC.GetLeft()) {
+				player.isDead;
+			}
+		}
 		else if (CMovingBitmap::IsOverlap(PC, BC)) {//check touch
 			int obj_left = BC.GetLeft();
 			int obj_right = BC.GetLeft() + BC.GetWidth();
@@ -41,6 +46,9 @@ void CGameStateRun::Touching() {
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
 				// item brick
+				if (i.falling) {
+					player.isDead = true;
+				}
 				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.have_coin == true)) {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
@@ -71,6 +79,12 @@ void CGameStateRun::Touching() {
 					pipe_animation_flag = true;
 					isDanger = i.is_danger;
 					return;
+				}
+				if (i.foot_touch_fall) {
+					for (auto &j : bricks_arr) {
+						if (j.foot_touch_fall)
+							j.falling = true;
+					}
 				}
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
@@ -147,10 +161,9 @@ void CGameStateRun::Touching() {
 				PC.SetTopLeft(PC.GetLeft(), EC.GetTop() - PC.GetHeight());
 			}
 		}
-		else if (i.speed_y >= 15) {//predict penetrate
+		else if (i.speed_y >= 28) {//predict penetrate
 			if (EC.GetTop() + EC.GetHeight() <= PC.GetTop() && EC.GetTop() + EC.GetHeight() + i.speed_y >= PC.GetTop() && EC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && EC.GetLeft() + EC.GetWidth() - 2 > PC.GetLeft()) {
-				player.jumpSpeed = 0;
-				PC.SetTopLeft(PC.GetLeft(), EC.GetTop() - PC.GetHeight());
+				player.isDead = true;
 			}
 		}
 		else if (CMovingBitmap::IsOverlap(PC, EC)) {//check touch

@@ -56,10 +56,10 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} };
+		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} ,{"pipe_normal",false} };
 
-		Enemy normal1 = Enemy(600, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -1; enemys_arr.push_back(normal1);
-		Enemy normal2 = Enemy(920, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal2.step_enemy_enemy_dead = true; normal2.speed_x = -1; enemys_arr.push_back(normal2);
+		Enemy normal1 = Enemy(600, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -2; enemys_arr.push_back(normal1);
+		Enemy normal2 = Enemy(920, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal2.step_enemy_enemy_dead = true; normal2.speed_x = -2; enemys_arr.push_back(normal2);
 		
 
 		int currentGroundBlock = 0; // track how many ground blocks were build
@@ -93,7 +93,7 @@ void CGameStateRun::MapSetting(){
 
 		brick = Brick(far_from_start(currentGroundBlock + 2), groundY_up - pipeline_mid_height, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
 		env = Environment(far_from_start(currentGroundBlock + 1), groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
-		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.	is_danger = true; bricks_arr.push_back(brick);
 
 		/* phase3 */
 		currentGroundBlock += 15;
@@ -119,6 +119,8 @@ void CGameStateRun::MapSetting(){
 
 		for (int i = 0; i < 5; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + 6 + i), high_from_ground(7), { "resources/image/object/block1/brown_brick.bmp" });
+			if (i <= 2)
+				brick.is_fall = true;
 			bricks_arr.push_back(brick);
 		}
 
@@ -145,8 +147,14 @@ void CGameStateRun::MapSetting(){
 		/* phase6 */
 		currentGroundBlock += 11;
 		for (int i = 0; i < 17; i++) {
-			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
-			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); 
+			if (i >= 4 && i <= 8)
+				brick.foot_touch_fall = true;
+			bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); 
+			if (i >= 4 && i <= 8)
+				brick.foot_touch_fall = true;
+			bricks_arr.push_back(brick);
 		}
 
 		brick = Brick(far_from_start(currentGroundBlock + 3), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);

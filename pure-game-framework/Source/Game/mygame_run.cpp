@@ -41,6 +41,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	for (auto &i : enemys_arr) {
 		i.emove();
 	}
+	for (auto &i : bricks_arr) {
+		i.move();
+	}
 	Touching();
 	EventCtrl();
 	player.check_finish();
