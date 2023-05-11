@@ -41,7 +41,7 @@ void CGameStateRun::Touching() {
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
 				// item brick
-				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && i.have_coin == true) {
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.have_coin == true)) {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
 						player.coin_item_brick_audio->Play(3, false);
@@ -80,6 +80,13 @@ void CGameStateRun::Touching() {
 			}
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop() + 250);
+					player.jumpSpeed = 0;
+					animation_flag = true;
+					player.isFinish = true;
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
@@ -131,9 +138,7 @@ void CGameStateRun::Touching() {
 
 	//player&enemys touch
 	for (auto &i : enemys_arr) {
-		if (i.is_dead) {
-			continue;
-		}
+		if (i.is_dead) { continue;}
 		CMovingBitmap &EC = i.coll;
 
 		if (player.jumpSpeed >= 15) {//predict penetrate

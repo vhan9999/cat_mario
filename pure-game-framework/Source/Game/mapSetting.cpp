@@ -52,13 +52,14 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		
+		/*
 		event_list = { {"player_dead",false} };
 		for (int i = 0; i < 10; i++) {
 			Brick a = Brick(i*60, 800, { "resources/image/object/block1/brown_brick.bmp" }); a.foot_touch_break = true; bricks_arr.push_back(a);
 		}
 		Enemy b = Enemy(0, 500, { "resources/image/enemy/normal.bmp" }); b.step_enemy_enemy_dead = true; b.speed_x = 2; enemys_arr.push_back(b);
-		
+		*/
+
 		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;
 		Environment env;
@@ -73,6 +74,7 @@ void CGameStateRun::MapSetting(){
 		env = Environment(far_from_start(1), groundY_up - 132, { "resources/image/object/environment/mountain.bmp" }); environment_arr.push_back(env);
 
 		brick = Brick(far_from_start(9), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(8), high_from_ground(4), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
 
 		for (int i = 0; i < 5; i++) {
 			brick = Brick(far_from_start(9 + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
@@ -180,6 +182,9 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
+
+		brick = Brick(far_from_start(currentGroundBlock), groundY_up - pipeline_mid_height, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
+
 		for (int i = 0; i < 2; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
 			bricks_arr.push_back(brick);

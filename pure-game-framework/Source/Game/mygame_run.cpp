@@ -139,11 +139,6 @@ void CGameStateRun::OnShow()
 		player.coll.ShowBitmap();
 	}
 
-	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 500, 400, std::to_string(player.shift_amount));
-	CDDraw::ReleaseBackCDC();
-
 	/* display game over screen
 	if (player.isDead == true) {
 		Sleep(1500);
