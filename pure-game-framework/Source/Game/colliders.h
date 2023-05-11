@@ -60,8 +60,11 @@ namespace game_framework {
 		bool isDead = false;
 		bool isFinish = false;
 
-		int shift_amount = 0; // track player distance far from initial point
+		int current_checkpoint_x;
+		int current_checkpoint_y;
 
+		int shift_amount = 0; // track player distance far from checkpoint point
+		int distance_count = 0; // track player distance far from initial point
 		CAudio *map_audio = CAudio::Instance();
 		CAudio *player_jump_audio = CAudio::Instance();
 		CAudio *player_dead_audio = CAudio::Instance();

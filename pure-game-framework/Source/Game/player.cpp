@@ -135,7 +135,7 @@ void Player::ableToJump(double &ground) {
 			coll.SetFrameIndexOfBitmap(0);
 			coll.SetTopLeft(560, coll.GetTop());
 			moveSpeed += 2;
-			if (Player::shift_amount >= 7239) { // player meet end point
+			if (Player::distance_count >= 7239) { // player meet end point
 				moveSpeed = 0;
 				coll.SetFrameIndexOfBitmap(6);
 			}
@@ -227,6 +227,7 @@ void Player::resetValue() {
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
 	shift_amount = 0;
+	distance_count = 0;
 	keyUp = false;
 	keyDown = false;
 	keyLeft = false;

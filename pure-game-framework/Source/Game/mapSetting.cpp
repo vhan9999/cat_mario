@@ -45,6 +45,7 @@ void CGameStateRun::shiftMapImage() {
 			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
 		}
 		player.shift_amount += player.moveSpeed;
+		player.distance_count += player.moveSpeed;
 	}
 }
 

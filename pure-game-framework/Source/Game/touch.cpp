@@ -53,6 +53,13 @@ void CGameStateRun::Touching() {
 						coin_animation_flag = true;
 					}
 				}
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.shift_amount = 0; // change checkpoint by reset shift_amount 
+					player.current_checkpoint_x = 120;
+					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+					return;
+				}
 				player.jumpSpeed = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_bottom);
 				player.jumpSpeed += 1;
@@ -72,6 +79,13 @@ void CGameStateRun::Touching() {
 					isDanger = i.is_danger;
 					return;
 				}
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.shift_amount = 0; // change checkpoint by reset shift_amount 
+					player.current_checkpoint_x = 120;
+					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+					return;
+				}
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_top - PC.GetHeight());
@@ -87,6 +101,13 @@ void CGameStateRun::Touching() {
 					player.isFinish = true;
 					return;
 				}
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.shift_amount = 0; // change checkpoint by reset shift_amount 
+					player.current_checkpoint_x = 120;
+					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
@@ -98,6 +119,13 @@ void CGameStateRun::Touching() {
 					player.jumpSpeed = 0;
 					animation_flag = true;
 					player.isFinish = true;
+					return;
+				}
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.shift_amount = 0; // change checkpoint by reset shift_amount 
+					player.current_checkpoint_x = 120;
+					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
 					return;
 				}
 				player.moveSpeed = 0;

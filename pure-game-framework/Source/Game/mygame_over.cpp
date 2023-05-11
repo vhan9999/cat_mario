@@ -41,6 +41,7 @@ void CGameStateOver::OnInit()
 void CGameStateOver::OnShow()
 {
 	game_life.ShowBitmap();
+	// game over text
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
 	CTextDraw::Print(pDC, 500, 400, std::to_string(lifes));
