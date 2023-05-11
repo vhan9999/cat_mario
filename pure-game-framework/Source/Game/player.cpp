@@ -22,12 +22,10 @@ void Player::move() {
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500); 
 		player_fall = true; 
 		player_on_air = false; 
+		isDead = true;
 	}	
 	else if (moveSpeed != 0 || jumpSpeed != 0) {// move
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, coll.GetTop() + jumpSpeed);
-	}
-	if (coll.GetTop() > 1500) {
-		isDead = true;
 	}
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);

@@ -31,6 +31,11 @@ void CGameStateRun::Touching() {
 				player.ableToJump(ground); // can jump on block
 			}
 		}
+		else if (i.speed_y >= 28) {//predict penetrate
+			if (BC.GetTop() + BC.GetHeight() <= PC.GetTop() && BC.GetTop() + BC.GetHeight() + i.speed_y >= PC.GetTop() && BC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && BC.GetLeft() + BC.GetWidth() - 2 > PC.GetLeft()) {
+				player.isDead;
+			}
+		}
 		else if (CMovingBitmap::IsOverlap(PC, BC)) {//check touch
 			int obj_left = BC.GetLeft();
 			int obj_right = BC.GetLeft() + BC.GetWidth();
@@ -40,6 +45,13 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
+				if (i.invisible && player.jumpSpeed < 0) {
+					i.invisible = false;
+					i.coll.SetFrameIndexOfBitmap(1);
+				}
+				if (i.falling) {
+					player.isDead = true;
+				}
 				// item brick
 				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.have_coin == true)) {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
@@ -57,6 +69,8 @@ void CGameStateRun::Touching() {
 				PC.SetTopLeft(PC.GetLeft(), obj_bottom);
 				player.jumpSpeed += 1;
 			}
+			else if (i.invisible)
+				continue;
 			//foot touch
 			else if (inRange(PC.GetTop() + PC.GetHeight() +1, obj_top, obj_mid_y) && PC.GetLeft() + 2 < obj_right && PC.GetLeft() + PC.GetWidth() - 2 > obj_left) {
 				if (player.keyDown == true && i.coll.GetImageFileName() == "resources/image/object/block2/pipeline_big.bmp") {
@@ -71,6 +85,12 @@ void CGameStateRun::Touching() {
 					pipe_animation_flag = true;
 					isDanger = i.is_danger;
 					return;
+				}
+				if (i.foot_touch_fall) {
+					for (auto &j : bricks_arr) {
+						if (j.foot_touch_fall)
+							j.falling = true;
+					}
 				}
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
@@ -147,10 +167,9 @@ void CGameStateRun::Touching() {
 				PC.SetTopLeft(PC.GetLeft(), EC.GetTop() - PC.GetHeight());
 			}
 		}
-		else if (i.speed_y >= 15) {//predict penetrate
+		else if (i.speed_y >= 28) {//predict penetrate
 			if (EC.GetTop() + EC.GetHeight() <= PC.GetTop() && EC.GetTop() + EC.GetHeight() + i.speed_y >= PC.GetTop() && EC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && EC.GetLeft() + EC.GetWidth() - 2 > PC.GetLeft()) {
-				player.jumpSpeed = 0;
-				PC.SetTopLeft(PC.GetLeft(), EC.GetTop() - PC.GetHeight());
+				player.isDead = true;
 			}
 		}
 		else if (CMovingBitmap::IsOverlap(PC, EC)) {//check touch
@@ -160,6 +179,9 @@ void CGameStateRun::Touching() {
 			int obj_bottom = EC.GetTop() + EC.GetHeight();
 			int obj_mid_x = EC.GetLeft() + (EC.GetWidth() / 2);
 			int obj_mid_y = EC.GetTop() + (EC.GetHeight() / 2);
+			if (i.cloud) {
+				i.coll.SetFrameIndexOfBitmap(1);
+			}
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
 				player.isDead = true;
@@ -202,12 +224,14 @@ void CGameStateRun::Touching() {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
+				player.isDead = true;
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
+				player.isDead = true;
 			}
 		}
 	}
@@ -264,7 +288,7 @@ void CGameStateRun::Touching() {
 	for (auto &i : enemys_arr) {
 		for (auto &j : enemys_arr) {
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
-				if (i.turtle) {
+				if (i.turtle&&!j.turtle) {
 					j.is_dead = true;
 				}
 				

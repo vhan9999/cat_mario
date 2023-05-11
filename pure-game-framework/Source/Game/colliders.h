@@ -76,7 +76,7 @@ namespace game_framework {
 		Brick(int posx, int posy, std::vector<std::string> image) : Collider(posx, posy, image) {
 		}
 		~Brick() = default;
-
+		void move();
 		bool head_touch_break = false; // break and animation
 		bool foot_touch_break = false;
 		bool invisible = false;
@@ -85,6 +85,8 @@ namespace game_framework {
 		bool have_coin = false;
 		bool have_item = false;
 		bool is_danger = false;
+		bool is_fall = false;
+		bool falling = false;
 		std::string item;
 
 	};
@@ -104,6 +106,7 @@ namespace game_framework {
 		bool is_dead = false;
 		bool able_touch = true;
 		bool turtle = false;
+		bool cloud = false;
 	};
 
 	class Environment : public Collider {

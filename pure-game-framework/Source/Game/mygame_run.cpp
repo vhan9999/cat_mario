@@ -30,7 +30,7 @@ void CGameStateRun::OnBeginState()
 	environment_arr.clear();
 	event_list.clear();
 	MapSetting();
-	player.coll.SetTopLeft(0, 0);
+	player.coll.SetTopLeft(200, groundY_up - 68);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
@@ -40,6 +40,9 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 
 	for (auto &i : enemys_arr) {
 		i.emove();
+	}
+	for (auto &i : bricks_arr) {
+		i.move();
 	}
 	Touching();
 	EventCtrl();
@@ -134,13 +137,14 @@ void CGameStateRun::OnShow()
 {
 	if(!player.isDead)
 		player.coll.ShowBitmap();
+	for (auto i : enemys_arr) {
+		if (!i.is_dead)
+			i.coll.ShowBitmap();
+	}
 	for (auto i : bricks_arr) {
 		i.coll.ShowBitmap();
 	}
-	for (auto i : enemys_arr) {
-		if(!i.is_dead)
-			i.coll.ShowBitmap();
-	}
+	
 	if (animation_flag == true) {
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
