@@ -153,14 +153,12 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	if(!player.isDead)
-		player.coll.ShowBitmap();
+	for (auto i : environment_arr) {
+		i.coll.ShowBitmap();
+	}
 	for (auto i : enemys_arr) {
 		if (!i.is_dead)
 			i.coll.ShowBitmap();
-	}
-	for (auto i : environment_arr) {
-		i.coll.ShowBitmap();
 	}
 	for (auto i : bricks_arr) {
 		i.coll.ShowBitmap();
