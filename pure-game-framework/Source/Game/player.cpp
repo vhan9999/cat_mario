@@ -17,7 +17,7 @@ void Player::move() {
 	moveHor();
 	moveVer();
 	// gravity and moving
-	if (coll.GetTop() + jumpSpeed >= 1500) {// fall down (dead) 
+	if (coll.GetTop() + jumpSpeed >= 1500 || coll.GetTop() >= 1000) {// fall down (dead) 
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500); 
 		player_fall = true; 
 		player_on_air = false; 
