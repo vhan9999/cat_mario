@@ -24,19 +24,36 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-	player.resetValue();
+	event_list.clear();
 	enemys_arr.clear();
 	bricks_arr.clear();
 	environment_arr.clear();
-	event_list.clear();
 	MapSetting();
-	player.coll.SetTopLeft(200, groundY_up - 68);
+	if (player.reach_checkpoint == true) {
+		for (auto &i : bricks_arr) {
+			int brick_pos = i.coll.GetLeft() - player.shift_amount;
+			i.coll.SetTopLeft(brick_pos, i.coll.GetTop());
+		}
+		for (auto &i : environment_arr) {
+			int env_pos = i.coll.GetLeft() - player.shift_amount;
+			i.coll.SetTopLeft(env_pos, i.coll.GetTop());
+		}
+	}
+
+	player.resetValue();
+
+	animation_flag = false;
+	coin_animation_flag = false;
+	pipe_animation_flag = false;
+	
+	player.coll.SetTopLeft(120, groundY_up - 68);
+	player.map_audio->Play(0, true);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+
 	player.move();
-	// player.dead_check(); check player is dead or not
 
 	for (auto &i : enemys_arr) {
 		i.emove();
@@ -65,17 +82,18 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	"resources/animation/interact_pipe/animate_17.bmp","resources/animation/interact_pipe/animate_18.bmp", "resources/animation/interact_pipe/animate_19.bmp","resources/animation/interact_pipe/animate_20.bmp" };
 	vector<string> game_over_image = { "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" };
 	
-	player = Player(200, groundY_up-68, player_image); // player initial posiiton
+
+	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
 	player.load_voice();
 	player.map_audio->Play(0, true); // load map1 song
 	
+	// set curent checkpoint
+	player.current_checkpoint_x = 120;
+	player.current_checkpoint_y = groundY_up - 68;
+
 	coin_animation.LoadBitmapByString(coin_image, RGB(163, 73, 164));
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 
-	/*
-	game_over.LoadBitmapByString(game_over_image, RGB(163, 73, 164));
-	game_over.SetFrameIndexOfBitmap(1);
-	*/
 	
 	MapSetting();// set map
 }
@@ -135,8 +153,9 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-	if(!player.isDead)
-		player.coll.ShowBitmap();
+	for (auto i : environment_arr) {
+		i.coll.ShowBitmap();
+	}
 	for (auto i : enemys_arr) {
 		if (!i.is_dead)
 			i.coll.ShowBitmap();
@@ -149,17 +168,6 @@ void CGameStateRun::OnShow()
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
-
-	/* display game over screen
-	if (player.isDead == true) {
-		Sleep(1500);
-		game_over.SetFrameIndexOfBitmap(0);
-		game_over.ShowBitmap();
-
-		CDC *pDC = CDDraw::GetBackCDC();
-		CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
-		CTextDraw::Print(pDC, 500, 400, std::to_string(player.dead_count));
-		CDDraw::ReleaseBackCDC();
-	}
-	*/
+	if(!player.isDead)
+		player.coll.ShowBitmap();
 }

@@ -6,7 +6,6 @@ using namespace game_framework;
 void Player::load_voice() {
 	map_audio->Load(0, "resources/audio/map_song/field.wav");
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
-	player_dead_audio->Load(2, "resources/audio/player_audio/death.wav");
 	coin_item_brick_audio->Load(3, "resources/audio/interact_audio/coin.wav");
 	pipe_interact_audio->Load(4, "resources/audio/interact_audio/dokan.wav");
 	player_finish_audio->Load(5, "resources/audio/map_song/goal.wav");
@@ -18,7 +17,7 @@ void Player::move() {
 	moveHor();
 	moveVer();
 	// gravity and moving
-	if (coll.GetTop() + jumpSpeed >= 1500) {// fall down (dead) 
+	if (coll.GetTop() + jumpSpeed >= 1500 || coll.GetTop() >= 1000) {// fall down (dead) 
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500); 
 		player_fall = true; 
 		player_on_air = false; 
@@ -27,10 +26,26 @@ void Player::move() {
 	else if (moveSpeed != 0 || jumpSpeed != 0) {// move
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, coll.GetTop() + jumpSpeed);
 	}
+	if (player_fall == true) {
+		isDead = true;
+		map_audio->Stop(0);
+	}
+	if (coll.GetTop() <= -500) {
+		isDead = true;
+		map_audio->Stop(0);
+	}
+
+	/*
 	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 0, 0, std::to_string(shift_amount));
+	CTextDraw::ChangeFontLog(pDC, 50, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::Print(pDC, 0, 0, "Distance : "+std::to_string(distance_count));
 	CDDraw::ReleaseBackCDC();
+
+	CDC *pDC1 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC1, 50, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::Print(pDC1, 0, 60, "Shift amount : " + std::to_string(shift_amount));
+	CDDraw::ReleaseBackCDC();
+	*/
 }
 
 void Player::moveHor() {
@@ -78,7 +93,6 @@ void Player::moveHor() {
 	if (coll.GetLeft() + coll.GetWidth() > 512) { // right
 		int player_posX = 512 - coll.GetWidth();
 		coll.SetTopLeft(player_posX, coll.GetTop());
-		// shift the image
 	}
 
 }
@@ -133,7 +147,7 @@ void Player::ableToJump(double &ground) {
 			coll.SetFrameIndexOfBitmap(0);
 			coll.SetTopLeft(560, coll.GetTop());
 			moveSpeed += 2;
-			if (Player::shift_amount >= 7239) { // player meet end point
+			if (Player::distance_count >= 7239) { // player meet end point
 				moveSpeed = 0;
 				coll.SetFrameIndexOfBitmap(6);
 			}
@@ -190,25 +204,6 @@ void Player::check_finish() {
 	}
 }			
 
-/*
-// player dead check
-void Player::dead_check() {
-	
-	if (player_fall == true) { isDead = true; }
-
-	if (isDead == true) {
-		jumpSpeed = 0; moveSpeed = 0;
-		dead_audio_flag += 1;
-		if (dead_audio_flag == 1) {
-			map_audio->Stop(0);
-			player_jump_audio->Stop(1);
-			player_dead_audio->Play(2, false);
-		}
-		if (dead_audio_flag == 10) { dead_audio_flag = 5; }
-	}
-}
-*/
-
 void Player::voice() {
 	if ((player_on_air == false) && (keyUp == true)) {
 		player_jump_audio->Play(1, false);
@@ -224,20 +219,23 @@ void Player::resetValue() {
 	moveSpeed = 0;
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
-	shift_amount = 0;
+	if (reach_checkpoint == true) {
+		distance_count = 3600;
+		enemy_shift_amount = 3600;
+	}else{
+		distance_count = 0;
+		enemy_shift_amount = 0;
+	}
+
 	keyUp = false;
 	keyDown = false;
 	keyLeft = false;
 	keyRight = false;
 	player_fall = false;
+	player_fly = false;
 	player_on_air = false;
 	isMove = false;
 	isDead = false;
 	isFinish = false;
-	CAudio *map_audio = CAudio::Instance();
-	CAudio *player_jump_audio = CAudio::Instance();
-	CAudio *player_dead_audio = CAudio::Instance();
-	CAudio *coin_item_brick_audio = CAudio::Instance();
-	CAudio *pipe_interact_audio = CAudio::Instance();
-	CAudio *player_finish_audio = CAudio::Instance();
+
 }

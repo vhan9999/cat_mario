@@ -37,7 +37,6 @@ namespace game_framework {
 		void voice();
 		void resetValue();
 		void check_finish();
-		// void dead_check();
 
 		int frame = 0;
 		double animate_frame = 0;
@@ -45,26 +44,32 @@ namespace game_framework {
 		int dead_frame = 0;
 		int jumpSpeed = 0;
 		int moveSpeed = 0;
-		int dead_audio_flag = 0;
 		int dead_count = 2;
 		int finish_audio_flag = 0;
+		int dead_audio_flag = 0;
+		int shift_amount = 0; // track player distance far from checkpoint point
+		int enemy_shift_amount = 0;
+		int distance_count = 0; // track player distance far from initial point
 
 		bool keyUp = false;
 		bool keyDown = false;
 		bool keyLeft = false;
 		bool keyRight = false;
 		bool player_fall = false;
+		bool player_fly = false;
 
 		bool player_on_air = false;
 		bool isMove = false;
 		bool isDead = false;
 		bool isFinish = false;
+		bool reach_checkpoint = false;
 
-		int shift_amount = 0; // track player distance far from initial point
+		int current_checkpoint_x;
+		int current_checkpoint_y;
+
 
 		CAudio *map_audio = CAudio::Instance();
 		CAudio *player_jump_audio = CAudio::Instance();
-		CAudio *player_dead_audio = CAudio::Instance();
 		CAudio *coin_item_brick_audio = CAudio::Instance();
 		CAudio *pipe_interact_audio = CAudio::Instance();
 		CAudio *player_finish_audio = CAudio::Instance();
@@ -97,7 +102,6 @@ namespace game_framework {
 		Enemy(int posx, int posy , std::vector<std::string> image) : Collider(posx, posy, image) {}
 		~Enemy() = default;
 		void emove();
-		
 
 		bool step_enemy_enemy_dead = false;//true -> enemy dead
 		bool step_enemy_player_dead = false;
