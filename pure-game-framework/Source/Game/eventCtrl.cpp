@@ -59,7 +59,7 @@ void CGameStateRun::EventCtrl() {
 			event_list["yellow"] = true;
 		}
 		if (player.enemy_shift_amount >= 6900 && player.enemy_shift_amount <= 7000 && !event_list["down_seal_2"]) {
-			Enemy down_seal_2(630, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 19; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
+			Enemy down_seal_2(600, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 19; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
 			event_list["down_seal_2"] = true;
 		}
 	}
