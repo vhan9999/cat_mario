@@ -37,13 +37,13 @@ void Player::move() {
 
 	/*
 	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 50, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(0, 0, 0), 20);
 	CTextDraw::Print(pDC, 0, 0, "Distance : "+std::to_string(distance_count));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 50, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC1, 0, 60, "Shift amount : " + std::to_string(shift_amount));
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
+	CTextDraw::Print(pDC1, 0, 30, "Shift amount : " + std::to_string(shift_amount));
 	CDDraw::ReleaseBackCDC();
 	*/
 }
@@ -221,10 +221,8 @@ void Player::resetValue() {
 	finish_audio_flag = 0;
 	if (reach_checkpoint == true) {
 		distance_count = 3600;
-		enemy_shift_amount = 3600;
 	}else{
 		distance_count = 0;
-		enemy_shift_amount = 0;
 	}
 
 	keyUp = false;

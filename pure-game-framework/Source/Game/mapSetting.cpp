@@ -45,7 +45,6 @@ void CGameStateRun::shiftMapImage() {
 			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
 		}
 		player.distance_count += player.moveSpeed;
-		player.enemy_shift_amount += player.moveSpeed;
 	}
 }
 
@@ -57,7 +56,7 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} ,{"pipe_normal",false} };
+		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} ,{"pipe_normal",false} , {"cloud_evil1",false} };
 
 		Enemy normal1 = Enemy(600, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -2; enemys_arr.push_back(normal1);
 		Enemy normal2 = Enemy(920, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal2.step_enemy_enemy_dead = true; normal2.speed_x = -2; enemys_arr.push_back(normal2);
@@ -206,7 +205,6 @@ void CGameStateRun::MapSetting(){
 			bricks_arr.push_back(brick);
 		}
 		brick = Brick(far_from_start(currentGroundBlock + 7), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
-		Enemy cloud = Enemy(far_from_start(currentGroundBlock + 8), high_from_ground(8), { "resources/image/enemy/cloud_eye.bmp" ,"resources/image/enemy/cloud_devil.bmp" }); cloud.cloud = true; cloud.steel = false; cloud.step_enemy_player_dead = true; enemys_arr.push_back(cloud);
 		brick = Brick(far_from_start(currentGroundBlock + 11), groundY_up - pipeline_short_height, { "resources/image/object/block2/pipeline_short.bmp" }); bricks_arr.push_back(brick);
 
 		/* phase 9 */
