@@ -35,17 +35,11 @@ void Player::move() {
 		map_audio->Stop(0);
 	}
 
-	/*
-	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 50, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 0, 0, "Distance : "+std::to_string(distance_count));
-	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC1, 50, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC1, 0, 60, "Shift amount : " + std::to_string(shift_amount));
+	CTextDraw::Print(pDC1, 0, 60, "Enemy Shift amount : " + std::to_string(enemy_shift_amount));
 	CDDraw::ReleaseBackCDC();
-	*/
 }
 
 void Player::moveHor() {
@@ -145,7 +139,7 @@ void Player::ableToJump(double &ground) {
 		if (jumpSpeed >= 5) { jumpSpeed = 5;} // fix jump speed 
 		if (player_on_air == false) {
 			coll.SetFrameIndexOfBitmap(0);
-			coll.SetTopLeft(560, coll.GetTop());
+			coll.SetTopLeft(550, coll.GetTop());
 			moveSpeed += 2;
 			if (Player::distance_count >= 7239) { // player meet end point
 				moveSpeed = 0;
