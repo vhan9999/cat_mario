@@ -92,6 +92,7 @@ void CGameStateRun::MapSetting(){
 		}
 
 		brick = Brick(far_from_start(currentGroundBlock + 2), groundY_up - pipeline_mid_height, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
+		env = Environment(far_from_start(currentGroundBlock + 3), high_from_ground(10), { "resources/image/object/environment/cloud_eye.bmp" }); environment_arr.push_back(env);
 		env = Environment(far_from_start(currentGroundBlock + 1), groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
 		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.	is_danger = true; bricks_arr.push_back(brick);
 
@@ -137,12 +138,12 @@ void CGameStateRun::MapSetting(){
 			bricks_arr.push_back(brick);
 		}
 		brick = Brick(far_from_start(currentGroundBlock + 2), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
-		env = Environment(far_from_start(currentGroundBlock + 7), high_from_ground(12), { "resources/image/object/environment/cloud_eye.bmp" });
 		for (int i = 0; i < 2; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + 9 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
 			bricks_arr.push_back(brick);
 		}
 
+		env = Environment(far_from_start(currentGroundBlock + 7), high_from_ground(11), { "resources/image/object/environment/cloud_eye.bmp" }); environment_arr.push_back(env);
 		if(player.reach_checkpoint == false){
 			brick = Brick(far_from_start(currentGroundBlock + 9), high_from_ground(4) - checkpoint_flag_height, { "resources/image/object/environment/checkpoint_reached.bmp", "resources/image/object/environment/blank.bmp" }); bricks_arr.push_back(brick);
 		}
