@@ -8,7 +8,9 @@
 #include "mygame.h"
 #include "colliders.h"
 
+
 using namespace game_framework;
+
 
 void CGameStateRun::EventCtrl() {
 	if (current_map == 1) {
@@ -41,6 +43,109 @@ void CGameStateRun::EventCtrl() {
 				}
 			}
 			event_list["three_fall_bricksss"] = true;
+		}
+		if (player.distance_count >= 2968 && player.distance_count <= 3268 && !event_list["map7-10"]) {
+			int mountain_height = 132;
+			int grass_height = 50;
+			int pipeline_big_height = 240;
+			int pipeline_mid_height = 180;
+			int pipeline_short_height = 120;
+			int checkpoint_flag_height = 120;
+			int endpoint_building_height = 180;
+			Brick brick;
+			Environment env;
+			int ground = 776;
+			/* phase7 */
+			int startBlock = 2340+player.distance_count-2968;
+			
+			for (int i = 0; i < 6; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 5; i++) {
+				brick = Brick(startBlock+(i * 60)+120, 776-(60*3), { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true;  bricks_arr.push_back(brick);
+			}
+			brick = Brick(startBlock + 60, 776 - (60 * 7), { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true;  bricks_arr.push_back(brick);
+			for (int i = 0; i < 3; i++) {
+				brick = Brick(startBlock, 776 - (60 * (1 + i)), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 2; i++) {
+				brick = Brick(startBlock + 60, 776 - (60 * (1 + i)), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick);
+			}
+
+			/* phase 8 */
+			startBlock += 420;
+			for (int i = 0; i < 13; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+
+			brick = Brick(startBlock, groundY_up - pipeline_mid_height, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
+
+			for (int i = 0; i < 2; i++) {
+				brick = Brick(startBlock + (i * 60)+240, 776 - (60 * 4), { "resources/image/object/block1/brown_brick.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			brick = Brick(startBlock + 420, 776 - (60 * 4), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 660, groundY_up - pipeline_short_height, { "resources/image/object/block2/pipeline_short.bmp" }); bricks_arr.push_back(brick);
+			/* phase 9 */
+			startBlock += 780;
+			for (int i = 0; i < 9; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 9; i++) {
+				brick = Brick(startBlock + (i * 60), 776 - (60 * 1), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 8; i++) {
+				brick = Brick(startBlock + (i * 60)+60, 776 - (60 * 2), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+
+			}
+			for (int i = 0; i < 7; i++) {
+				brick = Brick(startBlock + (i * 60) + 120, 776 - (60 * 3), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 6; i++) {
+				brick = Brick(startBlock + (i * 60) + 180, 776 - (60 * 4), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 5; i++) {
+				brick = Brick(startBlock + (i * 60) + 240, 776 - (60 * 5), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 4; i++) {
+				brick = Brick(startBlock + (i * 60) + 300, 776 - (60 * 6), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 3; i++) {
+				brick = Brick(startBlock + (i * 60) + 360, 776 - (60 * 7), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 2; i++) {
+				brick = Brick(startBlock + (i * 60) + 420, 776 - (60 * 8), { "resources/image/object/block1/brown_brick4.bmp" });
+				bricks_arr.push_back(brick);
+			}
+			/* phase 10 */
+			startBlock += 540;
+			for (int i = 0; i < 7; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+			brick = Brick(startBlock + 240, 776 - (60 * 1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick);
+			// endpoint flag
+			brick = Brick(startBlock + 240 + 20, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
+
+			/* phase 11 */
+			startBlock += 420;
+			for (int i = 0; i < 10; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+			env = Environment(startBlock - 120, groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
+			env = Environment(startBlock + 120, groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
+			event_list["map7-10"] = true;
 		}
 		if (player.distance_count >= 4800 && player.distance_count <= 4889 && !event_list["two_normal_2"]) {
 			Enemy normal3 = Enemy(1100, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal3.step_enemy_enemy_dead = true; normal3.speed_x = -2; enemys_arr.push_back(normal3);
@@ -80,7 +185,7 @@ void CGameStateRun::EventCtrl() {
 	}
 	//delete old
 	for (std::vector<Enemy>::iterator it = enemys_arr.begin(); it != enemys_arr.end();) {
-		if ((*it).coll.GetLeft() < -1000) {
+		if ((*it).coll.GetLeft() < -1000 || (*it).coll.GetTop() > 1300 || (*it).coll.GetTop() < -200) {
 			it = enemys_arr.erase(it);
 		}
 		else {
@@ -88,7 +193,7 @@ void CGameStateRun::EventCtrl() {
 		}
 	}
 	for (std::vector<Brick>::iterator it = bricks_arr.begin(); it != bricks_arr.end();) {
-		if ((*it).coll.GetLeft() < -1000) {
+		if ((*it).coll.GetLeft() < -1000 || (*it).coll.GetTop() > 1300 || (*it).coll.GetTop() < -200) {
 			it = bricks_arr.erase(it);
 		}
 		else {
