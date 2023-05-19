@@ -74,7 +74,7 @@ void CGameStateRun::MapSetting(){
 		env = Environment(far_from_start(7), high_from_ground(9), { "resources/image/object/environment/cloud_eye.bmp" }); environment_arr.push_back(env);
 		env = Environment(far_from_start(1), groundY_up - 132, { "resources/image/object/environment/mountain.bmp" }); environment_arr.push_back(env);
 
-		brick = Brick(far_from_start(9), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+		// brick = Brick(far_from_start(9), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
 		// brick = Brick(far_from_start(8), high_from_ground(4), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
 
 		for (int i = 0; i < 5; i++) {
@@ -206,14 +206,12 @@ void CGameStateRun::MapSetting(){
 		}
 		brick = Brick(far_from_start(currentGroundBlock + 7), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock + 11), groundY_up - pipeline_short_height, { "resources/image/object/block2/pipeline_short.bmp" }); bricks_arr.push_back(brick);
-
 		/* phase 9 */
 		currentGroundBlock += 13;
 		for (int i = 0; i < 9; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
-
 		for (int i = 0; i < 9; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(1), { "resources/image/object/block1/brown_brick4.bmp" });
 			bricks_arr.push_back(brick);
