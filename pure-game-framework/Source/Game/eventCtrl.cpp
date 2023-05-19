@@ -75,4 +75,21 @@ void CGameStateRun::EventCtrl() {
 			GotoGameState(GAME_STATE_OVER);
 		}
 	}
+	//delete old
+	for (std::vector<Enemy>::iterator it = enemys_arr.begin(); it != enemys_arr.end();) {
+		if ((*it).coll.GetLeft() < -1000) {
+			it = enemys_arr.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+	for (std::vector<Brick>::iterator it = bricks_arr.begin(); it != bricks_arr.end();) {
+		if ((*it).coll.GetLeft() < -1000) {
+			it = bricks_arr.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
 }
