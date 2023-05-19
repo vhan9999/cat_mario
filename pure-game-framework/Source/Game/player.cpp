@@ -199,7 +199,9 @@ void Player::check_finish() {
 			player_jump_audio->Stop(1);
 			player_finish_audio->Play(5, false);
 		}
-
+		if (isDead == true) {
+			player_finish_audio->Stop(5);
+		}
 		if (finish_audio_flag == 10) { finish_audio_flag = 5; }
 	}
 }			
