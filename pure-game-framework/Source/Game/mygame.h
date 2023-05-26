@@ -44,7 +44,7 @@ namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// Constants
 	/////////////////////////////////////////////////////////////////////////////
-
+	static int lifes = 2;
 	enum AUDIO_ID {				// 定義各種音效的編號
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
@@ -137,13 +137,13 @@ namespace game_framework {
 		void OnInit();
 
 		CAudio *game_over_audio = CAudio::Instance();
-
+		
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		int counter;	// 倒數之計數器
-		int lifes = 2;
+		
 		CMovingBitmap game_life;
 		int dead_frame = 0;
 	};

@@ -44,7 +44,7 @@ void CGameStateRun::EventCtrl() {
 			}
 			event_list["three_fall_bricksss"] = true;
 		}
-		if (player.distance_count >= 2968 && player.distance_count <= 3268 && !event_list["map7-10"]) {
+		if (player.distance_count >= 2968 && player.distance_count <= 3668 && !event_list["map7-10"]) {
 			int mountain_height = 132;
 			int grass_height = 50;
 			int pipeline_big_height = 240;
@@ -183,6 +183,25 @@ void CGameStateRun::EventCtrl() {
 			GotoGameState(GAME_STATE_OVER);
 		}
 	}
+	if (player.isFinish == true) {
+		player.coll.SetFrameIndexOfBitmap(4);
+		player.moveSpeed = 0; player.jumpSpeed = 0;
+		player.jumpSpeed += 5;
+		if (player.jumpSpeed >= 5) { player.jumpSpeed = 5; } // fix jump speed 
+		if (player.player_on_air == false) {
+			player.coll.SetFrameIndexOfBitmap(0);
+			player.coll.SetTopLeft(560, player.coll.GetTop());
+			player.moveSpeed += 2;
+			if (player.distance_count >= 7239) { // player meet end point
+				player.moveSpeed = 0;
+				player.coll.SetFrameIndexOfBitmap(6);
+				current_map++;
+				lifes++;
+				GotoGameState(GAME_STATE_OVER);
+			}
+		}
+	}
+
 	//delete old
 	for (std::vector<Enemy>::iterator it = enemys_arr.begin(); it != enemys_arr.end();) {
 		if ((*it).coll.GetLeft() < -1000 || (*it).coll.GetTop() > 1300 || (*it).coll.GetTop() < -200) {
