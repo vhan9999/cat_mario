@@ -46,7 +46,8 @@ void CGameStateRun::OnBeginState()
 	animation_flag = false;
 	coin_animation_flag = false;
 	pipe_animation_flag = false;
-	
+	pipe_hor_animation_flag = false;
+
 	player.coll.SetTopLeft(120, groundY_up - 68);
 	player.map_audio->Play(0, true);
 }
@@ -88,6 +89,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	"resources/animation/interact_pipe/animate_9.bmp","resources/animation/interact_pipe/animate_10.bmp", "resources/animation/interact_pipe/animate_11.bmp","resources/animation/interact_pipe/animate_12.bmp", 
 	"resources/animation/interact_pipe/animate_13.bmp","resources/animation/interact_pipe/animate_14.bmp", "resources/animation/interact_pipe/animate_15.bmp","resources/animation/interact_pipe/animate_16.bmp",
 	"resources/animation/interact_pipe/animate_17.bmp","resources/animation/interact_pipe/animate_18.bmp", "resources/animation/interact_pipe/animate_19.bmp","resources/animation/interact_pipe/animate_20.bmp" };
+	vector<string> interact_hor_pipe_image = { "resources/animation/interact_hor_pipe/01.bmp",  "resources/animation/interact_hor_pipe/02.bmp", "resources/animation/interact_hor_pipe/03.bmp",
+											"resources/animation/interact_hor_pipe/04.bmp", "resources/animation/interact_hor_pipe/05.bmp", "resources/animation/interact_hor_pipe/06.bmp" };
 	vector<string> game_over_image = { "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" };
 	
 	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
@@ -100,6 +103,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	coin_animation.LoadBitmapByString(coin_image, RGB(163, 73, 164));
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
+	pipe_hor_animation.LoadBitmapByString(interact_hor_pipe_image, RGB(255, 242, 0));
 
 	MapSetting();// set map
 	

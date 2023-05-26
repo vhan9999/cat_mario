@@ -168,6 +168,18 @@ void CGameStateRun::Touching() {
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
 					return;
 				}
+				// horizontal pipeline
+				if (player.keyRight == true && i.coll.GetImageFileName() == "resources/image/object/block2/pipeline_big_hor.bmp") {
+					player.coll.SetFrameIndexOfBitmap(6);
+					player.moveSpeed = 0; player.jumpSpeed = 0;
+					// enable animation
+					player.pipe_interact_audio->Play(4, false);
+					pipe_hor_animation.SetFrameIndexOfBitmap(0);
+					pipe_hor_animation.SetTopLeft(i.coll.GetLeft()-player.coll.GetWidth(), player.coll.GetTop());
+					animation_flag = true;
+					pipe_hor_animation_flag = true;
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
@@ -202,6 +214,16 @@ void CGameStateRun::Touching() {
 				pipe_animation.SetAnimation(40, true);
 			}
 		}
+	}
+	// check pipe_horizontal_interact animation
+	if (pipe_hor_animation_flag == true && animation_flag == true) {
+		pipe_hor_animation.SetAnimation(40, false);
+		if (pipe_hor_animation.GetFrameIndexOfBitmap() == 5) {
+			pipe_hor_animation.SetAnimation(40, true);
+		}
+		// bounce back
+		player.coll.SetFrameIndexOfBitmap(0);
+		player.moveSpeed -= 100;
 	}
 	//player&enemys touch
 	for (auto &i : enemys_arr) {
