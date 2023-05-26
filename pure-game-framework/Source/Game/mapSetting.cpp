@@ -265,7 +265,7 @@ void CGameStateRun::MapSetting(){
 		env = Environment(far_from_start(currentGroundBlock + 2), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
 	}
 	else if(current_map == 2) {
-
+		
 	}
 	else if (current_map == 3) {
 

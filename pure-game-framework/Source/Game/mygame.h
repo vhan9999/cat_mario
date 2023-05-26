@@ -108,7 +108,7 @@ namespace game_framework {
 		bool animation_flag = false;
 		bool coin_animation_flag = false;
 		bool pipe_animation_flag = false;
-
+		bool finish_animation_flag = false;
 
 	protected:
 		void OnMove();									// 移動遊戲元素
@@ -143,10 +143,10 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		int counter;	// 倒數之計數器
-		int lifes = 2;
+		int lifes=2;
 		CMovingBitmap game_life;
 		int dead_frame = 0;
 	};
-
 }
+
 #endif

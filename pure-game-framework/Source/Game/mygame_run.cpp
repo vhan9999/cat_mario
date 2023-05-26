@@ -94,7 +94,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	coin_animation.LoadBitmapByString(coin_image, RGB(163, 73, 164));
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 
-	
 	MapSetting();// set map
 }
 
