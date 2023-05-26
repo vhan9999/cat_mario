@@ -44,7 +44,7 @@ void CGameStateRun::EventCtrl() {
 			}
 			event_list["three_fall_bricksss"] = true;
 		}
-		if (player.distance_count >= 2968 && player.distance_count <= 3668 && !event_list["map7-10"]) {
+		if (player.distance_count >= 3628 && player.distance_count <= 3728 && !event_list["map7-10"]) {
 			int mountain_height = 132;
 			int grass_height = 50;
 			int pipeline_big_height = 240;
@@ -56,7 +56,7 @@ void CGameStateRun::EventCtrl() {
 			Environment env;
 			int ground = 776;
 			/* phase7 */
-			int startBlock = 2340+player.distance_count-2968;
+			int startBlock = 1020+player.distance_count-2968;
 			
 			for (int i = 0; i < 6; i++) {
 				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
@@ -176,6 +176,7 @@ void CGameStateRun::EventCtrl() {
 			Enemy dead_player(player.coll.GetLeft(), player.coll.GetTop(), { {"resources/image/player/player_dead.bmp"} }); dead_player.steel = true; dead_player.able_touch = false; dead_player.speed_y = -19; enemys_arr.push_back(dead_player);
 			player.coll.UnshowBitmap();
 			event_list["player_dead"] = true;
+			event_list["map7-10"] = false;
 		}
 		player.dead_frame++;
 		if (player.dead_frame >= 100) {
