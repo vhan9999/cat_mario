@@ -223,7 +223,7 @@ void CGameStateRun::Touching() {
 		}
 		// bounce back
 		player.coll.SetFrameIndexOfBitmap(0);
-		player.moveSpeed -= 100;
+		player.moveSpeed -= 10;
 	}
 	//player&enemys touch
 	for (auto &i : enemys_arr) {
