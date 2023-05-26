@@ -167,7 +167,7 @@ void CGameStateRun::EventCtrl() {
 			event_list["yellow"] = true;
 		}
 		if (player.distance_count >= 6900 && player.distance_count <= 7000 && !event_list["down_seal_2"]) {
-			Enemy down_seal_2(600, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 19; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
+			Enemy down_seal_2(600, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 17; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
 			event_list["down_seal_2"] = true;
 		}
 	}
@@ -185,6 +185,7 @@ void CGameStateRun::EventCtrl() {
 			GotoGameState(GAME_STATE_OVER);
 		}
 	}
+	// player hit the ending flag
 	if (player.isFinish == true) {
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
@@ -192,7 +193,7 @@ void CGameStateRun::EventCtrl() {
 		if (player.jumpSpeed >= 5) { player.jumpSpeed = 5; } // fix jump speed 
 		if (player.player_on_air == false) {
 			player.coll.SetFrameIndexOfBitmap(0);
-			player.coll.SetTopLeft(560, player.coll.GetTop());
+			player.coll.SetTopLeft(player.coll.GetLeft()+20, player.coll.GetTop());
 			player.moveSpeed += 2;
 			if (player.distance_count >= 7200) { // player meet end point
 				player.moveSpeed = 0;

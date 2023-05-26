@@ -56,10 +56,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 
 	player.move();
-	if ((player.coll.GetLeft() + player.coll.GetWidth() > 512) && (current_map != 2)) { // right
-		int player_posX = 512 - player.coll.GetWidth();
-		player.coll.SetTopLeft(player_posX, player.coll.GetTop());
-	}
 	if (current_map != 2) { 
 		shiftMapImage();
 	}
@@ -101,6 +97,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	player.current_checkpoint_x = 120;
 	player.current_checkpoint_y = groundY_up - 68;
 
+	// animation
 	coin_animation.LoadBitmapByString(coin_image, RGB(163, 73, 164));
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 	pipe_hor_animation.LoadBitmapByString(interact_hor_pipe_image, RGB(255, 242, 0));
@@ -164,6 +161,11 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
+
+	CDC *pDC1 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
+	CTextDraw::Print(pDC1, 0, 30, "Current map : " + std::to_string(current_map));
+	CDDraw::ReleaseBackCDC();
 
 	for (auto i : environment_arr) {
 		i.coll.ShowBitmap();

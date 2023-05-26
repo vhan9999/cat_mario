@@ -178,6 +178,7 @@ void CGameStateRun::Touching() {
 					pipe_hor_animation.SetTopLeft(i.coll.GetLeft()-player.coll.GetWidth(), player.coll.GetTop());
 					animation_flag = true;
 					pipe_hor_animation_flag = true;
+					isDanger = i.is_danger;
 					return;
 				}
 				player.moveSpeed = 0;
@@ -217,13 +218,15 @@ void CGameStateRun::Touching() {
 	}
 	// check pipe_horizontal_interact animation
 	if (pipe_hor_animation_flag == true && animation_flag == true) {
-		pipe_hor_animation.SetAnimation(40, false);
-		if (pipe_hor_animation.GetFrameIndexOfBitmap() == 5) {
-			pipe_hor_animation.SetAnimation(40, true);
+		if (isDanger == true) {
+			pipe_hor_animation.SetAnimation(40, false);
+			if (pipe_hor_animation.GetFrameIndexOfBitmap() == 5) {
+				pipe_hor_animation.SetAnimation(40, true);
+			}
+			// bounce back
+			player.coll.SetFrameIndexOfBitmap(0);
+			player.moveSpeed -= 10;
 		}
-		// bounce back
-		player.coll.SetFrameIndexOfBitmap(0);
-		player.moveSpeed -= 10;
 	}
 	//player&enemys touch
 	for (auto &i : enemys_arr) {

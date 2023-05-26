@@ -16,6 +16,10 @@ void Player::move() {
 	voice();
 	moveHor();
 	moveVer();
+	if (coll.GetLeft() + coll.GetWidth() > 990) { // right
+		int player_posX = 990 - coll.GetWidth();
+		coll.SetTopLeft(player_posX, coll.GetTop());
+	}
 	// gravity and moving
 	if (coll.GetTop() + jumpSpeed >= 1500 || coll.GetTop() >= 1000) {// fall down (dead) 
 		coll.SetTopLeft(coll.GetLeft() + moveSpeed, 1500); 
@@ -204,6 +208,7 @@ void Player::resetValue() {
 		distance_count = 3600;
 	}else{
 		distance_count = 0;
+		reach_checkpoint = false;
 	}
 	
 	coll.SetFrameIndexOfBitmap(0);

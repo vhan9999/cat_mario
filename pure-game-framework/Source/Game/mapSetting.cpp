@@ -44,6 +44,9 @@ void CGameStateRun::shiftMapImage() {
 			// interact pipe
 			int pipe_pos = pipe_animation.GetLeft() - player.moveSpeed;
 			pipe_animation.SetTopLeft(pipe_pos, pipe_animation.GetTop());
+			// interact horiontal pipe
+			int pipe_hor_pos = pipe_hor_animation.GetLeft() - player.moveSpeed;
+			pipe_hor_animation.SetTopLeft(pipe_hor_pos, pipe_hor_animation.GetTop());
 		}
 		player.distance_count += player.moveSpeed;
 	}
@@ -187,7 +190,7 @@ void CGameStateRun::MapSetting(){
 		}
 		env = Environment(far_from_start(1), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
 		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
-		brick = Brick(far_from_start(12), groundY_up - pipeline_big_hor_height+10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(12), groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 	}
 	else if (current_map == 3) {
 
