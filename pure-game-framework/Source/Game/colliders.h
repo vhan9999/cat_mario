@@ -62,6 +62,7 @@ namespace game_framework {
 		bool isMove = false;
 		bool isDead = false;
 		bool isFinish = false;
+		bool isEnd = false;
 		bool reach_checkpoint = false;
 
 		int current_checkpoint_x;

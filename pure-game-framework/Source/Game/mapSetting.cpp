@@ -17,6 +17,7 @@ int pipeline_mid_height = 180;
 int pipeline_short_height = 120;
 int checkpoint_flag_height = 120;
 int endpoint_building_height = 180;
+int pipeline_big_hor_height = 120;
 
 // shift map image
 void CGameStateRun::shiftMapImage() {
@@ -93,7 +94,7 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(currentGroundBlock + 2), groundY_up - pipeline_mid_height+5, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
 		env = Environment(far_from_start(currentGroundBlock + 3), high_from_ground(10), { "resources/image/object/environment/cloud_eye.bmp" }); environment_arr.push_back(env);
 		env = Environment(far_from_start(currentGroundBlock + 1), groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
-		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height+5, { "resources/image/object/block2/pipeline_big.bmp" }); brick.	is_danger = true; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 10), groundY_up - pipeline_big_height+5, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 
 		/* phase3 */
 		currentGroundBlock += 15;
@@ -177,7 +178,16 @@ void CGameStateRun::MapSetting(){
 		
 	}
 	else if(current_map == 2) {
-		
+		/* upper_phase1 */
+		Brick brick;
+		Environment env;
+		for (int i = 0; i < 17; i++) {
+			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
+		}
+		env = Environment(far_from_start(1), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
+		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(12), groundY_up - pipeline_big_hor_height+10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); bricks_arr.push_back(brick);
 	}
 	else if (current_map == 3) {
 

@@ -29,18 +29,16 @@ void CGameStateRun::OnBeginState()
 	bricks_arr.clear();
 	environment_arr.clear();
 	MapSetting();
-
-	if (player.isFinish == true) {
-		player.distance_count = 0;
-	}
-	if (player.reach_checkpoint == true) {
-		for (auto &i : bricks_arr) {
-			int brick_pos = i.coll.GetLeft() - player.shift_amount;
-			i.coll.SetTopLeft(brick_pos, i.coll.GetTop());
-		}
-		for (auto &i : environment_arr) {
-			int env_pos = i.coll.GetLeft() - player.shift_amount;
-			i.coll.SetTopLeft(env_pos, i.coll.GetTop());
+	if (player.isEnd == false) {
+		if (player.reach_checkpoint == true) {
+			for (auto &i : bricks_arr) {
+				int brick_pos = i.coll.GetLeft() - player.shift_amount;
+				i.coll.SetTopLeft(brick_pos, i.coll.GetTop());
+			}
+			for (auto &i : environment_arr) {
+				int env_pos = i.coll.GetLeft() - player.shift_amount;
+				i.coll.SetTopLeft(env_pos, i.coll.GetTop());
+			}
 		}
 	}
 	player.resetValue();
@@ -57,6 +55,13 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 
 	player.move();
+	if ((player.coll.GetLeft() + player.coll.GetWidth() > 512) && (current_map != 2)) { // right
+		int player_posX = 512 - player.coll.GetWidth();
+		player.coll.SetTopLeft(player_posX, player.coll.GetTop());
+	}
+	if (current_map != 2) { 
+		shiftMapImage();
+	}
 
 	for (auto &i : enemys_arr) {
 		i.emove();
@@ -67,7 +72,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	Touching();
 	EventCtrl();
 	player.check_finish();
-	shiftMapImage();
 	
 }
 

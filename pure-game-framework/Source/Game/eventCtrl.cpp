@@ -198,6 +198,7 @@ void CGameStateRun::EventCtrl() {
 				player.moveSpeed = 0;
 				player.coll.SetFrameIndexOfBitmap(6);
 				current_map++;
+				player.isEnd = true;
 		 		GotoGameState(GAME_STATE_OVER);
 			}
 		}

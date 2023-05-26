@@ -90,11 +90,6 @@ void Player::moveHor() {
 	if (coll.GetLeft() <= 0) {
 		coll.SetTopLeft(0, coll.GetTop());
 	}
-	if (coll.GetLeft() + coll.GetWidth() > 512) { // right
-		int player_posX = 512 - coll.GetWidth();
-		coll.SetTopLeft(player_posX, coll.GetTop());
-	}
-
 }
 
 void Player::moveVer() {
@@ -205,12 +200,13 @@ void Player::resetValue() {
 	moveSpeed = 0;
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
-	if (reach_checkpoint == true) {
+	if (reach_checkpoint == true && isEnd == false) {
 		distance_count = 3600;
 	}else{
 		distance_count = 0;
 	}
-
+	
+	coll.SetFrameIndexOfBitmap(0);
 	keyUp = false;
 	keyDown = false;
 	keyLeft = false;
@@ -221,5 +217,5 @@ void Player::resetValue() {
 	isMove = false;
 	isDead = false;
 	isFinish = false;
-
+	isEnd = false;
 }
