@@ -35,12 +35,12 @@ void Player::move() {
 		map_audio->Stop(0);
 	}
 
-	/*
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(0, 0, 0), 20);
 	CTextDraw::Print(pDC, 0, 0, "Distance : "+std::to_string(distance_count));
 	CDDraw::ReleaseBackCDC();
 
+	/*
 	CDC *pDC1 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
 	CTextDraw::Print(pDC1, 0, 30, "Shift amount : " + std::to_string(shift_amount));
@@ -139,8 +139,6 @@ void Player::ableToJump(double &ground) {
 			coll.SetFrameIndexOfBitmap(2);
 		}
 	}
-	// when player hit the finish flag
-	
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpeed -= 5; // v-=5(a)
 	}

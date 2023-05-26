@@ -29,6 +29,10 @@ void CGameStateRun::OnBeginState()
 	bricks_arr.clear();
 	environment_arr.clear();
 	MapSetting();
+
+	if (player.isFinish == true) {
+		player.distance_count = 0;
+	}
 	if (player.reach_checkpoint == true) {
 		for (auto &i : bricks_arr) {
 			int brick_pos = i.coll.GetLeft() - player.shift_amount;
@@ -39,7 +43,6 @@ void CGameStateRun::OnBeginState()
 			i.coll.SetTopLeft(env_pos, i.coll.GetTop());
 		}
 	}
-
 	player.resetValue();
 
 	animation_flag = false;
@@ -83,7 +86,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	"resources/animation/interact_pipe/animate_17.bmp","resources/animation/interact_pipe/animate_18.bmp", "resources/animation/interact_pipe/animate_19.bmp","resources/animation/interact_pipe/animate_20.bmp" };
 	vector<string> game_over_image = { "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" };
 	
-
 	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
 	player.load_voice();
 	player.map_audio->Play(0, true); // load map1 song
@@ -96,6 +98,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 
 	MapSetting();// set map
+	
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
@@ -153,6 +156,7 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
+
 	for (auto i : environment_arr) {
 		i.coll.ShowBitmap();
 	}
