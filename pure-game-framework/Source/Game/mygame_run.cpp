@@ -65,6 +65,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	EventCtrl();
 	player.check_finish();
 	shiftMapImage();
+	
 }
 
 // CMovingBitmap game_over;

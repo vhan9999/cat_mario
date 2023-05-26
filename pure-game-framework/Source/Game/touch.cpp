@@ -36,6 +36,16 @@ void CGameStateRun::Touching() {
 				player.isDead;
 			}
 		}
+		else if (i.falling) {
+			if (inRange(PC.GetTop() + PC.GetHeight() + 1, BC.GetTop() - 6, BC.GetTop() + (BC.GetHeight() / 2)) && PC.GetLeft() + 2 < BC.GetLeft() + BC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > BC.GetLeft()) {
+				player.jumpSpeed = i.speed_y;
+				player.jumpBonusFrame = 0;
+				PC.SetTopLeft(PC.GetLeft(), BC.GetTop() - PC.GetHeight());
+				double ground = BC.GetTop() - PC.GetHeight();
+				player.ableToJump(ground); // can jump on block
+
+			}
+		}
 		else if (CMovingBitmap::IsOverlap(PC, BC)) {//check touch
 			int obj_left = BC.GetLeft();
 			int obj_right = BC.GetLeft() + BC.GetWidth();
@@ -45,7 +55,9 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
-				if (i.invisible && player.jumpSpeed < 0) {
+				if (i.invisible) {
+					if (player.jumpSpeed > 0)
+						continue;
 					i.invisible = false;
 					i.coll.SetFrameIndexOfBitmap(1);
 				}
@@ -160,6 +172,7 @@ void CGameStateRun::Touching() {
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
 				player.frame += 2;
 			}
+			
 		}
 	}
 	// check coin animation

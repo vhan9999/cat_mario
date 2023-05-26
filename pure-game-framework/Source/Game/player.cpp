@@ -96,10 +96,12 @@ void Player::moveHor() {
 	}
 
 }
+
 void Player::moveVer() {
 	double fall_gnd = 1500;
 	Player::ableToJump(fall_gnd);
 }
+
 void Player::ableToJump(double &ground) {
 	jumpBonusFrame++;
 
@@ -123,7 +125,7 @@ void Player::ableToJump(double &ground) {
 		player_on_air = true;
 	}
 
-	else if (keyUp == true && coll.GetTop() == ground) {// jump while on the ground
+	else if (keyUp == true && coll.GetTop() >= ground-1 && coll.GetTop() <= ground + 1) {// jump while on the ground
 		jumpBonusFrame = 0; // for big jump
 		jumpSpeed = -19;// v0
 	}
@@ -137,24 +139,8 @@ void Player::ableToJump(double &ground) {
 			coll.SetFrameIndexOfBitmap(2);
 		}
 	}
+	// when player hit the finish flag
 	
-	// when player hit the finish flag	
-	if (isFinish == true) { 
-		coll.SetFrameIndexOfBitmap(4);
-		moveSpeed = 0; jumpSpeed = 0;
-		jumpSpeed += 5;
-		if (jumpSpeed >= 5) { jumpSpeed = 5;} // fix jump speed 
-		if (player_on_air == false) {
-			coll.SetFrameIndexOfBitmap(0);
-			coll.SetTopLeft(560, coll.GetTop());
-			moveSpeed += 2;
-			if (Player::distance_count >= 7239) { // player meet end point
-				moveSpeed = 0;
-				coll.SetFrameIndexOfBitmap(6);
-			}
-		}
-	}
-
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpeed -= 5; // v-=5(a)
 	}
