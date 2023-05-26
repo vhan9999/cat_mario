@@ -137,7 +137,8 @@ void Player::ableToJump(double &ground) {
 			coll.SetFrameIndexOfBitmap(2);
 		}
 	}
-	// when player hit the finish flag
+	
+	// when player hit the finish flag	
 	if (isFinish == true) { 
 		coll.SetFrameIndexOfBitmap(4);
 		moveSpeed = 0; jumpSpeed = 0;
@@ -153,6 +154,7 @@ void Player::ableToJump(double &ground) {
 			}
 		}
 	}
+
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpeed -= 5; // v-=5(a)
 	}

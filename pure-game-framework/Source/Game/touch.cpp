@@ -169,7 +169,6 @@ void CGameStateRun::Touching() {
 			coin_animation.SetAnimation(20, true);
 		}
 	}
-	
 	// check pipe_interact animation
 	if (pipe_animation_flag == true && animation_flag == true) {
 		if (isDanger == true) {
@@ -191,7 +190,6 @@ void CGameStateRun::Touching() {
 			}
 		}
 	}
-
 	//player&enemys touch
 	for (auto &i : enemys_arr) {
 		if (i.is_dead) { continue;}
