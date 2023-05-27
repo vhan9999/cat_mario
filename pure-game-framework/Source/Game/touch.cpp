@@ -214,6 +214,8 @@ void CGameStateRun::Touching() {
 			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
 				pipe_animation.SetAnimation(40, true);
 			}
+			//current_map += 1;
+			// GotoGameState)
 		}
 	}
 	// check pipe_horizontal_interact animation
