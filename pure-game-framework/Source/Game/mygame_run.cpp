@@ -48,8 +48,17 @@ void CGameStateRun::OnBeginState()
 	pipe_animation_flag = false;
 	pipe_hor_animation_flag = false;
 
-	player.coll.SetTopLeft(120, groundY_up - 68);
-	player.map_audio->Play(0, true);
+	if (current_map == 3) {
+		player.coll.SetTopLeft(125, 0);
+		player.map_audio->Stop(0); // load map1 song
+		player.dungeon_audio->Play(6, true);
+	}
+	else {
+		player.coll.SetTopLeft(120, groundY_up - 68);
+		player.map_audio->Play(0, true); // load map1 song
+	}
+
+	// player.map_audio->Play(0, true);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
@@ -91,7 +100,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	
 	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
 	player.load_voice();
-	player.map_audio->Play(0, true); // load map1 song
+
 	
 	// set curent checkpoint
 	player.current_checkpoint_x = 120;

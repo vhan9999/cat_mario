@@ -74,6 +74,7 @@ namespace game_framework {
 		CAudio *coin_item_brick_audio = CAudio::Instance();
 		CAudio *pipe_interact_audio = CAudio::Instance();
 		CAudio *player_finish_audio = CAudio::Instance();
+		CAudio *dungeon_audio = CAudio::Instance();
 	};
 
 	class Brick : public Collider {

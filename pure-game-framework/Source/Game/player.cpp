@@ -9,6 +9,7 @@ void Player::load_voice() {
 	coin_item_brick_audio->Load(3, "resources/audio/interact_audio/coin.wav");
 	pipe_interact_audio->Load(4, "resources/audio/interact_audio/dokan.wav");
 	player_finish_audio->Load(5, "resources/audio/map_song/goal.wav");
+	dungeon_audio->Load(6, "resources/audio/map_song/dungeon.wav");
 }
 
 void Player::move() {

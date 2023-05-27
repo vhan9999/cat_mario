@@ -193,7 +193,13 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(12), groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 	}
 	else if (current_map == 3) {
-
+		/* upper_phase1 */
+		Brick brick;
+		Environment env;
+		for (int i = 0; i < 17; i++) {
+			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+		}
 	}
 	else if (current_map == 4) {
 
