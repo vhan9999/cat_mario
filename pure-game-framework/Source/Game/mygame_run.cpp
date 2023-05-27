@@ -57,8 +57,6 @@ void CGameStateRun::OnBeginState()
 		player.coll.SetTopLeft(120, groundY_up - 68);
 		player.map_audio->Play(0, true); // load map1 song
 	}
-
-	// player.map_audio->Play(0, true);
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
@@ -172,8 +170,8 @@ void CGameStateRun::OnShow()
 {
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 30, "Current map : " + std::to_string(current_map));
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::Print(pDC1, 0, 200, "Current map : " + std::to_string(current_map));
 	CDDraw::ReleaseBackCDC();
 
 	for (auto i : environment_arr) {

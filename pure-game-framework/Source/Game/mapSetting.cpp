@@ -69,6 +69,7 @@ void CGameStateRun::MapSetting(){
 		Brick brick;
 		Environment env;
 		brick = Brick(0, 500, { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true;  bricks_arr.push_back(brick);
+		
 		/* phase1 */
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
@@ -180,6 +181,7 @@ void CGameStateRun::MapSetting(){
 
 		
 	}
+	// map2
 	else if(current_map == 2) {
 		/* upper_phase1 */
 		Brick brick;
@@ -192,13 +194,30 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(12), groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 	}
+	// map2 dungeon
 	else if (current_map == 3) {
-		/* upper_phase1 */
+		/* phase1 */
+		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;
 		Environment env;
+		for (int i = 0; i < 13; i++) {
+			brick = Brick(far_from_start(4+i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+		}
+		for (int i = 0; i < 13; i++) {
+			brick = Brick(0, i*60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+		}
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+		}
+		for (int i = 0; i < 4; i++) {
+			brick = Brick(far_from_start(7+i), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+		}
+
+		brick = Brick(far_from_start(14), groundY_up-60, { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
+
+		for (int i = 0; i < 2; i++) {
+			brick = Brick(far_from_start(16), high_from_ground(i+1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
 		}
 	}
 	else if (current_map == 4) {

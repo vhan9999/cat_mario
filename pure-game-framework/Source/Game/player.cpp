@@ -41,8 +41,8 @@ void Player::move() {
 	}
 
 	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC, 0, 0, "Distance : "+std::to_string(distance_count));
+	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(255, 255, 255), 20);
+	CTextDraw::Print(pDC, 0, 100, "Distance : "+std::to_string(distance_count));
 	CDDraw::ReleaseBackCDC();
 
 	/*

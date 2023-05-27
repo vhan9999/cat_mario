@@ -181,6 +181,7 @@ void CGameStateRun::EventCtrl() {
 		player.dead_frame++;
 		if (player.dead_frame >= 100) {
 			player.map_audio->Stop(0);
+			player.dungeon_audio->Stop(6);
 			player.player_finish_audio->Stop(5);
 			GotoGameState(GAME_STATE_OVER);
 		}
