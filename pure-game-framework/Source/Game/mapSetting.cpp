@@ -262,7 +262,22 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + 9+3 + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + 9+3 + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
-		for (int i = 0; i < 15; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+		for (int i = 0; i < 18; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+		
+		/* phase 4 */
+		currentGroundBlock += 18;
+		for (int i = 0; i < 6; i++) {
+			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+		}
+		brick = Brick(far_from_start(currentGroundBlock + 2), groundY_up - pipeline_short_height, { "resources/image/object/block2/pipeline_short.bmp" }); bricks_arr.push_back(brick);
+		for (int i = 0; i < 2; i++) {
+			brick = Brick(far_from_start(currentGroundBlock + 8 + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(currentGroundBlock + 8 + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+		}
+		if (player.reach_checkpoint == false) {
+			brick = Brick(far_from_start(currentGroundBlock + 9), high_from_ground(0) - checkpoint_flag_height, { "resources/image/object/environment/checkpoint_reached.bmp", "resources/image/object/environment/blank.bmp" }); bricks_arr.push_back(brick);
+		}
 
 	}
 	else if (current_map == 4) {

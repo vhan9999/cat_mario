@@ -42,7 +42,13 @@ void CGameStateRun::OnBeginState()
 		}
 	}
 	player.resetValue();
-
+	if (player.reach_checkpoint == true && player.isEnd == false) {
+		player.distance_count = player.shift_amount;
+	}
+	else {
+		player.distance_count = 0;
+		player.reach_checkpoint = false;
+	}
 	animation_flag = false;
 	coin_animation_flag = false;
 	pipe_animation_flag = false;
@@ -170,8 +176,8 @@ void CGameStateRun::OnShow()
 {
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC1, 0, 200, "Current map : " + std::to_string(current_map));
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
+	CTextDraw::Print(pDC1, 0, 190, "Current map : " + std::to_string(current_map));
 	CDDraw::ReleaseBackCDC();
 
 	for (auto i : environment_arr) {

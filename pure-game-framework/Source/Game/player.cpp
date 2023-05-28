@@ -42,15 +42,14 @@ void Player::move() {
 
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 0, 100, "Distance : "+std::to_string(distance_count));
+	CTextDraw::Print(pDC, 0, 140, "Distance : "+std::to_string(distance_count));
 	CDDraw::ReleaseBackCDC();
 
-	/*
 	CDC *pDC1 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 30, "Shift amount : " + std::to_string(shift_amount));
+	CTextDraw::Print(pDC1, 0, 60, "Shift amount : " + std::to_string(shift_amount));
 	CDDraw::ReleaseBackCDC();
-	*/
+
 }
 
 void Player::moveHor() {
@@ -142,7 +141,6 @@ void Player::ableToJump(double &ground) {
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpeed -= 5; // v-=5(a)
 	}
-	
 }
 
 void Player::ani() {
@@ -205,13 +203,12 @@ void Player::resetValue() {
 	moveSpeed = 0;
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
-	if (reach_checkpoint == true && isEnd == false) {
-		distance_count = 3600;
-	}else{
+
+	if (isEnd == true) {
+		shift_amount = 0;
 		distance_count = 0;
 		reach_checkpoint = false;
 	}
-	
 	coll.SetFrameIndexOfBitmap(0);
 	keyUp = false;
 	keyDown = false;
