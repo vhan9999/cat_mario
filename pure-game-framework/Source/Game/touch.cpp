@@ -110,10 +110,12 @@ void CGameStateRun::Touching() {
 					return;
 				}
 				if (i.foot_touch_fall) {
+					/*
 					for (auto &j : bricks_arr) {
 						if (j.foot_touch_fall)
 							j.falling = true;
-					}
+					}*/
+					i.falling = true;
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
