@@ -39,25 +39,31 @@ void CGameStateRun::OnBeginState()
 				int env_pos = i.coll.GetLeft() - player.shift_amount;
 				i.coll.SetTopLeft(env_pos, i.coll.GetTop());
 			}
+			player.distance_count = player.shift_amount;
+		}
+		else {
+			player.distance_count = 0;
+			player.reach_checkpoint = false;
 		}
 	}
 	player.resetValue();
-	if (player.reach_checkpoint == true && player.isEnd == false) {
-		player.distance_count = player.shift_amount;
-	}
-	else {
-		player.distance_count = 0;
-		player.reach_checkpoint = false;
-	}
+
 	animation_flag = false;
 	coin_animation_flag = false;
 	pipe_animation_flag = false;
 	pipe_hor_animation_flag = false;
 
 	if (current_map == 3) {
-		player.coll.SetTopLeft(125, 0);
-		player.map_audio->Stop(0); // load map1 song
-		player.dungeon_audio->Play(6, true);
+		if (player.reach_checkpoint == false) {
+			player.coll.SetTopLeft(125, 0);
+			player.map_audio->Stop(0); // load map1 song
+			player.dungeon_audio->Play(6, true);
+		}
+		else {
+			player.coll.SetTopLeft(512, groundY_up-player.coll.GetHeight());
+			player.map_audio->Stop(0); // load map1 song
+			player.dungeon_audio->Play(6, true);
+		}
 	}
 	else {
 		player.coll.SetTopLeft(120, groundY_up - 68);

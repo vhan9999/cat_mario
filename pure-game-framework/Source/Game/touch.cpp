@@ -118,7 +118,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount 
+					// change checkpoint 
+					if (current_map == 1) { player.shift_amount = 3600; }
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -142,7 +144,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount 
+					// change checkpoint 
+					if (current_map == 1) { player.shift_amount = 3600; }
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -164,7 +168,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount
+					// change checkpoint 
+					if (current_map == 1) { player.shift_amount = 3600; }
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
