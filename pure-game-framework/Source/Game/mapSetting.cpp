@@ -325,6 +325,18 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 2; i++) { brick = Brick(far_from_start(currentGroundBlock + 13), high_from_ground(1 * (i + 1)), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 		brick = Brick(far_from_start(currentGroundBlock + 14), groundY_up - 60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 
+		/* phase 7 */
+			// up
+		currentGroundBlock += 15;
+		for (int i = 0; i < 15; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			// down
+		for (int i = 0; i < 15; i++) {
+			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+		}
+		for (int i = 0; i < 3; i++) { brick = Brick(far_from_start(currentGroundBlock + 4 + i), high_from_ground(1), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 11), groundY_up - pipeline_mid_height + 5, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
 
 }
 	else if (current_map == 4) {
