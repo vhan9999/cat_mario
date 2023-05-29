@@ -39,17 +39,6 @@ void Player::move() {
 		isDead = true;
 		map_audio->Stop(0);
 	}
-
-	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 0, 140, "Distance : "+std::to_string(distance_count));
-	CDDraw::ReleaseBackCDC();
-
-	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 60, "Shift amount : " + std::to_string(shift_amount));
-	CDDraw::ReleaseBackCDC();
-
 }
 
 void Player::moveHor() {

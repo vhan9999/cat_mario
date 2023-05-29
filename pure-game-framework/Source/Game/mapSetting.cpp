@@ -200,6 +200,8 @@ void CGameStateRun::MapSetting(){
 		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;
 		Environment env;
+
+		env = Environment(0, 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
 			// up 
 		for (int i = 0; i < 13; i++) { brick = Brick(far_from_start(4+i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);}
 			// down
@@ -230,6 +232,7 @@ void CGameStateRun::MapSetting(){
 
 		/* phase 2 */
 		currentGroundBlock += 17;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
 			// up
 		for (int i = 0; i < 17; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down
@@ -257,6 +260,7 @@ void CGameStateRun::MapSetting(){
 
 		/* phase 3 */
 		currentGroundBlock += 17;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
 			// up
 		for (int i = 0; i < 18; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down
@@ -271,6 +275,8 @@ void CGameStateRun::MapSetting(){
 		
 		/* phase 4 */
 		currentGroundBlock += 18;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
 		for (int i = 0; i < 6; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
@@ -286,6 +292,8 @@ void CGameStateRun::MapSetting(){
 
 		/* phase 5 */
 		currentGroundBlock += 10;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
 			// up
 		for (int i = 0; i < 4; i++) { brick = Brick(far_from_start(currentGroundBlock + 2 + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 		for (int i = 0; i < 6; i++) { brick = Brick(far_from_start(currentGroundBlock + 6 + i), 0, { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick); }
@@ -296,6 +304,8 @@ void CGameStateRun::MapSetting(){
 		}
 		/* phase 6 */
 		currentGroundBlock += 12;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
 			// up
 		brick = Brick(far_from_start(currentGroundBlock), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 		for (int i = 0; i < 8; i++) { brick = Brick(far_from_start(currentGroundBlock + 1 + i), 0, { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick); }
@@ -326,8 +336,10 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(currentGroundBlock + 14), groundY_up - 60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 
 		/* phase 7 */
-			// up
 		currentGroundBlock += 15;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
+			// up
 		for (int i = 0; i < 15; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down
 		for (int i = 0; i < 15; i++) {
@@ -341,6 +353,8 @@ void CGameStateRun::MapSetting(){
 		/* phase 8 */
 			// up
 		currentGroundBlock += 15;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
 		for (int i = 0; i < 3; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down
 		for (int i = 0; i < 3; i++) {
@@ -358,6 +372,8 @@ void CGameStateRun::MapSetting(){
 
 		/* phase 9 */
 		currentGroundBlock += 16;
+		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
 			// up
 		for (int i = 0; i < 8; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down

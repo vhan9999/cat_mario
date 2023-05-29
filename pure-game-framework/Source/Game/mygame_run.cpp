@@ -180,12 +180,6 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-
-	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 190, "Current map : " + std::to_string(current_map));
-	CDDraw::ReleaseBackCDC();
-
 	for (auto i : environment_arr) {
 		i.coll.ShowBitmap();
 	}
@@ -201,6 +195,23 @@ void CGameStateRun::OnShow()
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
+
+	CDC *pDC0 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(0, 250, 10), 20);
+	CTextDraw::Print(pDC0, 0, 190, "Current map : " + std::to_string(current_map));
+	CDDraw::ReleaseBackCDC();
+
+	CDC *pDC1 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 250, 10), 20);
+	CTextDraw::Print(pDC1, 0, 140, "Distance : " + std::to_string(player.distance_count));
+	CDDraw::ReleaseBackCDC();
+
+	CDC *pDC2 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(0, 250, 10), 20);
+	CTextDraw::Print(pDC2, 0, 60, "Shift amount : " + std::to_string(player.shift_amount));
+	CDDraw::ReleaseBackCDC();
+
+
 	if(!player.isDead)
 		player.coll.ShowBitmap();
 }
