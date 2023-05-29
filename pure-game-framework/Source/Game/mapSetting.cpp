@@ -125,7 +125,7 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 5; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + 6 + i), high_from_ground(7), { "resources/image/object/block1/brown_brick.bmp" });
 			if (i <= 2)
-				brick.is_fall = true;
+				brick.is_fall = 1;
 			bricks_arr.push_back(brick);
 		}
 
@@ -154,12 +154,14 @@ void CGameStateRun::MapSetting(){
 		currentGroundBlock += 11;
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); 
-			if (i >= 4 && i <= 8)
+			if (i >= 4 && i <= 8) {
 				brick.foot_touch_fall = true;
+				brick.is_fall = 2;
+			}
 			bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); 
 			if (i >= 4 && i <= 8)
-				brick.foot_touch_fall = true;
+				brick.is_fall = 2;
 			bricks_arr.push_back(brick);
 		}
 

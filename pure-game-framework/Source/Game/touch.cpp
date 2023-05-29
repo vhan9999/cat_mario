@@ -109,7 +109,7 @@ void CGameStateRun::Touching() {
 				}
 				if (i.foot_touch_fall) {
 					for (auto &j : bricks_arr) {
-						if (j.foot_touch_fall)
+						if (j.is_fall == i.is_fall)
 							j.falling = true;
 					}
 				}

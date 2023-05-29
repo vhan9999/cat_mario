@@ -91,7 +91,7 @@ namespace game_framework {
 		bool have_coin = false;
 		bool have_item = false;
 		bool is_danger = false;
-		bool is_fall = false;
+		int is_fall = 0;
 		bool falling = false;
 		std::string item;
 

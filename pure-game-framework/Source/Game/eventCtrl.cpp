@@ -37,7 +37,7 @@ void CGameStateRun::EventCtrl() {
 			Enemy normal4 = Enemy(1300, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal4.step_enemy_enemy_dead = true; normal4.speed_x = -2; enemys_arr.push_back(normal4);
 			Enemy turtle1 = Enemy(1400, 700, { "resources/image/enemy/turtle_open.bmp","resources/image/enemy/turtle_open_flip.bmp","resources/image/enemy/turtle_close.bmp","resources/image/enemy/turtle_close_flip.bmp" }); turtle1.coll.SetFrameIndexOfBitmap(1); turtle1.speed_x = 2; turtle1.turtle = true; enemys_arr.push_back(turtle1);
 			for (auto &i : bricks_arr) {
-				if (i.is_fall) {
+				if (i.is_fall == 1) {
 					i.falling = true;
 					i.speed_y = 5;
 				}
