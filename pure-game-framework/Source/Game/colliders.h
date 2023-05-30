@@ -49,6 +49,7 @@ namespace game_framework {
 		int dead_audio_flag = 0;
 		int shift_amount = 0; // track player distance far from checkpoint point
 		int distance_count = 0; // track player distance far from initial point
+		int finish_point;
 
 		bool keyUp = false;
 		bool keyDown = false;

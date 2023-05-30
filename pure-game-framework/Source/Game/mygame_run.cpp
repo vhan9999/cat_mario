@@ -65,8 +65,14 @@ void CGameStateRun::OnBeginState()
 			player.dungeon_audio->Play(6, true);
 		}
 	}
+	else if (current_map == 4) {
+		player.coll.SetTopLeft(150, groundY_up - 120 - 68);
+		player.dungeon_audio->Stop(6);
+		player.map_audio->Play(0, true); // load map1 song
+	}
 	else {
 		player.coll.SetTopLeft(120, groundY_up - 68);
+		player.dungeon_audio->Stop(6);
 		player.map_audio->Play(0, true); // load map1 song
 	}
 }
@@ -196,22 +202,27 @@ void CGameStateRun::OnShow()
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
 
+	/*
 	CDC *pDC0 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(0, 250, 10), 20);
+	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC0, 0, 190, "Current map : " + std::to_string(current_map));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 250, 10), 20);
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC1, 0, 140, "Distance : " + std::to_string(player.distance_count));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC2 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(0, 250, 10), 20);
+	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC2, 0, 60, "Shift amount : " + std::to_string(player.shift_amount));
 	CDDraw::ReleaseBackCDC();
 
-
+	CDC *pDC3 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
+	CTextDraw::Print(pDC3, 0, 230, "isEnd : " + std::to_string(player.finish_point));
+	CDDraw::ReleaseBackCDC();
+	*/
 	if(!player.isDead)
 		player.coll.ShowBitmap();
 }

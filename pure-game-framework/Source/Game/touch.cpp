@@ -14,6 +14,11 @@ bool inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
 }
 
+/*
+	*** NOTE ***
+	game map phase image are all in resource/game_map
+*/
+
 bool isDanger = false;
 void CGameStateRun::Touching() {
 	CMovingBitmap &PC = player.coll;
@@ -225,6 +230,7 @@ void CGameStateRun::Touching() {
 			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
 				pipe_animation.SetAnimation(40, true);
 				current_map += 1;
+				player.isEnd = true;
 				GotoGameState(GAME_STATE_RUN);
 			}
 		}

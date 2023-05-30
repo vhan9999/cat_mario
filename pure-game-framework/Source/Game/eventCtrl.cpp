@@ -196,10 +196,13 @@ void CGameStateRun::EventCtrl() {
 			player.coll.SetFrameIndexOfBitmap(0);
 			player.coll.SetTopLeft(player.coll.GetLeft()+20, player.coll.GetTop());
 			player.moveSpeed += 2;
-			if (player.distance_count >= 7200) { // player meet end point
+			if (player.distance_count >= player.finish_point) { // player meet end point
 				player.moveSpeed = 0;
 				player.coll.SetFrameIndexOfBitmap(6);
 				current_map++;
+				if (current_map == 5) {
+					current_map = 1;
+				}
 				player.isEnd = true;
 		 		GotoGameState(GAME_STATE_OVER);
 			}
