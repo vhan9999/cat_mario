@@ -182,7 +182,6 @@ void CGameStateRun::EventCtrl() {
 		if (player.dead_frame >= 100) {
 			player.map_audio->Stop(0);
 			player.dungeon_audio->Stop(6);
-			player.player_finish_audio->Stop(5);
 			GotoGameState(GAME_STATE_OVER);
 		}
 	}
@@ -190,12 +189,15 @@ void CGameStateRun::EventCtrl() {
 	if (player.isFinish == true) {
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
-		player.jumpSpeed += 5;
-		if (player.jumpSpeed >= 5) { player.jumpSpeed = 5; } // fix jump speed 
+		player.jumpSpeed = 5;
 		if (player.player_on_air == false) {
 			player.coll.SetFrameIndexOfBitmap(0);
-			player.coll.SetTopLeft(player.coll.GetLeft()+20, player.coll.GetTop());
-			player.moveSpeed += 2;
+			player.coll.SetTopLeft(player.coll.GetLeft()+90, groundY_up-player.coll.GetHeight());
+			player.moveSpeed = 2;
+			if (player.isDead == true) {
+				player.moveSpeed = 0;
+				player.player_finish_audio->Stop(5);
+			}
 			if (player.distance_count >= player.finish_point) { // player meet end point
 				player.moveSpeed = 0;
 				player.coll.SetFrameIndexOfBitmap(6);
@@ -204,7 +206,7 @@ void CGameStateRun::EventCtrl() {
 					current_map = 1;
 				}
 				player.isEnd = true;
-		 		GotoGameState(GAME_STATE_OVER);
+				GotoGameState(GAME_STATE_OVER);
 			}
 		}
 	}

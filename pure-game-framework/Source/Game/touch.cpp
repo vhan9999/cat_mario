@@ -143,7 +143,7 @@ void CGameStateRun::Touching() {
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
-					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop() + 250);
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
 					player.jumpSpeed = 0;
 					animation_flag = true;
 					player.isFinish = true;
@@ -167,7 +167,7 @@ void CGameStateRun::Touching() {
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
-					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop()+250);
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
 					player.jumpSpeed = 0;
 					animation_flag = true;
 					player.isFinish = true;

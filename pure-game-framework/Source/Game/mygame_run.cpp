@@ -203,26 +203,26 @@ void CGameStateRun::OnShow()
 	}
 
 	/*
+	*/
 	CDC *pDC0 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC0, 0, 190, "Current map : " + std::to_string(current_map));
+	CTextDraw::Print(pDC0, 0, 190, "finish point : " + std::to_string(player.finish_point));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 140, "Distance : " + std::to_string(player.distance_count));
+	CTextDraw::Print(pDC1, 0, 140, "current map : " + std::to_string(current_map));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC2 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC2, 0, 60, "Shift amount : " + std::to_string(player.shift_amount));
+	CTextDraw::Print(pDC2, 0, 60, "shift amount : " + std::to_string(player.shift_amount));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC3 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC3, 0, 230, "isEnd : " + std::to_string(player.finish_point));
+	CTextDraw::Print(pDC3, 0, 230, "distance : " + std::to_string(player.distance_count));
 	CDDraw::ReleaseBackCDC();
-	*/
 	if(!player.isDead)
 		player.coll.ShowBitmap();
 }
