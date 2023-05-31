@@ -6,6 +6,7 @@ using namespace game_framework;
 void Player::load_voice() {
 	map_audio->Load(0, "resources/audio/map_song/field.wav");
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
+	// player_break_brick->Load(2, "resources/audio/interact_audio/brockbreak.wav");
 	coin_item_brick_audio->Load(3, "resources/audio/interact_audio/coin.wav");
 	pipe_interact_audio->Load(4, "resources/audio/interact_audio/dokan.wav");
 	player_finish_audio->Load(5, "resources/audio/map_song/goal.wav");

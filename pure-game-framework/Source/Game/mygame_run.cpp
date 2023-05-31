@@ -203,7 +203,6 @@ void CGameStateRun::OnShow()
 	}
 
 	/*
-	*/
 	CDC *pDC0 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC0, 0, 190, "finish point : " + std::to_string(player.finish_point));
@@ -223,6 +222,7 @@ void CGameStateRun::OnShow()
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC3, 0, 230, "distance : " + std::to_string(player.distance_count));
 	CDDraw::ReleaseBackCDC();
+	*/
 	if(!player.isDead)
 		player.coll.ShowBitmap();
 }

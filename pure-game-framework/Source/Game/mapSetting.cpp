@@ -24,6 +24,7 @@ void CGameStateRun::shiftMapImage() {
 	if (player.coll.GetLeft() + player.coll.GetWidth() > 512) {
 		int player_posX = 512 - player.coll.GetWidth();
 		player.coll.SetTopLeft(player_posX, player.coll.GetTop());
+		
 		// shift image left
 		for (auto &i : bricks_arr) {
 			int obj_pos = i.coll.GetLeft() - player.moveSpeed;
@@ -69,10 +70,8 @@ void CGameStateRun::MapSetting(){
 		int currentGroundBlock = 0; // track how many ground blocks were build
 		Brick brick;
 		Environment env;
-		brick = Brick(0, 500, { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true;  bricks_arr.push_back(brick);
 		
 		/* phase1 */
-		
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
@@ -84,7 +83,7 @@ void CGameStateRun::MapSetting(){
 		// brick = Brick(far_from_start(8), high_from_ground(4), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
 
 		for (int i = 0; i < 5; i++) {
-			brick = Brick(far_from_start(9 + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
+			brick = Brick(far_from_start(9 + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 			bricks_arr.push_back(brick);
 		}
 		brick = Brick(far_from_start(9 + 5), high_from_ground(4 + 3), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
@@ -120,12 +119,12 @@ void CGameStateRun::MapSetting(){
 		env = Environment(far_from_start(currentGroundBlock + 3), groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
 
 		for (int i = 0; i < 3; i++) {
-			brick = Brick(far_from_start(currentGroundBlock + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
+			brick = Brick(far_from_start(currentGroundBlock + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 			bricks_arr.push_back(brick);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			brick = Brick(far_from_start(currentGroundBlock + 6 + i), high_from_ground(7), { "resources/image/object/block1/brown_brick.bmp" });
+			brick = Brick(far_from_start(currentGroundBlock + 6 + i), high_from_ground(7), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 			if (i <= 2)
 				brick.is_fall = true;
 			bricks_arr.push_back(brick);
@@ -139,12 +138,12 @@ void CGameStateRun::MapSetting(){
 		}
 
 		for (int i = 0; i < 3; i++) {
-			brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(9), { "resources/image/object/block1/brown_brick.bmp" });
+			brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(9), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 			bricks_arr.push_back(brick);
 		}
-		brick = Brick(far_from_start(currentGroundBlock + 2), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
+		brick = Brick(far_from_start(currentGroundBlock + 2), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 		for (int i = 0; i < 2; i++) {
-			brick = Brick(far_from_start(currentGroundBlock + 9 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp" });
+			brick = Brick(far_from_start(currentGroundBlock + 9 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 			bricks_arr.push_back(brick);
 		}
 
@@ -384,11 +383,19 @@ void CGameStateRun::MapSetting(){
 			}
 		}
 		brick = Brick(far_from_start(currentGroundBlock+5), 600 - pipeline_big_height + 5, { "resources/image/object/block2/pipeline_big.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 5)+10, 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
+		
+
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 8; j++) {
 				brick = Brick(far_from_start(currentGroundBlock + 8 + j), i*60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 			}
 		}
+		brick = Brick(far_from_start(currentGroundBlock + 8), 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 12), 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 14), 600-pipeline_big_height, { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 14), 600 - (pipeline_big_height*2), { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 14), 600 - (pipeline_big_height * 3), { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
 }
 	else if (current_map == 4) {
 		player.finish_point = 1531-90;

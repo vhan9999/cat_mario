@@ -60,7 +60,8 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
-				if (i.invisible) {
+				// invisible
+				if ((i.invisible == true) && (i.coll.GetImageFileName() != "resources/image/object/block1/brick_break.bmp")) {
 					if (player.jumpSpeed > 0)
 						continue;
 					i.invisible = false;
@@ -80,6 +81,17 @@ void CGameStateRun::Touching() {
 						coin_animation.SetTopLeft(i.coll.GetLeft(), i.coll.GetTop() - 168);
 						animation_flag = true;
 						coin_animation_flag = true;
+					}
+				}
+				// head touch break
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brick_break.bmp")) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						i.invisible = true;
+						// player.player_break_brick->Play(2, false);
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
 					}
 				}
 				// checkpoint

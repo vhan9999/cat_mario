@@ -71,6 +71,7 @@ namespace game_framework {
 
 		CAudio *map_audio = CAudio::Instance();
 		CAudio *player_jump_audio = CAudio::Instance();
+		// CAudio *player_break_brick = CAudio::Instance();
 		CAudio *coin_item_brick_audio = CAudio::Instance();
 		CAudio *pipe_interact_audio = CAudio::Instance();
 		CAudio *player_finish_audio = CAudio::Instance();
