@@ -83,10 +83,10 @@ void CGameStateRun::EventCtrl() {
 			brick = Brick(startBlock, groundY_up - pipeline_mid_height, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
 
 			for (int i = 0; i < 2; i++) {
-				brick = Brick(startBlock + (i * 60)+240, 776 - (60 * 4), { "resources/image/object/block1/brown_brick.bmp" });
+				brick = Brick(startBlock + (i * 60)+240, 776 - (60 * 4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 				bricks_arr.push_back(brick);
 			}
-			brick = Brick(startBlock + 420, 776 - (60 * 4), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 420, 776 - (60 * 4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(startBlock + 660, groundY_up - pipeline_short_height, { "resources/image/object/block2/pipeline_short.bmp" }); bricks_arr.push_back(brick);
 			/* phase 9 */
 			startBlock += 780;
@@ -182,6 +182,7 @@ void CGameStateRun::EventCtrl() {
 		if (player.dead_frame >= 100) {
 			player.map_audio->Stop(0);
 			player.dungeon_audio->Stop(6);
+			player.game_over_audio->Play(2);
 			GotoGameState(GAME_STATE_OVER);
 		}
 	}

@@ -191,8 +191,8 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
 		env = Environment(far_from_start(1), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
+		brick = Brick(far_from_start(12)-10, groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
-		brick = Brick(far_from_start(12), groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 	}
 	// map2 dungeon
 	else if (current_map == 3) {

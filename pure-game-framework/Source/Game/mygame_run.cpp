@@ -205,7 +205,7 @@ void CGameStateRun::OnShow()
 	/*
 	CDC *pDC0 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC0, 0, 190, "finish point : " + std::to_string(player.finish_point));
+	CTextDraw::Print(pDC0, 0, 190, "game end : " + std::to_string(gameEnd));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC1 = CDDraw::GetBackCDC();
