@@ -199,9 +199,11 @@ void CGameStateRun::EventCtrl() {
 				player.moveSpeed = 0;
 				player.player_finish_audio->Stop(5);
 			}
+			if(player.distance_count >= player.finish_point-2){
+				player.coll.SetFrameIndexOfBitmap(6);
+			}
 			if (player.distance_count >= player.finish_point) { // player meet end point
 				player.moveSpeed = 0;
-				player.coll.SetFrameIndexOfBitmap(6);
 				current_map++;
 				if (current_map == 5) {
 					current_map = 1;
