@@ -184,4 +184,5 @@ void CGameStateRun::OnShow()
 	}
 	if(!player.isDead)
 		player.coll.ShowBitmap();
+
 }

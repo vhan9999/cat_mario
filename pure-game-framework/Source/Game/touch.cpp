@@ -231,9 +231,9 @@ void CGameStateRun::Touching() {
 		}
 	}
 	//player&enemys touch
-	for (auto &i : enemys_arr) {
-		if (i.is_dead) { continue;}
-		CMovingBitmap &EC = i.coll;
+	for (auto &enemy : enemys_arr) {
+		if (enemy.is_dead) { continue;}
+		CMovingBitmap &EC = enemy.coll;
 
 		if (player.jumpSpeed >= 28) {//predict penetrate
 			if (PC.GetTop() + PC.GetHeight() <= EC.GetTop() && PC.GetTop() + PC.GetHeight() + player.jumpSpeed >= EC.GetTop() && PC.GetLeft() + 2 < EC.GetLeft() + EC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > EC.GetLeft()) {
@@ -241,8 +241,8 @@ void CGameStateRun::Touching() {
 				PC.SetTopLeft(PC.GetLeft(), EC.GetTop() - PC.GetHeight());
 			}
 		}
-		else if (i.speed_y >= 28) {//predict penetrate
-			if (EC.GetTop() + EC.GetHeight() <= PC.GetTop() && EC.GetTop() + EC.GetHeight() + i.speed_y >= PC.GetTop() && EC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && EC.GetLeft() + EC.GetWidth() - 2 > PC.GetLeft()) {
+		else if (enemy.speed_y >= 28) {//predict penetrate
+			if (EC.GetTop() + EC.GetHeight() <= PC.GetTop() && EC.GetTop() + EC.GetHeight() + enemy.speed_y >= PC.GetTop() && EC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && EC.GetLeft() + EC.GetWidth() - 2 > PC.GetLeft()) {
 				player.isDead = true;
 			}
 		}
@@ -253,8 +253,8 @@ void CGameStateRun::Touching() {
 			int obj_bottom = EC.GetTop() + EC.GetHeight();
 			int obj_mid_x = EC.GetLeft() + (EC.GetWidth() / 2);
 			int obj_mid_y = EC.GetTop() + (EC.GetHeight() / 2);
-			if (i.cloud) {
-				i.coll.SetFrameIndexOfBitmap(1);
+			if (enemy.cloud) {
+				enemy.coll.SetFrameIndexOfBitmap(1);
 			}
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
@@ -262,33 +262,33 @@ void CGameStateRun::Touching() {
 			}
 			//foot touch
 			else if (inRange(PC.GetTop() + PC.GetHeight() + 1, obj_top, obj_mid_y) && PC.GetLeft() + 2 < obj_right && PC.GetLeft() + PC.GetWidth() - 2 > obj_left) {
-				if (i.step_enemy_enemy_dead) {
+				if (enemy.step_enemy_enemy_dead) {
 					player.jumpSpeed = -19;
-					i.is_dead = true;
-					i.coll.UnshowBitmap();
+					enemy.is_dead = true;
+					enemy.coll.UnshowBitmap();
 				}
-				else if (i.step_enemy_player_dead) {
+				else if (enemy.step_enemy_player_dead) {
 					player.isDead = true;
 				}
-				else if (i.step_enemy_jump) {
+				else if (enemy.step_enemy_jump) {
 					player.jumpSpeed = -19;
 				}
-				else if (i.turtle) {
+				else if (enemy.turtle) {
 					player.jumpSpeed = -19;
-					int current_bitmap = i.coll.GetFrameIndexOfBitmap();
-					if (current_bitmap == 0 || current_bitmap == 1) {
-						i.speed_x = 0;
-						i.coll.SetFrameIndexOfBitmap(current_bitmap + 2);
+					int current_bitmap = enemy.coll.GetFrameIndexOfBitmap();
+		if (current_bitmap == 0 || current_bitmap == 1) {
+			enemy.speed_x = 0;
+						enemy.coll.SetFrameIndexOfBitmap(current_bitmap + 2);
 					}
 					else {
-						if (player.coll.GetLeft() > i.coll.GetLeft()) {
-							i.speed_x = -5;
-							i.coll.SetFrameIndexOfBitmap(2);
+						if (player.coll.GetLeft() > enemy.coll.GetLeft()) {
+							enemy.speed_x = -5;
+							enemy.coll.SetFrameIndexOfBitmap(2);
 						}
 
 						else{
-							i.speed_x = 5;
-							i.coll.SetFrameIndexOfBitmap(3);
+							enemy.speed_x = 5;
+							enemy.coll.SetFrameIndexOfBitmap(3);
 						}
 					}
 				}
