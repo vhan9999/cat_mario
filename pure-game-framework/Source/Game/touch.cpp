@@ -14,6 +14,11 @@ bool inRange(double num, double min, double max) {
 	return (min <= num && num <= max);
 }
 
+/*
+	*** NOTE ***
+	game map phase image are all in resource/game_map
+*/
+
 bool isDanger = false;
 void CGameStateRun::Touching() {
 	CMovingBitmap &PC = player.coll;
@@ -55,7 +60,8 @@ void CGameStateRun::Touching() {
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
 			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
-				if (i.invisible) {
+				// invisible
+				if ((i.invisible == true) && (i.coll.GetImageFileName() != "resources/image/object/block1/brick_break.bmp")) {
 					if (player.jumpSpeed > 0)
 						continue;
 					i.invisible = false;
@@ -77,10 +83,23 @@ void CGameStateRun::Touching() {
 						coin_animation_flag = true;
 					}
 				}
+				// head touch break
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brick_break.bmp")) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						i.invisible = true;
+						// player.player_break_brick->Play(2, false);
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
+				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount 
+					// change checkpoint 
+					if(current_map == 1){ player.shift_amount = 3600; } 
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -108,15 +127,20 @@ void CGameStateRun::Touching() {
 					return;
 				}
 				if (i.foot_touch_fall) {
+					/*
 					for (auto &j : bricks_arr) {
 						if (j.is_fall == i.is_fall)
 							j.falling = true;
 					}
+					*/
+					i.falling = true;
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount 
+					// change checkpoint 
+					if (current_map == 1) { player.shift_amount = 3500; }
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -131,7 +155,7 @@ void CGameStateRun::Touching() {
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
-					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop() + 250);
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
 					player.jumpSpeed = 0;
 					animation_flag = true;
 					player.isFinish = true;
@@ -140,7 +164,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount 
+					// change checkpoint 
+					if (current_map == 1) { player.shift_amount = 3600; }
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -153,7 +179,7 @@ void CGameStateRun::Touching() {
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
-					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop()+250);
+					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
 					player.jumpSpeed = 0;
 					animation_flag = true;
 					player.isFinish = true;
@@ -162,7 +188,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					i.coll.SetFrameIndexOfBitmap(1);
-					player.shift_amount = 3600; // change checkpoint by reset shift_amount
+					// change checkpoint 
+					if (current_map == 1) { player.shift_amount = 3600; }
+					else if (current_map == 3) { player.shift_amount = 3157; }
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -213,9 +241,10 @@ void CGameStateRun::Touching() {
 			pipe_animation.SetAnimation(40, false);
 			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
 				pipe_animation.SetAnimation(40, true);
+				current_map += 1;
+				player.isEnd = true;
+				GotoGameState(GAME_STATE_RUN);
 			}
-			//current_map += 1;
-			// GotoGameState)
 		}
 	}
 	// check pipe_horizontal_interact animation

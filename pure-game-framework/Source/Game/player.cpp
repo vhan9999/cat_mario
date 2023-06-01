@@ -6,9 +6,12 @@ using namespace game_framework;
 void Player::load_voice() {
 	map_audio->Load(0, "resources/audio/map_song/field.wav");
 	player_jump_audio->Load(1, "resources/audio/player_audio/jump.wav");
+	game_over_audio->Load(2, "resources/audio/player_audio/death.wav");
 	coin_item_brick_audio->Load(3, "resources/audio/interact_audio/coin.wav");
 	pipe_interact_audio->Load(4, "resources/audio/interact_audio/dokan.wav");
 	player_finish_audio->Load(5, "resources/audio/map_song/goal.wav");
+	dungeon_audio->Load(6, "resources/audio/map_song/dungeon.wav");
+	// player_break_brick->Load(7, "resources/audio/interact_audio/brockbreak.wav");
 }
 
 void Player::move() {
@@ -38,18 +41,6 @@ void Player::move() {
 		isDead = true;
 		map_audio->Stop(0);
 	}
-
-	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC, 0, 0, "Distance : "+std::to_string(distance_count));
-	CDDraw::ReleaseBackCDC();
-
-	/*
-	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 30, "Shift amount : " + std::to_string(shift_amount));
-	CDDraw::ReleaseBackCDC();
-	*/
 }
 
 void Player::moveHor() {
@@ -141,7 +132,6 @@ void Player::ableToJump(double &ground) {
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
 		jumpSpeed -= 5; // v-=5(a)
 	}
-	
 }
 
 void Player::ani() {
@@ -204,13 +194,12 @@ void Player::resetValue() {
 	moveSpeed = 0;
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
-	if (reach_checkpoint == true && isEnd == false) {
-		distance_count = 3600;
-	}else{
+
+	if (isEnd == true) {
+		shift_amount = 0;
 		distance_count = 0;
 		reach_checkpoint = false;
 	}
-	
 	coll.SetFrameIndexOfBitmap(0);
 	keyUp = false;
 	keyDown = false;

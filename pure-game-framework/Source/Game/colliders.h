@@ -48,8 +48,8 @@ namespace game_framework {
 		int finish_audio_flag = 0;
 		int dead_audio_flag = 0;
 		int shift_amount = 0; // track player distance far from checkpoint point
-		// int enemy_shift_amount = 0;
 		int distance_count = 0; // track player distance far from initial point
+		int finish_point;
 
 		bool keyUp = false;
 		bool keyDown = false;
@@ -71,9 +71,12 @@ namespace game_framework {
 
 		CAudio *map_audio = CAudio::Instance();
 		CAudio *player_jump_audio = CAudio::Instance();
+		CAudio *game_over_audio = CAudio::Instance();
 		CAudio *coin_item_brick_audio = CAudio::Instance();
 		CAudio *pipe_interact_audio = CAudio::Instance();
 		CAudio *player_finish_audio = CAudio::Instance();
+		CAudio *dungeon_audio = CAudio::Instance();
+		// CAudio *player_break_brick = CAudio::Instance();
 	};
 
 	class Brick : public Collider {

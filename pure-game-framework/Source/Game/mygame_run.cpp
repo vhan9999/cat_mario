@@ -39,6 +39,11 @@ void CGameStateRun::OnBeginState()
 				int env_pos = i.coll.GetLeft() - player.shift_amount;
 				i.coll.SetTopLeft(env_pos, i.coll.GetTop());
 			}
+			player.distance_count = player.shift_amount;
+		}
+		else {
+			player.distance_count = 0;
+			player.reach_checkpoint = false;
 		}
 	}
 	player.resetValue();
@@ -48,8 +53,28 @@ void CGameStateRun::OnBeginState()
 	pipe_animation_flag = false;
 	pipe_hor_animation_flag = false;
 
-	player.coll.SetTopLeft(120, groundY_up - 68);
-	player.map_audio->Play(0, true);
+	if (current_map == 3) {
+		if (player.reach_checkpoint == false) {
+			player.coll.SetTopLeft(125, 0);
+			player.map_audio->Stop(0); // load map1 song
+			player.dungeon_audio->Play(6, true);
+		}
+		else {
+			player.coll.SetTopLeft(512, groundY_up-player.coll.GetHeight());
+			player.map_audio->Stop(0); // load map1 song
+			player.dungeon_audio->Play(6, true);
+		}
+	}
+	else if (current_map == 4) {
+		player.coll.SetTopLeft(150, groundY_up - 120 - 68);
+		player.dungeon_audio->Stop(6);
+		player.map_audio->Play(0, true); // load map1 song
+	}
+	else {
+		player.coll.SetTopLeft(120, groundY_up - 68);
+		player.dungeon_audio->Stop(6);
+		player.map_audio->Play(0, true); // load map1 song
+	}
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
@@ -91,7 +116,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	
 	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
 	player.load_voice();
-	player.map_audio->Play(0, true); // load map1 song
+
 	
 	// set curent checkpoint
 	player.current_checkpoint_x = 120;
@@ -161,12 +186,6 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動
 
 void CGameStateRun::OnShow()
 {
-
-	CDC *pDC1 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(0, 0, 0), 20);
-	CTextDraw::Print(pDC1, 0, 30, "Current map : " + std::to_string(current_map));
-	CDDraw::ReleaseBackCDC();
-
 	for (auto i : environment_arr) {
 		i.coll.ShowBitmap();
 	}
@@ -182,6 +201,28 @@ void CGameStateRun::OnShow()
 		if (coin_animation_flag == true) { coin_animation.ShowBitmap(); }
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
+
+	/*
+	CDC *pDC0 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(255, 0, 0), 20);
+	CTextDraw::Print(pDC0, 0, 190, "game end : " + std::to_string(gameEnd));
+	CDDraw::ReleaseBackCDC();
+
+	CDC *pDC1 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC1, 30, "Courier New", RGB(255, 0, 0), 20);
+	CTextDraw::Print(pDC1, 0, 140, "current map : " + std::to_string(current_map));
+	CDDraw::ReleaseBackCDC();
+
+	CDC *pDC2 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
+	CTextDraw::Print(pDC2, 0, 60, "shift amount : " + std::to_string(player.shift_amount));
+	CDDraw::ReleaseBackCDC();
+
+	CDC *pDC3 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
+	CTextDraw::Print(pDC3, 0, 230, "distance : " + std::to_string(player.distance_count));
+	CDDraw::ReleaseBackCDC();
+	*/
 	if(!player.isDead)
 		player.coll.ShowBitmap();
 
