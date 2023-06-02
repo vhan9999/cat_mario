@@ -157,12 +157,10 @@ void CGameStateRun::Touching() {
 					return;
 				}
 				if (i.foot_touch_fall) {
-					/*
 					for (auto &j : bricks_arr) {
 						if (j.is_fall == i.is_fall)
 							j.falling = true;
 					}
-					*/
 					i.falling = true;
 				}
 				// checkpoint
