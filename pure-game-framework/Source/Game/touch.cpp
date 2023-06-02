@@ -25,15 +25,29 @@ void CGameStateRun::Touching() {
 	CMovingBitmap &PC = player.coll;
 	//big player
 	if (player.coll.GetFrameIndexOfBitmap() == 7 || player.coll.GetFrameIndexOfBitmap() == 8) {
-		for (std::vector<Brick>::iterator it = bricks_arr.begin(); it != bricks_arr.end();) {
-			if (CMovingBitmap::IsOverlap((*it).coll, player.coll)) {
-				it = bricks_arr.erase(it);
+		for (std::vector<Brick>::iterator brick = bricks_arr.begin(); brick != bricks_arr.end();) {
+			if (CMovingBitmap::IsOverlap((*brick).coll, player.coll)) {
+				brick = bricks_arr.erase(brick);
 			}
 			else {
-				it++;
+				brick++;
 			}
 		}
 	}
+	//big enemy
+	for (std::vector<Enemy>::iterator enemy = enemys_arr.begin(); enemy != enemys_arr.end();) {
+		if ((*enemy).coll.GetImageFileName() == "resources/image/enemy/big_normal.bmp" || (*enemy).coll.GetImageFileName() == "resources/image/enemy/big_normal_flip.bmp") {
+			for (std::vector<Brick>::iterator brick = bricks_arr.begin(); brick != bricks_arr.end();) {
+				if (CMovingBitmap::IsOverlap((*brick).coll, (*enemy).coll)) {
+					brick = bricks_arr.erase(brick);
+				}
+				else {
+					brick++;
+				}
+			}
+		}
+	}
+	
 	//player&bricks touch
 	for (auto &i : bricks_arr) {
 		CMovingBitmap &BC = i.coll;
@@ -415,14 +429,27 @@ void CGameStateRun::Touching() {
 		}
 		
 	}
+	//enemy&enemy touch
 	for (auto &i : enemys_arr) {
 		for (auto &j : enemys_arr) {
+			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
+				if (i.big_mushroom && !j.big_mushroom) {
+					Enemy enemy = Enemy(j.coll.GetLeft(), j.coll.GetTop(), { "resources/image/enemy/big_normal.bmp" , "resources/image/enemy/big_normal_flip.bmp" }); enemy.speed_x = j.speed_x; enemy.speed_y = j.speed_y; enemy.step_enemy_player_dead = true;
+					if (j.coll.GetFrameIndexOfBitmap() != 0) {
+						enemy.coll.SetFrameIndexOfBitmap(1);
+					}
+					enemys_arr.push_back(enemy);
+					j.is_dead = true;
+				}
+
+			}
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
 				if (i.turtle&&!j.turtle) {
 					j.is_dead = true;
 				}
 				
 			}
+			
 		}
 	}
 	
