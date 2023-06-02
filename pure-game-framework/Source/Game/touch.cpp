@@ -437,15 +437,17 @@ void CGameStateRun::Touching() {
 				else if (inRange(EC.GetLeft(), obj_mid_x, obj_right) && EC.GetTop() <= obj_bottom && EC.GetTop() + EC.GetHeight() - 5 >= obj_top) {
 					j.speed_x = j.speed_x * (-1);
 					EC.SetTopLeft(obj_right, EC.GetTop());
-					if (j.coll.GetFrameIndexOfBitmap() % 2 == 0)
+					if (j.coll.GetFrameIndexOfBitmap() % 2 == 0) {
 						j.coll.SetFrameIndexOfBitmap(j.coll.GetFrameIndexOfBitmap() + 1);
+					}
 				}
 				//right touch
 				else if (inRange(EC.GetLeft() + EC.GetWidth() + 1, obj_left, obj_mid_x) && EC.GetTop() <= obj_bottom && EC.GetTop() + EC.GetHeight() - 5 >= obj_top) {
 					j.speed_x = j.speed_x * (-1);
 					EC.SetTopLeft(obj_left - EC.GetWidth(), EC.GetTop());
-					if(j.coll.GetFrameIndexOfBitmap()%2 == 1)
+					if (j.coll.GetFrameIndexOfBitmap() % 2 == 1) {
 						j.coll.SetFrameIndexOfBitmap(j.coll.GetFrameIndexOfBitmap() - 1);
+					}
 				}
 			}
 		}
