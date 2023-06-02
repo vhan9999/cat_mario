@@ -223,7 +223,6 @@ void CGameStateRun::OnShow()
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC3, 0, 230, "distance : " + std::to_string(player.distance_count));
 	CDDraw::ReleaseBackCDC();
-
 	if(!player.isDead)
 		player.coll.ShowBitmap();
 
