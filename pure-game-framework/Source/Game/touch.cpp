@@ -34,8 +34,7 @@ void CGameStateRun::Touching() {
 			}
 		}
 	}
-	//big enemy
-	for (std::vector<Enemy>::iterator enemy = enemys_arr.begin(); enemy != enemys_arr.end();) {
+	for (std::vector<Enemy>::iterator enemy = enemys_arr.begin(); enemy != enemys_arr.end(); enemy++) {
 		if ((*enemy).coll.GetImageFileName() == "resources/image/enemy/big_normal.bmp" || (*enemy).coll.GetImageFileName() == "resources/image/enemy/big_normal_flip.bmp") {
 			for (std::vector<Brick>::iterator brick = bricks_arr.begin(); brick != bricks_arr.end();) {
 				if (CMovingBitmap::IsOverlap((*brick).coll, (*enemy).coll)) {
@@ -61,9 +60,9 @@ void CGameStateRun::Touching() {
 				player.ableToJump(ground); // can jump on block
 			}
 		}
-		else if (i.speed_y >= 28) {//predict penetrate
+		if (i.speed_y >= 15) {//predict penetrate
 			if (BC.GetTop() + BC.GetHeight() <= PC.GetTop() && BC.GetTop() + BC.GetHeight() + i.speed_y >= PC.GetTop() && BC.GetLeft() + 2 < PC.GetLeft() + PC.GetWidth() && BC.GetLeft() + BC.GetWidth() - 2 > PC.GetLeft()) {
-				player.isDead;
+				player.isDead = true;
 			}
 		}
 		else if (i.falling) {
