@@ -135,6 +135,12 @@ void CGameStateRun::Touching() {
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
 					return;
 				}
+				// brick4 trap
+				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.isDead = true;
+					return;
+				}
 				player.jumpSpeed = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_bottom);
 				player.jumpSpeed += 1;
@@ -175,6 +181,12 @@ void CGameStateRun::Touching() {
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
 					return;
 				}
+				// brick4 trap
+				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.isDead = true;
+					return;
+				}
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_top - PC.GetHeight());
@@ -201,6 +213,12 @@ void CGameStateRun::Touching() {
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
 					return;
 				}
+				// brick4 trap
+				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.isDead = true;
+					return;
+				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
 				player.frame += 2;
@@ -223,6 +241,12 @@ void CGameStateRun::Touching() {
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+					return;
+				}
+				// brick4 trap
+				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.isDead = true;
 					return;
 				}
 				// horizontal pipeline

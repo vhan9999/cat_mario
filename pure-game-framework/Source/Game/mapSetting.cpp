@@ -232,7 +232,7 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(7+i), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
 		}
 
-		brick = Brick(far_from_start(14), groundY_up-60, { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(14), groundY_up - 60, { "resources/image/object/block1/green_brick4.bmp"}); bricks_arr.push_back(brick);
 
 		for (int i = 0; i < 2; i++) {
 			brick = Brick(far_from_start(16), high_from_ground(i+1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
@@ -254,7 +254,9 @@ void CGameStateRun::MapSetting(){
 			bricks_arr.push_back(brick);
 		}
 
-		for (int i = 0; i < 3; i++) { brick = Brick(far_from_start(currentGroundBlock+1), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
+		for (int i = 0; i < 2; i++) { brick = Brick(far_from_start(currentGroundBlock+1), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
+		// brick trap
+		brick = Brick(far_from_start(currentGroundBlock + 1)-10, high_from_ground(3)-10, { "resources/image/object/block1/green_brick4_trap1.bmp", "resources/image/object/block1/green_brick4_trap2.bmp" }); bricks_arr.push_back(brick);
 		for (int i = 0; i < 4; i++) { brick = Brick(far_from_start(currentGroundBlock + 3), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
 
 		for (int i = 0; i < 4; i++) {
