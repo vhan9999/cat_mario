@@ -200,7 +200,6 @@ void CGameStateRun::EventCtrl() {
 				player.player_finish_audio->Stop(5);
 			}
 			if(player.distance_count >= player.finish_point-2){
-				lifes += 1;
 				player.coll.SetFrameIndexOfBitmap(6);
 			}
 			if (player.distance_count >= player.finish_point) { // player meet end point
