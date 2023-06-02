@@ -167,6 +167,7 @@ void CGameStateRun::Touching() {
 					// change checkpoint 
 					if (current_map == 1) { player.shift_amount = 3600; }
 					else if (current_map == 3) { player.shift_amount = 3157; }
+					
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
@@ -191,6 +192,7 @@ void CGameStateRun::Touching() {
 					// change checkpoint 
 					if (current_map == 1) { player.shift_amount = 3600; }
 					else if (current_map == 3) { player.shift_amount = 3157; }
+					
 					player.reach_checkpoint = true;
 					player.current_checkpoint_x = 120;
 					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
