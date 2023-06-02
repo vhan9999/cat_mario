@@ -5,6 +5,7 @@
 #include "../Library/audio.h"
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
+#include <string>
 #ifndef COLLIDERS_H
 #define COLLIDERS_H
 
@@ -92,11 +93,10 @@ namespace game_framework {
 		bool foot_touch_fall = false;
 		bool head_touch_change = false;//change picture 
 		bool have_coin = false;
-		bool have_item = false;
 		bool is_danger = false;
 		int is_fall = 0;
 		bool falling = false;
-		std::string item;
+		std::string item = "";
 
 	};
 
@@ -115,6 +115,7 @@ namespace game_framework {
 		bool able_touch = true;
 		bool turtle = false;
 		bool cloud = false;
+		bool big_mushroom = false;
 	};
 
 	class Environment : public Collider {

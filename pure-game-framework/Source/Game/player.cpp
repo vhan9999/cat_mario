@@ -94,22 +94,27 @@ void Player::moveVer() {
 
 void Player::ableToJump(double &ground) {
 	jumpBonusFrame++;
-
+	
 	if (keyUp == true) {
-		if (coll.GetFrameIndexOfBitmap() == 0 || coll.GetFrameIndexOfBitmap() == 1) {
-			coll.SetFrameIndexOfBitmap(4);
+		if (coll.GetFrameIndexOfBitmap() != 7 && coll.GetFrameIndexOfBitmap() != 8) {
+			if (coll.GetFrameIndexOfBitmap() == 0 || coll.GetFrameIndexOfBitmap() == 1) {
+				coll.SetFrameIndexOfBitmap(4);
+			}
+			if (coll.GetFrameIndexOfBitmap() == 2 || coll.GetFrameIndexOfBitmap() == 3) {
+				coll.SetFrameIndexOfBitmap(5);
+			}
 		}
-		if (coll.GetFrameIndexOfBitmap() == 2 || coll.GetFrameIndexOfBitmap() == 3) {
-			coll.SetFrameIndexOfBitmap(5);
-		}
+		
 	}
 
 	if (coll.GetTop() < ground && isFinish == false) {// player in the air
-		if ((coll.GetFrameIndexOfBitmap() == 0 || coll.GetFrameIndexOfBitmap() == 1) && (player_on_air == true)) {
-			coll.SetFrameIndexOfBitmap(4);
-		}
-		if ((coll.GetFrameIndexOfBitmap() == 2 || coll.GetFrameIndexOfBitmap() == 3) && (player_on_air == true)) {
-			coll.SetFrameIndexOfBitmap(5);
+		if (coll.GetFrameIndexOfBitmap() != 7 && coll.GetFrameIndexOfBitmap() != 8) {
+			if ((coll.GetFrameIndexOfBitmap() == 0 || coll.GetFrameIndexOfBitmap() == 1) && (player_on_air == true)) {
+				coll.SetFrameIndexOfBitmap(4);
+			}
+			if ((coll.GetFrameIndexOfBitmap() == 2 || coll.GetFrameIndexOfBitmap() == 3) && (player_on_air == true)) {
+				coll.SetFrameIndexOfBitmap(5);
+			}
 		}
 		jumpSpeed += 1; // v += a
 		player_on_air = true;
@@ -122,11 +127,13 @@ void Player::ableToJump(double &ground) {
 
 	if (coll.GetTop() >= ground) {// player touch on the ground
 		player_on_air = false;
-		if (coll.GetFrameIndexOfBitmap() == 4) {
-			coll.SetFrameIndexOfBitmap(0);
-		}
-		if (coll.GetFrameIndexOfBitmap() == 5) {
-			coll.SetFrameIndexOfBitmap(2);
+		if (coll.GetFrameIndexOfBitmap() != 7 && coll.GetFrameIndexOfBitmap() != 8) {
+			if (coll.GetFrameIndexOfBitmap() == 4) {
+				coll.SetFrameIndexOfBitmap(0);
+			}
+			if (coll.GetFrameIndexOfBitmap() == 5) {
+				coll.SetFrameIndexOfBitmap(2);
+			}
 		}
 	}
 	if (jumpBonusFrame == 5 && keyUp) {// jump hold duration (if hold long will higher)
@@ -136,28 +143,32 @@ void Player::ableToJump(double &ground) {
 
 void Player::ani() {
 	animate_frame += 0.25;
-	if (keyRight == true) {
-		coll.SetFrameIndexOfBitmap(0);
-
-		// change image while moving
-		if ((int(animate_frame) % 2 == 0) && (coll.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
-			coll.SetFrameIndexOfBitmap(1);
-
-		}
-		else if ((int(animate_frame) % 11 == 0) && (coll.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+	if (coll.GetFrameIndexOfBitmap() != 7 && coll.GetFrameIndexOfBitmap() != 8) {
+		if (keyRight == true) {
 			coll.SetFrameIndexOfBitmap(0);
+
+			// change image while moving
+			if ((int(animate_frame) % 2 == 0) && (coll.GetFrameIndexOfBitmap() == 0) && (jumpSpeed == 0)) { // frame moldulus of odd number
+				coll.SetFrameIndexOfBitmap(1);
+
+			}
+			else if ((int(animate_frame) % 11 == 0) && (coll.GetFrameIndexOfBitmap() == 1) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+				coll.SetFrameIndexOfBitmap(0);
+			}
 		}
 	}
-	if (keyLeft == true) {
-		coll.SetFrameIndexOfBitmap(2);
-
-		// change image while moving
-		if ((int(animate_frame) % 2 == 0) && (coll.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
-			coll.SetFrameIndexOfBitmap(3);
-
-		}
-		else if ((int(animate_frame) % 11 == 0) && (coll.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+	if (coll.GetFrameIndexOfBitmap() != 7 && coll.GetFrameIndexOfBitmap() != 8) {
+		if (keyLeft == true) {
 			coll.SetFrameIndexOfBitmap(2);
+
+			// change image while moving
+			if ((int(animate_frame) % 2 == 0) && (coll.GetFrameIndexOfBitmap() == 2) && (jumpSpeed == 0)) { // frame moldulus of odd number
+				coll.SetFrameIndexOfBitmap(3);
+
+			}
+			else if ((int(animate_frame) % 11 == 0) && (coll.GetFrameIndexOfBitmap() == 3) && (jumpSpeed == 0)) {  // frame moldulus of even number 
+				coll.SetFrameIndexOfBitmap(2);
+			}
 		}
 	}
 	if (animate_frame >= 60) {
