@@ -177,15 +177,15 @@ void CGameStateRun::EventCtrl() {
 			player.coll.UnshowBitmap();
 			event_list["player_dead"] = true;
 			event_list["map7-10"] = false;
-		}
+		}	
 		player.dead_frame++;
 		if (player.dead_frame >= 100) {
 			player.map_audio->Stop(0);
 			player.dungeon_audio->Stop(6);
 			player.game_over_audio->Play(2);
 			GotoGameState(GAME_STATE_OVER);
-		}
-	}
+		}	
+	}		
 	// player hit the ending flag
 	if (player.isFinish == true) {
 		player.coll.SetFrameIndexOfBitmap(4);
