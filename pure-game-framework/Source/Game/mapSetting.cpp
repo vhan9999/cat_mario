@@ -215,11 +215,11 @@ void CGameStateRun::MapSetting(){
 			// down
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); 
-			if (i == 2) { brick.foot_touch_fall = true; }
+			if (i == 2) { brick.foot_touch_fall = true; brick.is_fall = 1; }
 			bricks_arr.push_back(brick);
 
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); 
-			if (i == 2) { brick.foot_touch_fall = true; }
+			if (i == 2) { brick.foot_touch_fall = true; brick.is_fall = 1;}
 			bricks_arr.push_back(brick);
 		}
 
@@ -229,10 +229,16 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(0, i*60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 		}
 		for (int i = 0; i < 4; i++) {
-			brick = Brick(far_from_start(7+i), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+			if (i == 1) {
+				brick = Brick(far_from_start(7 + i), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big";
+				bricks_arr.push_back(brick);
+			}
+			else {
+				brick = Brick(far_from_start(7 + i), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+			}
 		}
 
-		brick = Brick(far_from_start(14), groundY_up-60, { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(14), groundY_up - 60, { "resources/image/object/block1/green_brick4.bmp"}); bricks_arr.push_back(brick);
 
 		for (int i = 0; i < 2; i++) {
 			brick = Brick(far_from_start(16), high_from_ground(i+1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
@@ -246,15 +252,18 @@ void CGameStateRun::MapSetting(){
 			// down
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); 
-			if (i == 7) { brick.foot_touch_fall = true;}
+			if (i == 7) { brick.foot_touch_fall = true; brick.is_fall = 2; }
 			bricks_arr.push_back(brick);
 
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); 
-			if (i == 7) { brick.foot_touch_fall = true;}
+			if (i == 7) {brick.foot_touch_fall = true; brick.is_fall = 2;}
 			bricks_arr.push_back(brick);
 		}
 
-		for (int i = 0; i < 3; i++) { brick = Brick(far_from_start(currentGroundBlock+1), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
+		for (int i = 0; i < 2; i++) { brick = Brick(far_from_start(currentGroundBlock+1), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
+		// brick trap
+		brick = Brick(far_from_start(currentGroundBlock + 1)-10, high_from_ground(3)-10, { "resources/image/object/block1/green_brick4_trap1.bmp", "resources/image/object/block1/green_brick4_trap2.bmp" }); bricks_arr.push_back(brick);
+		
 		for (int i = 0; i < 4; i++) { brick = Brick(far_from_start(currentGroundBlock + 3), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
 
 		for (int i = 0; i < 4; i++) {
@@ -325,7 +334,13 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
 		for (int i = 0; i < 3; i++) {
-			brick = Brick(far_from_start(currentGroundBlock + 3+i), high_from_ground(8), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+			if (i == 0) {
+				brick = Brick(far_from_start(currentGroundBlock + 3 + i), high_from_ground(8), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big";
+				bricks_arr.push_back(brick);
+			}
+			else {
+				brick = Brick(far_from_start(currentGroundBlock + 3 + i), high_from_ground(8), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+			}
 		}
 		
 		brick = Brick(far_from_start(currentGroundBlock+3), groundY_up-60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
@@ -374,8 +389,8 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 2; i++) { brick = Brick(far_from_start(currentGroundBlock + i+1), high_from_ground(2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 		brick = Brick(far_from_start(currentGroundBlock + 2), high_from_ground(3), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 		
-		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(6), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; bricks_arr.push_back(brick);
-		brick = Brick(far_from_start(currentGroundBlock + 11), high_from_ground(4), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(6), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; brick.is_fall = 3; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 11), high_from_ground(4), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; brick.is_fall = 3; bricks_arr.push_back(brick);
 
 
 		/* phase 9 */
