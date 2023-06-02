@@ -215,11 +215,11 @@ void CGameStateRun::MapSetting(){
 			// down
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); 
-			if (i == 2) { brick.foot_touch_fall = true; }
+			if (i == 2) { brick.foot_touch_fall = true; brick.is_fall = 1; }
 			bricks_arr.push_back(brick);
 
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); 
-			if (i == 2) { brick.foot_touch_fall = true; }
+			if (i == 2) { brick.foot_touch_fall = true; brick.is_fall = 1;}
 			bricks_arr.push_back(brick);
 		}
 
@@ -246,11 +246,11 @@ void CGameStateRun::MapSetting(){
 			// down
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); 
-			if (i == 7) { brick.foot_touch_fall = true;}
+			if (i == 7) { brick.foot_touch_fall = true; brick.is_fall = 2; }
 			bricks_arr.push_back(brick);
 
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); 
-			if (i == 7) { brick.foot_touch_fall = true;}
+			if (i == 7) {brick.foot_touch_fall = true; brick.is_fall = 2;}
 			bricks_arr.push_back(brick);
 		}
 
@@ -374,8 +374,8 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 2; i++) { brick = Brick(far_from_start(currentGroundBlock + i+1), high_from_ground(2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 		brick = Brick(far_from_start(currentGroundBlock + 2), high_from_ground(3), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 		
-		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(6), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; bricks_arr.push_back(brick);
-		brick = Brick(far_from_start(currentGroundBlock + 11), high_from_ground(4), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(6), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; brick.is_fall = 3; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 11), high_from_ground(4), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; brick.is_fall = 3; bricks_arr.push_back(brick);
 
 
 		/* phase 9 */
