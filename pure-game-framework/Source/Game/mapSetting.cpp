@@ -83,8 +83,14 @@ void CGameStateRun::MapSetting(){
 		// brick = Brick(far_from_start(8), high_from_ground(4), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
 
 		for (int i = 0; i < 5; i++) {
-			brick = Brick(far_from_start(9 + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
-			bricks_arr.push_back(brick);
+			if (i == 1) {
+				brick = Brick(far_from_start(9 + 3 + i), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big";
+				bricks_arr.push_back(brick);
+			}
+			else {
+				brick = Brick(far_from_start(9 + 3 + i), high_from_ground(4), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
+				bricks_arr.push_back(brick);
+			}
 		}
 		brick = Brick(far_from_start(9 + 5), high_from_ground(4 + 3), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
 
@@ -126,7 +132,7 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 5; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + 6 + i), high_from_ground(7), { "resources/image/object/block1/brown_brick.bmp", "resources/image/object/block1/brick_break.bmp" });
 			if (i <= 2)
-				brick.is_fall = true;
+				brick.is_fall = 1;
 			bricks_arr.push_back(brick);
 		}
 
@@ -155,12 +161,14 @@ void CGameStateRun::MapSetting(){
 		currentGroundBlock += 11;
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); 
-			if (i >= 4 && i <= 8)
+			if (i >= 4 && i <= 8) {
 				brick.foot_touch_fall = true;
+				brick.is_fall = 2;
+			}
 			bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); 
 			if (i >= 4 && i <= 8)
-				brick.foot_touch_fall = true;
+				brick.is_fall = 2;
 			bricks_arr.push_back(brick);
 		}
 

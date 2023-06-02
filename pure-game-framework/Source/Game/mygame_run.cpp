@@ -100,7 +100,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 // CMovingBitmap game_over;
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp", "resources/image/player/player_blank_image.bmp" };
+	vector<string> player_image = { "resources/image/player/player_1.bmp" , "resources/image/player/player_2.bmp" ,"resources/image/player/player_1_flip.bmp" , "resources/image/player/player_2_flip.bmp", "resources/image/player/player_jump.bmp", "resources/image/player/player_jump_flip.bmp", "resources/image/player/player_blank_image.bmp","resources/image/enemy/muscle_man.bmp","resources/image/enemy/muscle_man_flip.bmp" };
 	vector<string> coin_image = { "resources/animation/object/coin/coin1.bmp", "resources/animation/object/coin/coin2.bmp",
 								"resources/animation/object/coin/coin3.bmp", "resources/animation/object/coin/coin4.bmp", 
 								"resources/animation/object/coin/coin5.bmp", "resources/animation/object/coin/coin6.bmp", 
@@ -226,4 +226,5 @@ void CGameStateRun::OnShow()
 
 	if(!player.isDead)
 		player.coll.ShowBitmap();
+
 }
