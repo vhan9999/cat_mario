@@ -65,7 +65,7 @@ void CGameStateRun::Touching() {
 				player.isDead = true;
 			}
 		}
-		else if (i.falling) {
+		if (i.falling) {
 			if (inRange(PC.GetTop() + PC.GetHeight() + 1, BC.GetTop() - 6, BC.GetTop() + (BC.GetHeight() / 2)) && PC.GetLeft() + 2 < BC.GetLeft() + BC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > BC.GetLeft()) {
 				player.jumpSpeed = i.speed_y;
 				player.jumpBonusFrame = 0;
@@ -157,6 +157,7 @@ void CGameStateRun::Touching() {
 					return;
 				}
 				if (i.foot_touch_fall) {
+
 					for (auto &j : bricks_arr) {
 						if (j.is_fall == i.is_fall)
 							j.falling = true;
