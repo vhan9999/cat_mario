@@ -11,7 +11,7 @@ void Player::load_voice() {
 	pipe_interact_audio->Load(4, "resources/audio/interact_audio/dokan.wav");
 	player_finish_audio->Load(5, "resources/audio/map_song/goal.wav");
 	dungeon_audio->Load(6, "resources/audio/map_song/dungeon.wav");
-	// player_break_brick->Load(7, "resources/audio/interact_audio/brockbreak.wav");
+	player_powerup->Load(7, "resources/audio/player_audio/powerup.wav");
 }
 
 void Player::move() {

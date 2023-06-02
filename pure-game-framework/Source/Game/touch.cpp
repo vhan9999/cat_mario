@@ -339,6 +339,7 @@ void CGameStateRun::Touching() {
 				enemy.coll.SetFrameIndexOfBitmap(1);
 			}
 			if (enemy.big_mushroom) {
+				player.player_powerup->Play(7, false);
 				enemy.is_dead = true;
 				if (PC.GetFrameIndexOfBitmap() == 0 || PC.GetFrameIndexOfBitmap() == 1 || PC.GetFrameIndexOfBitmap() == 3) {
 					PC.SetFrameIndexOfBitmap(7);
