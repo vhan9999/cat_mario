@@ -431,6 +431,9 @@ void CGameStateRun::Touching() {
 				}
 				//foot touch
 				else if (inRange(EC.GetTop() + EC.GetHeight() + 1, obj_top, obj_mid_y) && EC.GetLeft() + 2 < obj_right && EC.GetLeft() + EC.GetWidth() - 2 > obj_left) {
+					if (i.coll.GetImageFileName() == "resources/image/object/block1/brick_break.bmp" && i.coll.GetFrameIndexOfBitmap() == 1) {
+						continue;
+					}
 					j.speed_y = 0;
 					EC.SetTopLeft(EC.GetLeft(), BC.GetTop() - EC.GetHeight());
 				}
