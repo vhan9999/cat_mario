@@ -213,6 +213,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						if (player.moveSpeed > -10 && current_map == 1) { 
+							player.moveSpeed = -10;
+						}
 						i.coll.SetFrameIndexOfBitmap(1);
 						if (current_map == 1) { player.shift_amount = 3600; }
 						else if (current_map == 3) { player.shift_amount = 3157; }
@@ -247,6 +250,9 @@ void CGameStateRun::Touching() {
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						if (player.moveSpeed < 10 && current_map == 1) { 
+							player.moveSpeed = 10;
+						}
 						i.coll.SetFrameIndexOfBitmap(1);
 						if (current_map == 1) { player.shift_amount = 3600; }
 						else if (current_map == 3) { player.shift_amount = 3157; }
