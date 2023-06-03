@@ -126,14 +126,18 @@ void CGameStateRun::Touching() {
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
-					i.coll.SetFrameIndexOfBitmap(1);
-					// change checkpoint 
-					if(current_map == 1){ player.shift_amount = 3600; } 
-					else if (current_map == 3) { player.shift_amount = 3157; }
-					player.reach_checkpoint = true;
-					player.current_checkpoint_x = 120;
-					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
-					return;
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (current_map == 1) { player.shift_amount = 3600; }
+						else if (current_map == 3) { player.shift_amount = 3157; }
+						player.reach_checkpoint = true;
+						player.current_checkpoint_x = 120;
+						player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
 				}
 				// brick4 trap
 				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
@@ -172,14 +176,18 @@ void CGameStateRun::Touching() {
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
-					i.coll.SetFrameIndexOfBitmap(1);
-					// change checkpoint 
-					if (current_map == 1) { player.shift_amount = 3500; }
-					else if (current_map == 3) { player.shift_amount = 3157; }
-					player.reach_checkpoint = true;
-					player.current_checkpoint_x = 120;
-					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
-					return;
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (current_map == 1) { player.shift_amount = 3600; }
+						else if (current_map == 3) { player.shift_amount = 3157; }
+						player.reach_checkpoint = true;
+						player.current_checkpoint_x = 120;
+						player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
 				}
 				// brick4 trap
 				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
@@ -204,14 +212,18 @@ void CGameStateRun::Touching() {
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
-					i.coll.SetFrameIndexOfBitmap(1);
-					// change checkpoint 
-					if (current_map == 1) { player.shift_amount = 3600; }
-					else if (current_map == 3) { player.shift_amount = 3157; }
-					player.reach_checkpoint = true;
-					player.current_checkpoint_x = 120;
-					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
-					return;
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (current_map == 1) { player.shift_amount = 3600; }
+						else if (current_map == 3) { player.shift_amount = 3157; }
+						player.reach_checkpoint = true;
+						player.current_checkpoint_x = 120;
+						player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
 				}
 				// brick4 trap
 				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
@@ -234,14 +246,18 @@ void CGameStateRun::Touching() {
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
-					i.coll.SetFrameIndexOfBitmap(1);
-					// change checkpoint 
-					if (current_map == 1) { player.shift_amount = 3600; }
-					else if (current_map == 3) { player.shift_amount = 3157; }
-					player.reach_checkpoint = true;
-					player.current_checkpoint_x = 120;
-					player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
-					return;
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (current_map == 1) { player.shift_amount = 3600; }
+						else if (current_map == 3) { player.shift_amount = 3157; }
+						player.reach_checkpoint = true;
+						player.current_checkpoint_x = 120;
+						player.current_checkpoint_y = groundY_up - player.coll.GetHeight();
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
 				}
 				// brick4 trap
 				if (i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") {
