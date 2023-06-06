@@ -263,7 +263,9 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 2; i++) { brick = Brick(far_from_start(currentGroundBlock+1), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
 		// brick trap
 		brick = Brick(far_from_start(currentGroundBlock + 1)-10, high_from_ground(3)-10, { "resources/image/object/block1/green_brick4_trap1.bmp", "resources/image/object/block1/green_brick4_trap2.bmp" }); bricks_arr.push_back(brick);
-		
+		// invisible 
+		brick = Brick(far_from_start(currentGroundBlock + 2), high_from_ground(4), { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/green_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
+
 		for (int i = 0; i < 4; i++) { brick = Brick(far_from_start(currentGroundBlock + 3), high_from_ground(i + 1), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);}
 
 		for (int i = 0; i < 4; i++) {
@@ -289,7 +291,8 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + 9+3 + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + 9+3 + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
-		
+		brick = Brick(far_from_start(currentGroundBlock + 15), high_from_ground(3), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/green_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
+
 		/* phase 4 */
 		currentGroundBlock += 18;
 		env = Environment(far_from_start(currentGroundBlock), 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
@@ -303,6 +306,7 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + 8 + i), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + 8 + i), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
+
 		if (player.reach_checkpoint == false) {
 			brick = Brick(far_from_start(currentGroundBlock + 9), high_from_ground(0) - checkpoint_flag_height, { "resources/image/object/environment/checkpoint_reached.bmp", "resources/image/object/environment/blank.bmp" }); bricks_arr.push_back(brick);
 		}

@@ -84,7 +84,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	if (current_map != 2) { 
 		shiftMapImage();
 	}
-
+	
 	for (auto &i : enemys_arr) {
 		i.emove();
 	}
@@ -116,8 +116,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	
 	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
 	player.load_voice();
-
-	
 	// set curent checkpoint
 	player.current_checkpoint_x = 120;
 	player.current_checkpoint_y = groundY_up - 68;
@@ -126,6 +124,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	coin_animation.LoadBitmapByString(coin_image, RGB(163, 73, 164));
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 	pipe_hor_animation.LoadBitmapByString(interact_hor_pipe_image, RGB(255, 242, 0));
+	
+	lifes = 2;
 
 	MapSetting();// set map
 	
@@ -202,9 +202,10 @@ void CGameStateRun::OnShow()
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
 
+	/*
 	CDC *pDC3 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC3, 0, 230, "moveSpeed : " + std::to_string(player.moveSpeed));
+	CTextDraw::Print(pDC3, 0, 230, "life : " + std::to_string(lifes));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC2 = CDDraw::GetBackCDC();
@@ -212,7 +213,6 @@ void CGameStateRun::OnShow()
 	CTextDraw::Print(pDC2, 0, 60, "jumpSpeed : " + std::to_string(player.jumpSpeed));
 	CDDraw::ReleaseBackCDC();
 
-	/*
 	CDC *pDC0 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC0, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC0, 0, 190, "game end : " + std::to_string(gameEnd));

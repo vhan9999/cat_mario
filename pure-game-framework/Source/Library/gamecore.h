@@ -24,6 +24,7 @@ using namespace std;
 // 備註：這裡使用macro以便保留檔案名稱及行號，利於debug。
 /////////////////////////////////////////////////////////////////////////////
 
+
 #define GAME_ASSERT(boolexp,str)											\
 		if (!(boolexp)) {													\
 			int id;															\
@@ -145,10 +146,12 @@ namespace game_framework {
 		virtual void OnMouseMove(UINT nFlags, CPoint point) {}  // 處理滑鼠的動作 
 		virtual void OnRButtonDown(UINT nFlags, CPoint point) {}// 處理滑鼠的動作
 		virtual void OnRButtonUp(UINT nFlags, CPoint point) {}	// 處理滑鼠的動作
+
 	protected:
 		void GotoGameState(int state);							// 跳躍至指定的state
-		void ShowInitProgress(int percent, string message);						// 顯示初始化的進度
-																				//
+		void ShowInitProgress(int percent, string message);						// 顯示初始化的進度									
+
+		//
 		// virtual functions, 由繼承者提供implementation
 		//
 		virtual void OnMove() {}								// 移動這個狀態的遊戲元素

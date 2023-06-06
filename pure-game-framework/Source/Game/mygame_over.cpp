@@ -28,13 +28,12 @@ void CGameStateOver::OnMove()
 
 void CGameStateOver::OnBeginState()
 {
-	// game_over_audio->Play(2, false);
 	Sleep(1500);
+	lifes -= 1;
 	game_life.LoadBitmapByString({ "resources/image/logo/game_over1.bmp" });
 	game_life.SetFrameIndexOfBitmap(0);
 	game_life.SetTopLeft(0, 0);
 	dead_frame = 0;
-	lifes--;
 	Sleep(1500);
 }
 
@@ -49,5 +48,4 @@ void CGameStateOver::OnShow()
 	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
 	CTextDraw::Print(pDC, 500, 400, std::to_string(lifes));
 	CDDraw::ReleaseBackCDC();
-
 }
