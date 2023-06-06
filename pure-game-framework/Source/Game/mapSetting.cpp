@@ -456,7 +456,12 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(currentGroundBlock + i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
-		for (int i = 0; i < 7; i++) { brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick); }
+
+		Enemy flag_trap = Enemy(far_from_start(currentGroundBlock + 5), high_from_ground(1) - 560, { "resources/image/object/block2/flag_trap.bmp", "resources/image/object/block2/flag_trap.bmp" }); flag_trap.step_enemy_jump = true; enemys_arr.push_back(flag_trap);
+		for (int i = 0; i < 7; i++) { 
+			brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick); 
+		}
+		
 		brick = Brick(far_from_start(currentGroundBlock + 12)+20, groundY_up-560-60, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock+12), groundY_up-60, { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 
