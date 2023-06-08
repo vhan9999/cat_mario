@@ -191,6 +191,13 @@ void CGameStateRun::EventCtrl() {
 	}		
 	// player hit the ending flag
 	if (player.isFinish == true) {
+		if (current_map == 4) {
+			for (auto &enemy : enemys_arr) {
+				if ((enemy.coll.GetImageFileName() == "resources/image/object/block2/flag_trap.bmp") && (enemy.speed_x == 0)) {
+					enemy.speed_x = 4;
+				}
+			}
+		}
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
 		player.jumpSpeed = 5;

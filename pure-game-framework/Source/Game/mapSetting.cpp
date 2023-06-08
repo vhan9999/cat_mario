@@ -375,6 +375,7 @@ void CGameStateRun::MapSetting(){
 		}
 		for (int i = 0; i < 3; i++) { brick = Brick(far_from_start(currentGroundBlock + 4 + i), high_from_ground(1), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(3), { "resources/image/object/block1/question_block.bmp",  "resources/image/object/block1/invisible_brick.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock + 11), groundY_up - pipeline_mid_height + 5, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
 
 		/* phase 8 */

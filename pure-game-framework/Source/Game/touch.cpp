@@ -395,7 +395,7 @@ void CGameStateRun::Touching() {
 				}
 				else if (enemy.step_enemy_jump) {
 					if (enemy.coll.GetImageFileName() == "resources/image/object/block2/flag_trap.bmp") {
-						enemy.speed_x = 5;
+						enemy.speed_x = 4;
 					}
 					player.jumpSpeed = -19;
 				}
@@ -510,9 +510,7 @@ void CGameStateRun::Touching() {
 				}
 				
 			}
-			
 		}
 	}
-	
 }
 
