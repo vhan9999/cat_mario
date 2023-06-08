@@ -100,6 +100,7 @@ namespace game_framework {
 		int groundY_up = 776;
 		int groundX_down = 0;
 		int groundY_down = 836;
+		bool cheat_mode = false;
 
 		// animation
 		CMovingBitmap coin_animation;
@@ -120,7 +121,7 @@ namespace game_framework {
 		Player player;
 		CAudio *field_music = CAudio::Instance();
 
-		int current_map = 4;
+		int current_map = 3;
 
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array

@@ -146,6 +146,14 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	if (nChar == VK_DOWN) {
 		player.keyDown = true;
 	}
+	if (nChar == 0X43) {
+		if (cheat_mode == true) {
+			cheat_mode = false;
+		}
+		else {
+			cheat_mode = true;
+		}
+	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -203,11 +211,14 @@ void CGameStateRun::OnShow()
 	}
 
 
-	CDC *pDC2 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC2, 0, 60, "distance : " + std::to_string(player.distance_count));
-	CDDraw::ReleaseBackCDC();
+	if (cheat_mode == true) {
+		CDC *pDC2 = CDDraw::GetBackCDC();
+		CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
+		CTextDraw::Print(pDC2, 0, 60, "cheat mode on");
+		CDDraw::ReleaseBackCDC();
+	}
 	/*
+
 	CDC *pDC3 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC3, 0, 230, "on air : " + std::to_string(player.player_on_air));

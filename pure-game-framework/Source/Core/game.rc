@@ -159,7 +159,7 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 340, 60
+IDD_ABOUTBOX DIALOGEX 0, 0, 340, 340
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About Cat Mario"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
@@ -167,7 +167,14 @@ BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
     LTEXT           "Cat Mario",IDC_STATIC,39,10,300,8,SS_NOPREFIX
 	LTEXT           "Syobon Action(Cat Mario) released in February 2007 by Chiku.", IDC_STATIC, 39, 23, 300, 8
-    LTEXT           "Copyright (C) 2007-2008",IDC_STATIC,39,36,119,8
+    LTEXT           "------------------------------------------------------------", IDC_STATIC, 39, 36, 300, 8
+    LTEXT           "***HOW TO PLAY***",IDC_STATIC,39,49,119,8
+    LTEXT           "* Move left = press left arrow key",IDC_STATIC,44,62,119,8
+    LTEXT           "* Move right = press right arrow key",IDC_STATIC,44,75,119,8
+    LTEXT           "* Jump = press up arrow key",IDC_STATIC,44,88,119,8
+    LTEXT           "* Interact pipe = press down arrow key",IDC_STATIC,44,101,119,8
+    LTEXT           "* Cheat mode = press C or c",IDC_STATIC,44,114,119,8
+    LTEXT           "------------------------------------------------------------", IDC_STATIC, 39, 127, 300, 8
 END
 
 
