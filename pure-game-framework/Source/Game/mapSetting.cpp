@@ -198,9 +198,13 @@ void CGameStateRun::MapSetting(){
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 		}
+
+		brick = Brick(far_from_start(6), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big"; bricks_arr.push_back(brick);
 		env = Environment(far_from_start(1), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
+		
 		brick = Brick(far_from_start(12)-10, groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(13), high_from_ground(5), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big"; bricks_arr.push_back(brick);
 	}
 	// map2 dungeon
 	else if (current_map == 3) {
@@ -377,7 +381,7 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock + 5), high_from_ground(3), { "resources/image/object/block1/question_block.bmp",  "resources/image/object/block1/invisible_brick.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock + 11), groundY_up - pipeline_mid_height + 5, { "resources/image/object/block2/pipeline_mid.bmp" }); bricks_arr.push_back(brick);
-
+		
 		/* phase 8 */
 			// up
 		currentGroundBlock += 15;

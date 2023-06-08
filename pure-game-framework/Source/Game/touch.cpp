@@ -108,7 +108,7 @@ void CGameStateRun::Touching() {
 					}
 					else if (i.item.compare("") != 0) {
 						if (i.item.compare("red_mushroom_big") == 0) {
-							Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
+							Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
 							enemys_arr.push_back(mushroom);
 						}
 					}
@@ -195,6 +195,17 @@ void CGameStateRun::Touching() {
 					player.isDead = true;
 					return;
 				}
+				// question brick
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/question_block.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/invisible_brick.bmp")) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						i.invisible = true;
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
+				}
 				player.jumpSpeed = 0;
 				player.jumpBonusFrame = 0;
 				PC.SetTopLeft(PC.GetLeft(), obj_top - PC.GetHeight());
@@ -238,6 +249,17 @@ void CGameStateRun::Touching() {
 					i.coll.SetFrameIndexOfBitmap(1);
 					player.isDead = true;
 					return;
+				}
+				// question brick
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/question_block.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/invisible_brick.bmp")) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						i.invisible = true;
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
 				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_right, PC.GetTop());
@@ -291,6 +313,17 @@ void CGameStateRun::Touching() {
 					pipe_hor_animation_flag = true;
 					isDanger = i.is_danger;
 					return;
+				}
+				// question brick
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/question_block.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/invisible_brick.bmp")) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						i.invisible = true;
+						return;
+					}
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						return;
+					}
 				}
 				player.moveSpeed = 0;
 				PC.SetTopLeft(obj_left - PC.GetWidth(), PC.GetTop());
@@ -500,6 +533,7 @@ void CGameStateRun::Touching() {
 						enemy.coll.SetFrameIndexOfBitmap(1);
 					}
 					enemys_arr.push_back(enemy);
+					i.is_dead = true;
 					j.is_dead = true;
 				}
 
