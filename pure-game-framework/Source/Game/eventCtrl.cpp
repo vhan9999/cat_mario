@@ -133,9 +133,10 @@ void CGameStateRun::EventCtrl() {
 				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 			}
-			brick = Brick(startBlock + 240, 776 - (60 * 1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 240+60, 776 - (60 * 1), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 			// endpoint flag
-			brick = Brick(startBlock + 240 + 20, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 240 + 20 + 60, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag.bmp", "resources/image/object/environment/end_point_flag_blank.bmp" }); bricks_arr.push_back(brick);
+			env = Environment(startBlock + 240 + 20 + 60, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag_env.bmp" }); environment_arr.push_back(env);
 
 			/* phase 11 */
 			startBlock += 420;
@@ -143,8 +144,8 @@ void CGameStateRun::EventCtrl() {
 				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 			}
-			env = Environment(startBlock - 120, groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
-			env = Environment(startBlock + 120, groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
+			env = Environment(startBlock - 60, groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
+			env = Environment(startBlock + 180, groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
 			event_list["map7-10"] = true;
 		}
 		if (player.distance_count >= 4800 && player.distance_count <= 4889 && !event_list["two_normal_2"]) {
@@ -168,8 +169,8 @@ void CGameStateRun::EventCtrl() {
 			Enemy yellow1(1000, 50, { {"resources/image/enemy/yellow_comet_flip.bmp"} }); yellow1.steel = false; yellow1.able_touch = false; yellow1.speed_x = -30; yellow1.step_enemy_player_dead = true; enemys_arr.push_back(yellow1);
 			event_list["yellow"] = true;
 		}
-		if (player.distance_count >= 6900 && player.distance_count <= 7000 && !event_list["down_seal_2"]) {
-			Enemy down_seal_2(600, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 17; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
+		if (player.distance_count >= 7011 && player.distance_count <= 7082 && !event_list["down_seal_2"]) {
+			Enemy down_seal_2(570, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 17; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
 			event_list["down_seal_2"] = true;
 		}
 	}
@@ -201,15 +202,16 @@ void CGameStateRun::EventCtrl() {
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
 		player.jumpSpeed = 5;
+
 		if (player.player_on_air == false) {
 			player.coll.SetFrameIndexOfBitmap(0);
-			player.coll.SetTopLeft(player.coll.GetLeft()+90, groundY_up-player.coll.GetHeight());
-			player.moveSpeed = 2;
+			player.jumpSpeed = 0;
+			player.moveSpeed = 3;
 			if (player.isDead == true) {
 				player.moveSpeed = 0;
 				player.player_finish_audio->Stop(5);
 			}
-			if(player.distance_count >= player.finish_point-2){
+			if(player.distance_count >= player.finish_point-3){
 				player.coll.SetFrameIndexOfBitmap(6);
 			}
 			if (player.distance_count >= player.finish_point) { // player meet end point

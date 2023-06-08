@@ -202,15 +202,15 @@ void CGameStateRun::OnShow()
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
 
-	/*
-	CDC *pDC3 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC3, 0, 230, "life : " + std::to_string(lifes));
-	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC2 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC2, 0, 60, "jumpSpeed : " + std::to_string(player.jumpSpeed));
+	CTextDraw::Print(pDC2, 0, 60, "distance : " + std::to_string(player.distance_count));
+	CDDraw::ReleaseBackCDC();
+	/*
+	CDC *pDC3 = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
+	CTextDraw::Print(pDC3, 0, 230, "on air : " + std::to_string(player.player_on_air));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC0 = CDDraw::GetBackCDC();

@@ -214,17 +214,22 @@ void CGameStateRun::Touching() {
 			}
 			//left touch
 			else if (inRange(PC.GetLeft(), obj_mid_x, obj_right) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
-				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
-					if (player.isDead == true) {
-						player.moveSpeed = 0;
-						player.player_finish_audio->Stop(5);
+				// end point flag
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag_blank.bmp") {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (player.isDead == true) {
+							player.moveSpeed = 0;
+							player.player_finish_audio->Stop(5);
+						}
+						player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
+						player.jumpSpeed = 0;
+						animation_flag = true;
+						player.isFinish = true;
+						i.invisible = true;
+						return;
 					}
-					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
-					player.jumpSpeed = 0;
-					animation_flag = true;
-					player.isFinish = true;
-
-					return;
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) { return; }
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
@@ -267,16 +272,22 @@ void CGameStateRun::Touching() {
 			}
 			//right touch
 			else if (inRange(PC.GetLeft() + PC.GetWidth() + 1, obj_left, obj_mid_x) && PC.GetTop() <= obj_bottom && PC.GetTop() + PC.GetHeight() - 5 >= obj_top) {
-				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp") {
-					if (player.isDead == true) {
-						player.moveSpeed = 0;
-						player.player_finish_audio->Stop(5);
+				// end point flag
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag_blank.bmp") {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (player.isDead == true) {
+							player.moveSpeed = 0;
+							player.player_finish_audio->Stop(5);
+						}
+						player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
+						player.jumpSpeed = 0;
+						animation_flag = true;
+						player.isFinish = true;
+						i.invisible = true;
+						return;
 					}
-					player.coll.SetTopLeft(i.coll.GetLeft() - player.coll.GetWidth(), i.coll.GetTop());
-					player.jumpSpeed = 0;
-					animation_flag = true;
-					player.isFinish = true;
-					return;
+					else if (i.coll.GetFrameIndexOfBitmap() == 1) { return; }
 				}
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
@@ -428,7 +439,7 @@ void CGameStateRun::Touching() {
 				}
 				else if (enemy.step_enemy_jump) {
 					if (enemy.coll.GetImageFileName() == "resources/image/object/block2/flag_trap.bmp") {
-						enemy.speed_x = 4;
+						enemy.speed_x = 5;
 					}
 					player.jumpSpeed = -19;
 				}

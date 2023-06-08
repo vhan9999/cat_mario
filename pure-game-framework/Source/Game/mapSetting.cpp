@@ -61,7 +61,7 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		player.finish_point = 7200-90;
+		player.finish_point = 7266;
 		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} ,{"pipe_normal",false} , {"cloud_evil1",false} , {"map7-10",false} };
 
 		Enemy normal1 = Enemy(600, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -2; enemys_arr.push_back(normal1);
@@ -430,7 +430,7 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(currentGroundBlock + 14), 600 - (pipeline_big_height * 3), { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
 }
 	else if (current_map == 4) {
-		player.finish_point = 1531-90;
+		player.finish_point = 1531;
 
 		// upper map2
 		int currentGroundBlock = 0; // track how many ground blocks were build
@@ -463,11 +463,14 @@ void CGameStateRun::MapSetting(){
 		}
 
 		Enemy flag_trap = Enemy(far_from_start(currentGroundBlock + 5), high_from_ground(1) - 560, { "resources/image/object/block2/flag_trap.bmp", "resources/image/object/block2/flag_trap.bmp" }); flag_trap.step_enemy_jump = true; enemys_arr.push_back(flag_trap);
-		for (int i = 0; i < 7; i++) { 
+		for (int i = 0; i < 6; i++) { 
 			brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick); 
 		}
 		
-		brick = Brick(far_from_start(currentGroundBlock + 12)+20, groundY_up-560-60, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
+		// end_point_flag
+		brick = Brick(far_from_start(currentGroundBlock + 12)+20, groundY_up-560-60, { "resources/image/object/environment/end_point_flag.bmp", "resources/image/object/environment/end_point_flag_blank.bmp" }); bricks_arr.push_back(brick);
+		env = Environment(far_from_start(currentGroundBlock + 12) + 20, groundY_up - 560 - 60, { "resources/image/object/environment/end_point_flag_env.bmp" }); environment_arr.push_back(env);
+
 		brick = Brick(far_from_start(currentGroundBlock+12), groundY_up-60, { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 
 		// phase 4
