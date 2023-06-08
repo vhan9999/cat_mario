@@ -65,7 +65,7 @@ void CGameStateRun::Touching() {
 				player.isDead = true;
 			}
 		}
-		if (i.falling) {
+		if (i.falling && cheat_mode==false) {
 			if (inRange(PC.GetTop() + PC.GetHeight() + 1, BC.GetTop() - 6, BC.GetTop() + (BC.GetHeight() / 2)) && PC.GetLeft() + 2 < BC.GetLeft() + BC.GetWidth() && PC.GetLeft() + PC.GetWidth() - 2 > BC.GetLeft()) {
 				player.jumpSpeed = i.speed_y;
 				player.jumpBonusFrame = 0;
@@ -92,7 +92,7 @@ void CGameStateRun::Touching() {
 					i.invisible = false;
 					i.coll.SetFrameIndexOfBitmap(1);
 				}
-				if (i.falling) {
+				if (i.falling && cheat_mode == false) {
 					player.isDead = true;
 				}
 				// item brick
@@ -167,7 +167,7 @@ void CGameStateRun::Touching() {
 					isDanger = i.is_danger;
 					return;
 				}
-				if (i.foot_touch_fall) {
+				if (i.foot_touch_fall && cheat_mode == false) {
 					for (auto &j : bricks_arr) {
 						if (j.is_fall == i.is_fall)
 							j.falling = true;

@@ -175,6 +175,9 @@ BEGIN
     LTEXT           "* Interact pipe = press down arrow key",IDC_STATIC,44,101,119,8
     LTEXT           "* Cheat mode = press C or c",IDC_STATIC,44,114,119,8
     LTEXT           "------------------------------------------------------------", IDC_STATIC, 39, 127, 300, 8
+    LTEXT           "***CHEAT MODE***",IDC_STATIC,39,140,300,8
+    LTEXT           "-> cheat mode allow us to be immortal, which means the player able to hit all enemies and traps",IDC_STATIC,39,153,300,8
+    LTEXT           "with no dead.",IDC_STATIC,44,166,300,8
 END
 
 
