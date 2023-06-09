@@ -96,22 +96,42 @@ void CGameStateRun::Touching() {
 					player.isDead = true;
 				}
 				// item brick
-				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && i.coll.GetFrameIndexOfBitmap() == 0) {
-					i.coll.SetFrameIndexOfBitmap(1);
-					if (i.have_coin == true) {
-						player.coin_item_brick_audio->Play(3, false);
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.coll.GetFrameSizeOfBitmap() == 2)) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+						if (i.have_coin == true) {
+							player.coin_item_brick_audio->Play(3, false);
 
-						// enable coin animation
-						coin_animation.SetFrameIndexOfBitmap(0);
-						coin_animation.SetTopLeft(i.coll.GetLeft(), i.coll.GetTop() - 168);
-						animation_flag = true;
-						coin_animation_flag = true;
-					}
-					else if (i.item.compare("") != 0) {
-						if (i.item.compare("red_mushroom_big") == 0) {
-							Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
-							enemys_arr.push_back(mushroom);
+							// enable coin animation
+							coin_animation.SetFrameIndexOfBitmap(0);
+							coin_animation.SetTopLeft(i.coll.GetLeft(), i.coll.GetTop() - 168);
+							animation_flag = true;
+							coin_animation_flag = true;
 						}
+						else if (i.item.compare("") != 0) {
+							if (i.item.compare("red_mushroom_big") == 0) {
+								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
+								enemys_arr.push_back(mushroom);
+							}
+						}
+					}
+				}
+				// invisible item block 
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/invisible_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/item_brick.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/brown_brick2.bmp") && (i.coll.GetFrameSizeOfBitmap() == 3)) {
+					if (i.coll.GetFrameIndexOfBitmap() == 0) {
+						i.coll.SetFrameIndexOfBitmap(1);
+					}
+					if (i.coll.GetFrameIndexOfBitmap() == 1) {
+						if (i.item.compare("") != 0) {
+							if (i.item.compare("red_mushroom_big") == 0) {
+								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
+								enemys_arr.push_back(mushroom);
+							}
+						}
+						i.coll.SetFrameIndexOfBitmap(2);
+					}
+					if (i.coll.GetFrameIndexOfBitmap() == 2) {
+						i.invisible = false;
 					}
 				}
 				// head touch break
@@ -142,6 +162,12 @@ void CGameStateRun::Touching() {
 				}
 				// brick4 trap
 				if ((i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/green_brick4_trap2.bmp") && (cheat_mode == false)) {
+					i.coll.SetFrameIndexOfBitmap(1);
+					player.isDead = true;
+					return;
+				}
+				// item brick trap
+				if ((i.coll.GetImageFileName() == "resources/image/object/block1/item_brick_trap1.bmp" || i.coll.GetImageFileName() == "resources/image/object/block1/item_brick_trap2.bmp") && (cheat_mode == false)) {
 					i.coll.SetFrameIndexOfBitmap(1);
 					player.isDead = true;
 					return;

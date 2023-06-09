@@ -138,44 +138,46 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (nChar == VK_LEFT) {
-		player.keyLeft = true;
-		player.keyRight = false;
-	}
-	if (nChar == VK_RIGHT) {
-		player.keyRight = true;
-		player.keyLeft = false;
-	}
-	if (nChar == VK_UP) {
-		player.keyUp = true;
-	}
-	if (nChar == VK_DOWN) {
-		player.keyDown = true;
-	}
-	if (nChar == 0X43) {
-		if (cheat_mode == true) {
-			cheat_mode = false;
+	if (player.isFinish == false) {
+		if (nChar == VK_LEFT) {
+			player.keyLeft = true;
+			player.keyRight = false;
 		}
-		else {
-			cheat_mode = true;
+		if (nChar == VK_RIGHT) {
+			player.keyRight = true;
+			player.keyLeft = false;
+		}
+		if (nChar == VK_UP) {
+			player.keyUp = true;
+		}
+		if (nChar == VK_DOWN) {
+			player.keyDown = true;
+		}
+		if (nChar == 0X43) {
+			if (cheat_mode == true) {
+				cheat_mode = false;
+			}
+			else {
+				cheat_mode = true;
+			}
 		}
 	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == VK_RIGHT) {
-		player.keyRight = false;
-	}
-	if (nChar == VK_LEFT) {
-		player.keyLeft = false;
-	}
-	if (nChar == VK_UP) {
-		player.keyUp = false;
-	}
-	if (nChar == VK_DOWN) {
-		player.keyDown = false;
-	}
+		if (nChar == VK_RIGHT) {
+			player.keyRight = false;
+		}
+		if (nChar == VK_LEFT) {
+			player.keyLeft = false;
+		}
+		if (nChar == VK_UP) {
+			player.keyUp = false;
+		}
+		if (nChar == VK_DOWN) {
+			player.keyDown = false;
+		}
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -223,11 +225,11 @@ void CGameStateRun::OnShow()
 		CTextDraw::Print(pDC2, 0, 60, "cheat mode on");
 		CDDraw::ReleaseBackCDC();
 	}
-	/*
 
+	/*
 	CDC *pDC3 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC3, 0, 230, "on air : " + std::to_string(player.player_on_air));
+	CTextDraw::Print(pDC3, 0, 230, "isFinish : " + std::to_string(player.isFinish));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC0 = CDDraw::GetBackCDC();
