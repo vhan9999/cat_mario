@@ -14,6 +14,8 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
+int CGameState::lifes = 2;
+
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
 }
@@ -45,6 +47,10 @@ void CGameStateRun::OnBeginState()
 			player.distance_count = 0;
 			player.reach_checkpoint = false;
 		}
+	}
+
+	if (player.isEnd == true) {
+		lifes = 2;
 	}
 	player.resetValue();
 
@@ -125,7 +131,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 	pipe_hor_animation.LoadBitmapByString(interact_hor_pipe_image, RGB(255, 242, 0));
 	
-	lifes = 2;
+	
 
 	MapSetting();// set map
 	

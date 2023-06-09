@@ -49,10 +49,9 @@ namespace game_framework {
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2
 	};
-	static int lifes = 2;
-
-	class EventCtrl;
-	class mapSetting;
+	//static int lifes = 2;
+	//class EventCtrl;
+	//class mapSetting;
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
 	// 每個Member function的Implementation都要弄懂
@@ -121,7 +120,7 @@ namespace game_framework {
 		Player player;
 		CAudio *field_music = CAudio::Instance();
 
-		int current_map = 3;
+		int current_map = 4;
 
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array
