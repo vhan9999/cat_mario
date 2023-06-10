@@ -413,11 +413,21 @@ void CGameStateRun::MapSetting(){
 			// up
 		for (int i = 0; i < 8; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down
-		for (int i = 0; i < 8; i++) {
+
+		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 8; j++) {
-				brick = Brick(far_from_start(currentGroundBlock+j), 600+(60*i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+				if (j >= 0 && j <= 3) {
+					brick = Brick(far_from_start(currentGroundBlock + j), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" }); 
+					brick.foot_touch_fall = true; brick.is_fall = 4; bricks_arr.push_back(brick);
+				}
+				else { brick = Brick(far_from_start(currentGroundBlock+j), 600+(60*i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);}
 			}
 		}
+		// invisible
+		for (int i = 0; i < 4; i++) {
+			brick = Brick(far_from_start(currentGroundBlock+i), 600 - (60), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/green_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
+		}
+
 		brick = Brick(far_from_start(currentGroundBlock+5), 600 - pipeline_big_height + 5, { "resources/image/object/block2/pipeline_big.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock + 5)+10, 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
 		
