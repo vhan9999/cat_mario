@@ -20,7 +20,6 @@ CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
 
 void CGameStateOver::OnMove()
 {
-
 	dead_frame++;
 	if(dead_frame >= 100)
 		GotoGameState(GAME_STATE_RUN);
