@@ -236,13 +236,13 @@ void CGameStateRun::EventCtrl() {
 			}
 		}
 		if (!event_list["crown_normal_2"] && player.distance_count >= 4517-500 && player.distance_count <= 4517 - 400) {
-			//Enemy enemy = Enemy(950, 350, { "resources/image/enemy/normal_crown.bmp","resources/image/enemy/normal_crown_flip.bmp" }); enemy.step_enemy_player_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
+			Enemy enemy = Enemy(950, 350, { "resources/image/enemy/normal_crown.bmp","resources/image/enemy/normal_crown_flip.bmp" }); enemy.step_enemy_player_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
 			event_list["crown_normal_2"] = true;
 		}
 		if (player.distance_count >= 4840) {
 			player.map3frame++;
 
-			if (player.map3frame > 50) {
+			if ((player.map3frame > 75 && !event_list["boolean_question"]) || (player.map3frame > 10 && event_list["boolean_question"])) {
 				for (auto &i : bricks_arr) {
 					if (i.item == "orange_ball") {
 						int randx = rand() % (4 - (-4) + 1) + (-4);

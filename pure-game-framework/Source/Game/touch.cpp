@@ -7,7 +7,7 @@
 #include "../Library/gamecore.h"
 #include "mygame.h"
 #include "colliders.h"
-#include <string>
+#include "string.h"
 
 using namespace game_framework;
 
@@ -110,7 +110,7 @@ void CGameStateRun::Touching() {
 						}
 						else if (i.item.compare("") != 0) {
 							if (i.item.compare("red_mushroom_big") == 0) {
-								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
+								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3; 
 								enemys_arr.push_back(mushroom);
 							}
 							else if (i.item.compare("purple_mushroom") == 0) {
@@ -234,6 +234,7 @@ void CGameStateRun::Touching() {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
 						i.invisible = true;
+						event_list["boolean_question"] = true;
 						return;
 					}
 					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
@@ -294,6 +295,7 @@ void CGameStateRun::Touching() {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
 						i.invisible = true;
+						event_list["boolean_question"] = true;
 						return;
 					}
 					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
@@ -364,6 +366,7 @@ void CGameStateRun::Touching() {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
 						i.invisible = true;
+						event_list["boolean_question"] = true;
 						return;
 					}
 					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
@@ -576,24 +579,29 @@ void CGameStateRun::Touching() {
 	//enemy&enemy touch
 	for (auto &i : enemys_arr) {
 		for (auto &j : enemys_arr) {
+			if (i.coll.GetImageFileName().compare(j.coll.GetImageFileName()) == 0) {
+				continue;
+			}
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
-				if (i.big_mushroom && !j.big_mushroom) {
+				if ((i.big_mushroom) && (!j.big_mushroom)) {
 					Enemy enemy = Enemy(j.coll.GetLeft(), j.coll.GetTop(), { "resources/image/enemy/big_normal.bmp" , "resources/image/enemy/big_normal_flip.bmp" }); enemy.speed_x = j.speed_x; enemy.speed_y = j.speed_y; enemy.step_enemy_player_dead = true;
 					if (j.coll.GetFrameIndexOfBitmap() != 0) {
 						enemy.coll.SetFrameIndexOfBitmap(1);
 					}
 					enemys_arr.push_back(enemy);
-					i.is_dead = true;
+					i.coll.SetTopLeft(i.coll.GetLeft(), 950);
 					j.is_dead = true;
 				}
 
 			}
-			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
-				if (i.turtle&&!j.turtle) {
+			/*
+			if (CMovingBitmap::IsOverlap(i.coll, j.coll) && (i.turtle==true)) {
+				if ((i.turtle) && (!j.turtle)) {
 					j.is_dead = true;
 				}
 				
 			}
+			*/
 		}
 	}
 }

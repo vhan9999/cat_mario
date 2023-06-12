@@ -213,7 +213,7 @@ void CGameStateRun::MapSetting(){
 	}
 	// map2 dungeon
 	else if (current_map == 3) {
-		event_list = { {"player_dead",false}, {"one_normal",false},{"turtle_and_three_normal",false},{"fly_crown_normal",false},{"jump_big_cat",false},{"jump_back",false},{"jump_big_cat_2",false},{"first_fall",false},{"second_fall",false},{"third_fall",false},{"crown_normal_2",false} };
+		event_list = { {"player_dead",false}, {"one_normal",false},{"turtle_and_three_normal",false},{"fly_crown_normal",false},{"jump_big_cat",false},{"jump_back",false},{"jump_big_cat_2",false},{"first_fall",false},{"second_fall",false},{"third_fall",false},{"crown_normal_2",false}, {"boolean_question", false} };
 	
 		/* phase1 */
 		int currentGroundBlock = 0; // track how many ground blocks were build

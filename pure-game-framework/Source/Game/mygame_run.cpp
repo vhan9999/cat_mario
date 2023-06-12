@@ -241,7 +241,6 @@ void CGameStateRun::OnShow()
 	CTextDraw::Print(pDC1, 0, 140, "current map : " + std::to_string(current_map));
 	CDDraw::ReleaseBackCDC();
 
-*/
 	CDC *pDC2 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC2, 0, 60, "map3_frame: " + std::to_string(player.map3frame));
@@ -251,6 +250,7 @@ void CGameStateRun::OnShow()
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
 	CTextDraw::Print(pDC3, 0, 230, "distance : " + std::to_string(player.distance_count));
 	CDDraw::ReleaseBackCDC();
+	*/
 	
 	if(!player.isDead)
 		player.coll.ShowBitmap();
