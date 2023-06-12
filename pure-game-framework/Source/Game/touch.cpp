@@ -585,6 +585,7 @@ void CGameStateRun::Touching() {
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
 				if ((i.big_mushroom) && (!j.big_mushroom)) {
 					Enemy enemy = Enemy(j.coll.GetLeft(), j.coll.GetTop(), { "resources/image/enemy/big_normal.bmp" , "resources/image/enemy/big_normal_flip.bmp" }); enemy.speed_x = j.speed_x; enemy.speed_y = j.speed_y; enemy.step_enemy_player_dead = true;
+					player.player_powerup->Play(7, false);
 					if (j.coll.GetFrameIndexOfBitmap() != 0) {
 						enemy.coll.SetFrameIndexOfBitmap(1);
 					}
@@ -594,14 +595,12 @@ void CGameStateRun::Touching() {
 				}
 
 			}
-			/*
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll) && (i.turtle==true)) {
 				if ((i.turtle) && (!j.turtle)) {
 					j.is_dead = true;
 				}
 				
 			}
-			*/
 		}
 	}
 }
