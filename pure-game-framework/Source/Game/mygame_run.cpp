@@ -14,6 +14,8 @@ using namespace game_framework;
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 /////////////////////////////////////////////////////////////////////////////
+int CGameState::lifes = 2;
+
 CGameStateRun::CGameStateRun(CGame *g) : CGameState(g)
 {
 }
@@ -45,6 +47,10 @@ void CGameStateRun::OnBeginState()
 			player.distance_count = 0;
 			player.reach_checkpoint = false;
 		}
+	}
+
+	if (player.isEnd == true) {
+		lifes = 2;
 	}
 	player.resetValue();
 
@@ -79,7 +85,6 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-
 	player.move();
 	if (current_map != 2) { 
 		shiftMapImage();
@@ -125,43 +130,53 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 	pipe_hor_animation.LoadBitmapByString(interact_hor_pipe_image, RGB(255, 242, 0));
 	
-	lifes = 2;
+	
 
 	MapSetting();// set map
 	
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (nChar == VK_LEFT) {
-		player.keyLeft = true;
-		player.keyRight = false;
-	}
-	if (nChar == VK_RIGHT) {
-		player.keyRight = true;
-		player.keyLeft = false;
-	}
-	if (nChar == VK_UP) {
-		player.keyUp = true;
-	}
-	if (nChar == VK_DOWN) {
-		player.keyDown = true;
+	if (player.isFinish == false) {
+		if (nChar == VK_LEFT) {
+			player.keyLeft = true;
+			player.keyRight = false;
+		}
+		if (nChar == VK_RIGHT) {
+			player.keyRight = true;
+			player.keyLeft = false;
+		}
+		if (nChar == VK_UP) {
+			player.keyUp = true;
+		}
+		if (nChar == VK_DOWN) {
+			player.keyDown = true;
+		}
+		if (nChar == 0X43) {
+			if (cheat_mode == true) {
+				cheat_mode = false;
+			}
+			else {
+				cheat_mode = true;
+			}
+		}
 	}
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == VK_RIGHT) {
-		player.keyRight = false;
-	}
-	if (nChar == VK_LEFT) {
-		player.keyLeft = false;
-	}
-	if (nChar == VK_UP) {
-		player.keyUp = false;
-	}
-	if (nChar == VK_DOWN) {
-		player.keyDown = false;
-	}
+		if (nChar == VK_RIGHT) {
+			player.keyRight = false;
+		}
+		if (nChar == VK_LEFT) {
+			player.keyLeft = false;
+		}
+		if (nChar == VK_UP) {
+			player.keyUp = false;
+		}
+		if (nChar == VK_DOWN) {
+			player.keyDown = false;
+		}
 }
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
@@ -202,15 +217,18 @@ void CGameStateRun::OnShow()
 		if (pipe_animation_flag == true) { pipe_animation.ShowBitmap(); }
 	}
 
+
+	if (cheat_mode == true) {
+		CDC *pDC2 = CDDraw::GetBackCDC();
+		CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
+		CTextDraw::Print(pDC2, 0, 60, "cheat mode on");
+		CDDraw::ReleaseBackCDC();
+	}
+
 	/*
 	CDC *pDC3 = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC3, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC3, 0, 230, "life : " + std::to_string(lifes));
-	CDDraw::ReleaseBackCDC();
-
-	CDC *pDC2 = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC2, 30, "Courier New", RGB(255, 0, 0), 20);
-	CTextDraw::Print(pDC2, 0, 60, "jumpSpeed : " + std::to_string(player.jumpSpeed));
+	CTextDraw::Print(pDC3, 0, 230, "distance : " + std::to_string(player.distance_count));
 	CDDraw::ReleaseBackCDC();
 
 	CDC *pDC0 = CDDraw::GetBackCDC();

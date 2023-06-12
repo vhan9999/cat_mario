@@ -116,6 +116,7 @@ namespace game_framework {
 		bool turtle = false;
 		bool cloud = false;
 		bool big_mushroom = false;
+		bool dead_mushroom = false;
 	};
 
 	class Environment : public Collider {

@@ -130,6 +130,7 @@ namespace game_framework {
 
 	class CGameState {
 	public:
+		static int lifes; // test
 		CGameState(CGame *g);
 		void OnDraw();			// Template Method
 		void OnCycle();			// Template Method

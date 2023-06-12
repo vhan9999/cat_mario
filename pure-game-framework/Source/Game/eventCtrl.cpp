@@ -37,7 +37,7 @@ void CGameStateRun::EventCtrl() {
 			Enemy normal4 = Enemy(1300, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal4.step_enemy_enemy_dead = true; normal4.speed_x = -2; enemys_arr.push_back(normal4);
 			Enemy turtle1 = Enemy(1400, 700, { "resources/image/enemy/turtle_open.bmp","resources/image/enemy/turtle_open_flip.bmp","resources/image/enemy/turtle_close.bmp","resources/image/enemy/turtle_close_flip.bmp" }); turtle1.coll.SetFrameIndexOfBitmap(1); turtle1.speed_x = 2; turtle1.turtle = true; enemys_arr.push_back(turtle1);
 			for (auto &i : bricks_arr) {
-				if (i.is_fall == 1) {
+				if (i.is_fall == 1 && cheat_mode == false) {
 					i.falling = true;
 					i.speed_y = 5;
 				}
@@ -133,9 +133,10 @@ void CGameStateRun::EventCtrl() {
 				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 			}
-			brick = Brick(startBlock + 240, 776 - (60 * 1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 240+60, 776 - (60 * 1), { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 			// endpoint flag
-			brick = Brick(startBlock + 240 + 20, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 240 + 20 + 60, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag.bmp", "resources/image/object/environment/end_point_flag_blank.bmp" }); bricks_arr.push_back(brick);
+			env = Environment(startBlock + 240 + 20 + 60, 776 - (60 * 10) - 20, { "resources/image/object/environment/end_point_flag_env.bmp" }); environment_arr.push_back(env);
 
 			/* phase 11 */
 			startBlock += 420;
@@ -143,8 +144,8 @@ void CGameStateRun::EventCtrl() {
 				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
 			}
-			env = Environment(startBlock - 120, groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
-			env = Environment(startBlock + 120, groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
+			env = Environment(startBlock - 60, groundY_up - grass_height, { "resources/image/object/environment/grass.bmp" }); environment_arr.push_back(env);
+			env = Environment(startBlock + 180, groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
 			event_list["map7-10"] = true;
 		}
 		if (player.distance_count >= 4800 && player.distance_count <= 4889 && !event_list["two_normal_2"]) {
@@ -155,7 +156,7 @@ void CGameStateRun::EventCtrl() {
 			event_list["two_normal_2"] = true;
 			event_list["cloud_evil1"] = true;
 		}
-		/*
+		
 		if (player.distance_count >= 6284 && player.distance_count <= 6384 && !event_list["fall_normals"]) {
 			Enemy normal1 = Enemy(530, 0, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -2; enemys_arr.push_back(normal1);
 			Enemy normal2 = Enemy(597, 0, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal2.step_enemy_enemy_dead = true; normal2.speed_x = -2; enemys_arr.push_back(normal2);
@@ -163,13 +164,13 @@ void CGameStateRun::EventCtrl() {
 			Enemy normal4 = Enemy(725, 0, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal4.step_enemy_enemy_dead = true; normal4.speed_x = -2; enemys_arr.push_back(normal4);	
 			event_list["fall_normals"] = true;
 		}
-		*/
+
 		if (player.distance_count >= 6555 && player.distance_count <= 6655 && player.coll.GetTop() <= 200 && !event_list["yellow"]) {
 			Enemy yellow1(1000, 50, { {"resources/image/enemy/yellow_comet_flip.bmp"} }); yellow1.steel = false; yellow1.able_touch = false; yellow1.speed_x = -30; yellow1.step_enemy_player_dead = true; enemys_arr.push_back(yellow1);
 			event_list["yellow"] = true;
 		}
-		if (player.distance_count >= 6900 && player.distance_count <= 7000 && !event_list["down_seal_2"]) {
-			Enemy down_seal_2(600, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 17; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
+		if (player.distance_count >= 7011 && player.distance_count <= 7082 && !event_list["down_seal_2"]) {
+			Enemy down_seal_2(570, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 17; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
 			event_list["down_seal_2"] = true;
 		}
 	}
@@ -183,7 +184,6 @@ void CGameStateRun::EventCtrl() {
 		player.dead_frame++;
 		if (player.dead_frame >= 100) {
 			player.map_audio->Stop(0);
-			lifes -= 1;
 			player.dungeon_audio->Stop(6);
 			player.game_over_audio->Play(2);
 			GotoGameState(GAME_STATE_OVER);
@@ -201,20 +201,22 @@ void CGameStateRun::EventCtrl() {
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
 		player.jumpSpeed = 5;
+
 		if (player.player_on_air == false) {
 			player.coll.SetFrameIndexOfBitmap(0);
-			player.coll.SetTopLeft(player.coll.GetLeft()+90, groundY_up-player.coll.GetHeight());
-			player.moveSpeed = 2;
+			player.jumpSpeed = 0;
+			player.moveSpeed = 3;
 			if (player.isDead == true) {
 				player.moveSpeed = 0;
 				player.player_finish_audio->Stop(5);
 			}
-			if(player.distance_count >= player.finish_point-2){
+			if(player.distance_count >= player.finish_point-3){
 				player.coll.SetFrameIndexOfBitmap(6);
 			}
 			if (player.distance_count >= player.finish_point) { // player meet end point
 				player.moveSpeed = 0;
 				current_map++;
+				lifes++;
 				if (current_map == 5) {
 					current_map = 1;
 				}

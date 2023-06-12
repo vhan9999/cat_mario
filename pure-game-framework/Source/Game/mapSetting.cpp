@@ -61,7 +61,7 @@ int far_from_start(int blockCount) { return 60 * blockCount; }
 
 void CGameStateRun::MapSetting(){
 	if (current_map == 1) {
-		player.finish_point = 7200-90;
+		player.finish_point = 7266;
 		event_list = { {"player_dead",false} , {"up_seal_1",false} , {"down_seal_1",false} , {"two_normal_1",false} , {"two_normal_2",false} , {"three_fall_bricksss",false} , {"down_seal_2",false} , {"yellow",false} , {"fall_normals",false} ,{"pipe_normal",false} , {"cloud_evil1",false} , {"map7-10",false} };
 
 		Enemy normal1 = Enemy(600, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal1.step_enemy_enemy_dead = true; normal1.speed_x = -2; enemys_arr.push_back(normal1);
@@ -197,14 +197,18 @@ void CGameStateRun::MapSetting(){
 		for (int i = 0; i < 17; i++) {
 			brick = Brick(far_from_start(i), groundY_up, { "resources/image/object/block1/brown_brick3.bmp" }); bricks_arr.push_back(brick);
 			brick = Brick(far_from_start(i), groundY_down, { "resources/image/object/block1/brown_brick5.bmp" }); bricks_arr.push_back(brick);
-		}
+		}					
 
-		brick = Brick(far_from_start(6), high_from_ground(4), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big"; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(6), high_from_ground(4), { "resources/image/object/block1/item_brick_trap1.bmp", "resources/image/object/block1/item_brick_trap2.bmp" }); bricks_arr.push_back(brick);
 		env = Environment(far_from_start(1), groundY_up - endpoint_building_height, { "resources/image/object/environment/end_point_building.bmp" }); environment_arr.push_back(env);
 		
 		brick = Brick(far_from_start(12)-10, groundY_up - pipeline_big_hor_height + 10, { "resources/image/object/block2/pipeline_big_hor.bmp" }); brick.is_danger = true; bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
-		brick = Brick(far_from_start(13), high_from_ground(5), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big"; bricks_arr.push_back(brick);
+		
+		brick = Brick(far_from_start(11), high_from_ground(5) + 2, { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true;  bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(13)-10, high_from_ground(5) + 2, { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "purple_mushroom"; brick.invisible = true; bricks_arr.push_back(brick);
+		// restrict mushroom block
+		brick = Brick(far_from_start(16), high_from_ground(5), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/invisible_brick.bmp" }); bricks_arr.push_back(brick);
 	}
 	// map2 dungeon
 	else if (current_map == 3) {
@@ -409,11 +413,21 @@ void CGameStateRun::MapSetting(){
 			// up
 		for (int i = 0; i < 8; i++) { brick = Brick(far_from_start(currentGroundBlock + i), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 			// down
-		for (int i = 0; i < 8; i++) {
+
+		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 8; j++) {
-				brick = Brick(far_from_start(currentGroundBlock+j), 600+(60*i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+				if (j >= 0 && j <= 3) {
+					brick = Brick(far_from_start(currentGroundBlock + j), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" }); 
+					brick.foot_touch_fall = true; brick.is_fall = 4; bricks_arr.push_back(brick);
+				}
+				else { brick = Brick(far_from_start(currentGroundBlock+j), 600+(60*i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);}
 			}
 		}
+		// invisible
+		for (int i = 0; i < 4; i++) {
+			brick = Brick(far_from_start(currentGroundBlock+i), 600 - (60), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/green_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
+		}
+
 		brick = Brick(far_from_start(currentGroundBlock+5), 600 - pipeline_big_height + 5, { "resources/image/object/block2/pipeline_big.bmp" }); bricks_arr.push_back(brick);
 		brick = Brick(far_from_start(currentGroundBlock + 5)+10, 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
 		
@@ -430,7 +444,7 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(currentGroundBlock + 14), 600 - (pipeline_big_height * 3), { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
 }
 	else if (current_map == 4) {
-		player.finish_point = 1531-90;
+		player.finish_point = 1531;
 
 		// upper map2
 		int currentGroundBlock = 0; // track how many ground blocks were build
@@ -463,11 +477,14 @@ void CGameStateRun::MapSetting(){
 		}
 
 		Enemy flag_trap = Enemy(far_from_start(currentGroundBlock + 5), high_from_ground(1) - 560, { "resources/image/object/block2/flag_trap.bmp", "resources/image/object/block2/flag_trap.bmp" }); flag_trap.step_enemy_jump = true; enemys_arr.push_back(flag_trap);
-		for (int i = 0; i < 7; i++) { 
+		for (int i = 0; i < 6; i++) { 
 			brick = Brick(far_from_start(currentGroundBlock + i), high_from_ground(1), { "resources/image/object/block1/brown_brick4.bmp" }); bricks_arr.push_back(brick); 
 		}
 		
-		brick = Brick(far_from_start(currentGroundBlock + 12)+20, groundY_up-560-60, { "resources/image/object/environment/end_point_flag.bmp" }); bricks_arr.push_back(brick);
+		// end_point_flag
+		brick = Brick(far_from_start(currentGroundBlock + 12)+20, groundY_up-560-60, { "resources/image/object/environment/end_point_flag.bmp", "resources/image/object/environment/end_point_flag_blank.bmp" }); bricks_arr.push_back(brick);
+		env = Environment(far_from_start(currentGroundBlock + 12) + 20, groundY_up - 560 - 60, { "resources/image/object/environment/end_point_flag_env.bmp" }); environment_arr.push_back(env);
+
 		brick = Brick(far_from_start(currentGroundBlock+12), groundY_up-60, { "resources/image/object/block1/brown_brick.bmp" }); bricks_arr.push_back(brick);
 
 		// phase 4
