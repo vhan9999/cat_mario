@@ -43,13 +43,13 @@
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
 	// Constants
-	/////////////////////////////////////////////////////////////////////////////
-	static int lifes = 2;
+	///////////////////////////////////////////////////////////////////////////// 
 	enum AUDIO_ID {				// 定義各種音效的編號
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
 		AUDIO_NTUT				// 2
 	};
+	static int lifes = 2;
 	class EventCtrl;
 	class mapSetting;
 	/////////////////////////////////////////////////////////////////////////////
@@ -111,15 +111,15 @@ namespace game_framework {
 		bool pipe_animation_flag = false;
 		bool pipe_hor_animation_flag = false;
 		bool finish_animation_flag = false;
-
+		Player player;
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
-		Player player;
+		
 		CAudio *field_music = CAudio::Instance();
 
-		int current_map = 1;
+		int current_map = 3;
 
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array

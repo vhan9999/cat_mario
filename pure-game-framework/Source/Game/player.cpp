@@ -205,6 +205,7 @@ void Player::resetValue() {
 	moveSpeed = 0;
 	dead_audio_flag = 0;
 	finish_audio_flag = 0;
+	map3frame = 0;
 
 	if (isEnd == true) {
 		shift_amount = 0;

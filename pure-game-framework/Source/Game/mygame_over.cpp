@@ -34,7 +34,7 @@ void CGameStateOver::OnBeginState()
 	game_life.SetFrameIndexOfBitmap(0);
 	game_life.SetTopLeft(0, 0);
 	dead_frame = 0;
-	lifes--;
+	game_framework::lifes--;
 	Sleep(1500);
 }
 
@@ -47,7 +47,7 @@ void CGameStateOver::OnShow()
 	// game over text
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 500, 400, std::to_string(lifes));
+	CTextDraw::Print(pDC, 500, 400, std::to_string(game_framework::lifes));
 	CDDraw::ReleaseBackCDC();
 
 }
