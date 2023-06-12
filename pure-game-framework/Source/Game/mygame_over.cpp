@@ -45,6 +45,6 @@ void CGameStateOver::OnShow()
 	// game over text
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 120, "Courier New", RGB(255, 255, 255), 20);
-	CTextDraw::Print(pDC, 500, 400, std::to_string(lifes));
+	CTextDraw::Print(pDC, 500, 400, std::to_string(game_framework::lifes));
 	CDDraw::ReleaseBackCDC();
 }

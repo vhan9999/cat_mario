@@ -8,11 +8,12 @@
 #include "mygame.h"
 #include "colliders.h"
 #include "string"
-
+#include <stdlib.h>
+#include <time.h>
 using namespace game_framework;
 
-
 void CGameStateRun::EventCtrl() {
+
 	if (current_map == 1) {
 		if (player.distance_count >= 314 && player.distance_count <= 535 && !event_list["pipe_normal"]) {
 			Enemy normal3 = Enemy(1072, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); normal3.step_enemy_enemy_dead = true; normal3.speed_x = -2; enemys_arr.push_back(normal3);
@@ -173,6 +174,87 @@ void CGameStateRun::EventCtrl() {
 			Enemy down_seal_2(570, -100, { {"resources/image/enemy/seal_flip.bmp"} }); down_seal_2.steel = false; down_seal_2.able_touch = false; down_seal_2.speed_y = 17; down_seal_2.step_enemy_player_dead = true; enemys_arr.push_back(down_seal_2);
 			event_list["down_seal_2"] = true;
 		}
+	}
+	else if (current_map == 3) {
+		if (!event_list["one_normal"] && player.distance_count >= 1 && player.distance_count <= 100){
+			Enemy enemy = Enemy(888+512, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); enemy.step_enemy_enemy_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
+			event_list["one_normal"] = true;
+		}
+		if (!event_list["turtle_and_three_normal"] && player.distance_count >= 1156-500 && player.distance_count <= 1156 - 400) {
+			Enemy turtle1 = Enemy(1010, 580, { "resources/image/enemy/turtle_open.bmp","resources/image/enemy/turtle_open_flip.bmp","resources/image/enemy/turtle_close.bmp","resources/image/enemy/turtle_close_flip.bmp" }); turtle1.speed_x = -1; turtle1.turtle = true; enemys_arr.push_back(turtle1);
+			Enemy enemy = Enemy(1010 + 729, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); enemy.step_enemy_enemy_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
+			enemy = Enemy(1010 + 789, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); enemy.step_enemy_enemy_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
+			enemy = Enemy(1010 + 849, 700, { "resources/image/enemy/normal.bmp","resources/image/enemy/normal_flip.bmp" }); enemy.step_enemy_enemy_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
+			event_list["turtle_and_three_normal"] = true;
+		}
+		if (!event_list["fly_crown_normal"] && player.distance_count >= 2180 - 100 && player.distance_count <= 2180+40) {
+			Enemy enemy = Enemy(512+60, 920, { "resources/image/enemy/normal_crown.bmp","resources/image/enemy/normal_crown_flip.bmp" }); enemy.step_enemy_player_dead = true; enemy.speed_x = -2; enemy.speed_y = -28; enemys_arr.push_back(enemy);
+			event_list["fly_crown_normal"] = true;
+		}
+		if (!event_list["jump_big_cat"] && player.distance_count >= 2815 - 160 && player.distance_count <= 2815-60) {
+			Enemy enemy = Enemy(512 + 100, 560, { "resources/image/enemy/cat_man.bmp","resources/image/enemy/cat_man_flip.bmp" }); enemy.step_enemy_jump = true; enemy.speed_x = -2; enemy.speed_y = -16; enemys_arr.push_back(enemy);
+			event_list["jump_big_cat"] = true;
+		}
+		if (!event_list["jump_back"] && event_list["jump_big_cat"] && player.coll.GetLeft() > 0 &&player.coll.GetLeft() < 300) {
+			event_list["jump_back"] = true;
+		}
+		if (!event_list["jump_big_cat_2"] && event_list["jump_back"] && player.coll.GetLeft() >= 420 && player.coll.GetLeft() <= 562) {
+			Enemy enemy = Enemy(512 + 100, 560, { "resources/image/enemy/cat_man.bmp","resources/image/enemy/cat_man_flip.bmp" }); enemy.step_enemy_jump = true; enemy.speed_x = -2; enemy.speed_y = -16; enemys_arr.push_back(enemy);
+			event_list["jump_big_cat_2"] = true;
+		}
+		if (!event_list["first_fall"] && player.distance_count >= 3620 && player.distance_count <= 3720) {
+			for (auto &i : bricks_arr) {
+				if (i.is_fall == 3) {
+					i.falling = true;
+					i.speed_y = 0;
+				}
+			}
+			event_list["first_fall"] = true;
+		}
+		if (!event_list["second_fall"] && event_list["first_fall"]) {
+			player.map3frame++;
+			if (player.map3frame > 50) {
+				for (auto &i : bricks_arr) {
+					if (i.is_fall == 4) {
+						i.falling = true;
+						i.speed_y = 0;
+					}
+				}
+				event_list["second_fall"] = true;
+			}
+		}
+		if (!event_list["third_fall"]&& event_list["second_fall"]) {
+			player.map3frame++;
+			if (player.map3frame > 130) {
+				for (auto &i : bricks_arr) {
+					if (i.is_fall == 5) {
+						i.falling = true;
+						i.speed_y = 0;
+					}
+				}
+				event_list["third_fall"] = true;
+			}
+		}
+		if (!event_list["crown_normal_2"] && player.distance_count >= 4517-500 && player.distance_count <= 4517 - 400) {
+			//Enemy enemy = Enemy(950, 350, { "resources/image/enemy/normal_crown.bmp","resources/image/enemy/normal_crown_flip.bmp" }); enemy.step_enemy_player_dead = true; enemy.speed_x = -2; enemys_arr.push_back(enemy);
+			event_list["crown_normal_2"] = true;
+		}
+		if (player.distance_count >= 4840) {
+			player.map3frame++;
+
+			if (player.map3frame > 50) {
+				for (auto &i : bricks_arr) {
+					if (i.item == "orange_ball") {
+						int randx = rand() % (4 - (-4) + 1) + (-4);
+						int randy = rand() % (-15 - (-32) + 1) + (-32);
+						Enemy enemy = Enemy(i.coll.GetLeft()+30, i.coll.GetTop(), { "resources/image/enemy/orange_circle.bmp" }); enemy.step_enemy_player_dead = true; enemy.able_touch = false; enemy.speed_x = randx; enemy.speed_y = randy; enemys_arr.push_back(enemy);
+					}
+				}
+				player.map3frame = 0;
+			}
+			
+		}
+
 	}
 	if (player.isDead) {
 		if (!event_list["player_dead"]) {

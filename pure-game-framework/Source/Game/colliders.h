@@ -40,6 +40,7 @@ namespace game_framework {
 		void check_finish();
 
 		int frame = 0;
+		int map3frame = 0;
 		double animate_frame = 0;
 		int jumpBonusFrame = 0;
 		int dead_frame = 0;
