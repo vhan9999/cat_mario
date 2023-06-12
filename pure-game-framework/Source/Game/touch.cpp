@@ -113,6 +113,10 @@ void CGameStateRun::Touching() {
 								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
 								enemys_arr.push_back(mushroom);
 							}
+							else if (i.item.compare("purple_mushroom") == 0) {
+								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/purple_mushroom.bmp","resources/image/items/purple_mushroom.bmp" }); mushroom.dead_mushroom = true; mushroom.speed_x = 3;
+								enemys_arr.push_back(mushroom);
+							}
 						}
 					}
 				}
@@ -124,7 +128,11 @@ void CGameStateRun::Touching() {
 					if (i.coll.GetFrameIndexOfBitmap() == 1) {
 						if (i.item.compare("") != 0) {
 							if (i.item.compare("red_mushroom_big") == 0) {
-								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.big_mushroom = true; mushroom.speed_x = 3;
+								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/red_mushroom.bmp","resources/image/items/red_mushroom.bmp","resources/image/object/block1/brick_break.bmp" }); mushroom.dead_mushroom = true; mushroom.speed_x = 3;
+								enemys_arr.push_back(mushroom);
+							}
+							else if (i.item.compare("purple_mushroom") == 0) {
+								Enemy mushroom = Enemy(i.coll.GetLeft(), i.coll.GetTop() - 60, { "resources/image/items/purple_mushroom.bmp","resources/image/items/purple_mushroom.bmp" }); mushroom.dead_mushroom = true; mushroom.speed_x = 3;
 								enemys_arr.push_back(mushroom);
 							}
 						}
@@ -448,6 +456,10 @@ void CGameStateRun::Touching() {
 						PC.SetFrameIndexOfBitmap(8);
 					}
 					continue;
+				}
+				if (enemy.dead_mushroom) {
+					enemy.is_dead = true;
+					player.isDead = true;
 				}
 				//head touch
 				if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
