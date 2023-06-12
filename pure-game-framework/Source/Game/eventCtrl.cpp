@@ -202,7 +202,7 @@ void CGameStateRun::EventCtrl() {
 			Enemy enemy = Enemy(512 + 100, 560, { "resources/image/enemy/cat_man.bmp","resources/image/enemy/cat_man_flip.bmp" }); enemy.step_enemy_jump = true; enemy.speed_x = -2; enemy.speed_y = -16; enemys_arr.push_back(enemy);
 			event_list["jump_big_cat_2"] = true;
 		}
-		if (!event_list["first_fall"] && player.distance_count >= 3620 && player.distance_count <= 3720) {
+		if (!event_list["first_fall"] && player.distance_count >= 3620 && player.distance_count <= 3720 && cheat_mode == false) {
 			for (auto &i : bricks_arr) {
 				if (i.is_fall == 3) {
 					i.falling = true;
@@ -211,7 +211,7 @@ void CGameStateRun::EventCtrl() {
 			}
 			event_list["first_fall"] = true;
 		}
-		if (!event_list["second_fall"] && event_list["first_fall"]) {
+		if (!event_list["second_fall"] && event_list["first_fall"] && cheat_mode == false) {
 			player.map3frame++;
 			if (player.map3frame > 50) {
 				for (auto &i : bricks_arr) {
@@ -223,7 +223,7 @@ void CGameStateRun::EventCtrl() {
 				event_list["second_fall"] = true;
 			}
 		}
-		if (!event_list["third_fall"]&& event_list["second_fall"]) {
+		if (!event_list["third_fall"]&& event_list["second_fall"] && cheat_mode==false) {
 			player.map3frame++;
 			if (player.map3frame > 130) {
 				for (auto &i : bricks_arr) {
