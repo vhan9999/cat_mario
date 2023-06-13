@@ -207,7 +207,7 @@ void CGameStateRun::MapSetting(){
 		brick = Brick(far_from_start(14), groundY_up - pipeline_big_height, { "resources/image/object/block2/pipeline_big.bmp" }); brick.is_danger = false; bricks_arr.push_back(brick);
 		
 		brick = Brick(far_from_start(11), high_from_ground(5) + 2, { "resources/image/object/block1/invisible_brick.bmp","resources/image/object/block1/brown_brick2.bmp" }); brick.invisible = true;  bricks_arr.push_back(brick);
-		brick = Brick(far_from_start(13)-10, high_from_ground(5) + 2, { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "purple_mushroom"; brick.invisible = true; bricks_arr.push_back(brick);
+		brick = Brick(far_from_start(13)+15, high_from_ground(5) + 2, { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "purple_mushroom"; brick.invisible = true; bricks_arr.push_back(brick);
 		// restrict mushroom block
 		brick = Brick(far_from_start(16), high_from_ground(5), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/invisible_brick.bmp" }); bricks_arr.push_back(brick);
 	}

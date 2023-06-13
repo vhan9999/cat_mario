@@ -147,7 +147,6 @@ void CGameStateRun::Touching() {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
 						i.invisible = true;
-						// player.player_break_brick->Play(2, false);
 					}
 					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
 						return;
@@ -403,7 +402,7 @@ void CGameStateRun::Touching() {
 		}
 		else {
 			pipe_animation.SetAnimation(40, false);
-			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
+			if (pipe_animation.GetFrameIndexOfBitmap() == 19) {
 				pipe_animation.SetAnimation(40, true);
 				current_map += 1;
 				player.isEnd = true;
@@ -414,13 +413,12 @@ void CGameStateRun::Touching() {
 	// check pipe_horizontal_interact animation
 	if (pipe_hor_animation_flag == true && animation_flag == true) {
 		if (isDanger == true) {
-			pipe_hor_animation.SetAnimation(40, false);
-			if (pipe_hor_animation.GetFrameIndexOfBitmap() == 5) {
-				pipe_hor_animation.SetAnimation(40, true);
-			}
+			pipe_hor_animation.SetAnimation(80, true);
 			// bounce back
-			player.coll.SetFrameIndexOfBitmap(0);
-			player.moveSpeed -= 10;
+			if (pipe_animation.IsAnimationDone() == true) {
+				player.coll.SetFrameIndexOfBitmap(0);
+				player.moveSpeed -= 2;
+			}
 		}
 	}
 	//player&enemys touch

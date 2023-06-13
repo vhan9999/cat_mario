@@ -59,6 +59,7 @@ namespace game_framework {
 		bool keyRight = false;
 		bool player_fall = false;
 		bool player_fly = false;
+		bool player_shift_back = false;
 
 		bool player_on_air = false;
 		bool isMove = false;
