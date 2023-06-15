@@ -219,7 +219,6 @@ void Player::resetValue() {
 	keyRight = false;
 	player_fall = false;
 	player_fly = false;
-	player_shift_back = false;
 	player_on_air = false;
 	isMove = false;
 	isDead = false;

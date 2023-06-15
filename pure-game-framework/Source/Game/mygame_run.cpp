@@ -130,7 +130,10 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	pipe_animation.LoadBitmapByString(interact_pipe_image, RGB(255, 242, 0));
 	pipe_hor_animation.LoadBitmapByString(interact_hor_pipe_image, RGB(255, 242, 0));
 	
+	
+
 	MapSetting();// set map
+	
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
