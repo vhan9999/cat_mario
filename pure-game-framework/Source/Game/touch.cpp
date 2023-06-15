@@ -593,11 +593,11 @@ void CGameStateRun::Touching() {
 				}
 
 			}
-			if (CMovingBitmap::IsOverlap(i.coll, j.coll) && (i.turtle==true)) {
+			if (CMovingBitmap::IsOverlap(i.coll, j.coll) && (i.turtle == true)) {
 				if ((i.turtle) && (!j.turtle)) {
 					j.is_dead = true;
 				}
-				
+
 			}
 		}
 	}
