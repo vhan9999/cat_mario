@@ -118,7 +118,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	vector<string> interact_hor_pipe_image = { "resources/animation/interact_hor_pipe/01.bmp",  "resources/animation/interact_hor_pipe/02.bmp", "resources/animation/interact_hor_pipe/03.bmp",
 											"resources/animation/interact_hor_pipe/04.bmp", "resources/animation/interact_hor_pipe/05.bmp", "resources/animation/interact_hor_pipe/06.bmp" };
 	vector<string> game_over_image = { "resources/image/logo/game_over1.bmp", "resources/image/logo/game_over2.bmp" };
-	
+
 	player = Player(100, groundY_up - 68, player_image); // player initial posiiton
 	player.load_voice();
 	// set curent checkpoint
