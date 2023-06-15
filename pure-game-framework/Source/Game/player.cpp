@@ -52,7 +52,7 @@ void Player::moveHor() {
 		if (frame % 5 == 0) {//every 10 frame
 			moveSpeed += 1;
 			if (moveSpeed < 0)
-				moveSpeed += 3;
+				moveSpeed += 4;
 		}
 		if (moveSpeed >= 10)//speed max = 6
 			moveSpeed = 10;
@@ -64,7 +64,7 @@ void Player::moveHor() {
 		if (frame % 5 == 0) {
 			moveSpeed -= 1;
 			if (moveSpeed > 0)
-				moveSpeed -= 3;
+				moveSpeed -= 4;
 		}
 		if (moveSpeed <= -10)
 			moveSpeed = -10;

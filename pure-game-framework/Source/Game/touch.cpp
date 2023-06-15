@@ -83,7 +83,7 @@ void CGameStateRun::Touching() {
 			int obj_mid_x = BC.GetLeft() + (BC.GetWidth() / 2);
 			int obj_mid_y = BC.GetTop() + (BC.GetHeight() / 2);
 			//head touch
-			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 10 <= obj_right && PC.GetLeft() + PC.GetWidth() - 10 >= obj_left) {
+			if (inRange(PC.GetTop() - 1, obj_mid_y, obj_bottom) && PC.GetLeft() + 8 <= obj_right && PC.GetLeft() + PC.GetWidth() - 8 >= obj_left) {
 				// invisible
 				if ((i.invisible == true) && (cheat_mode == true)) { continue; }
 				if ((i.invisible == true) && (i.coll.GetImageFileName() != "resources/image/object/block1/brick_break.bmp") && (cheat_mode == false)) {
@@ -147,9 +147,10 @@ void CGameStateRun::Touching() {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
 						i.coll.SetFrameIndexOfBitmap(1);
 						i.invisible = true;
+						// player.player_break_brick->Play(2, false);
 					}
 					else if (i.coll.GetFrameIndexOfBitmap() == 1) {
-						return;
+						continue;
 					}
 				}
 				// checkpoint
@@ -186,7 +187,7 @@ void CGameStateRun::Touching() {
 			else if (i.invisible)
 				continue;
 			//foot touch
-			else if (inRange(PC.GetTop() + PC.GetHeight() +1, obj_top, obj_mid_y) && PC.GetLeft() + 2 < obj_right && PC.GetLeft() + PC.GetWidth() - 2 > obj_left) {
+			else if (inRange(PC.GetTop() + PC.GetHeight() +1, obj_top, obj_top+30) && PC.GetLeft() + 2 < obj_right && PC.GetLeft() + PC.GetWidth() - 2 > obj_left) {
 				if (player.keyDown == true && i.coll.GetImageFileName() == "resources/image/object/block2/pipeline_big.bmp") {
 					player.coll.SetFrameIndexOfBitmap(6);
 					player.moveSpeed = 0;
@@ -207,6 +208,11 @@ void CGameStateRun::Touching() {
 					}
 					i.falling = true;
 				}
+				/*if (i.foot_touch_break && i.coll.GetImageFileName() != "resources/image/object/block1/invisible_brick.bmp" && i.coll.GetImageFileName() != "resources/image/object/block1/brick_break.bmp") {
+					i.foot_touch_break = false;
+					i.coll.SetFrameIndexOfBitmap(2);
+					i.invisible = true;
+				}*/
 				// checkpoint
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/checkpoint_reached.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/blank.bmp") {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
@@ -402,7 +408,7 @@ void CGameStateRun::Touching() {
 		}
 		else {
 			pipe_animation.SetAnimation(40, false);
-			if (pipe_animation.GetFrameIndexOfBitmap() == 19) {
+			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
 				pipe_animation.SetAnimation(40, true);
 				current_map += 1;
 				player.isEnd = true;
@@ -413,12 +419,13 @@ void CGameStateRun::Touching() {
 	// check pipe_horizontal_interact animation
 	if (pipe_hor_animation_flag == true && animation_flag == true) {
 		if (isDanger == true) {
-			pipe_hor_animation.SetAnimation(80, true);
-			// bounce back
-			if (pipe_animation.IsAnimationDone() == true) {
-				player.coll.SetFrameIndexOfBitmap(0);
-				player.moveSpeed -= 2;
+			pipe_hor_animation.SetAnimation(40, false);
+			if (pipe_hor_animation.GetFrameIndexOfBitmap() == 5) {
+				pipe_hor_animation.SetAnimation(40, true);
 			}
+			// bounce back
+			player.coll.SetFrameIndexOfBitmap(0);
+			player.moveSpeed -= 10;
 		}
 	}
 	//player&enemys touch
@@ -583,7 +590,6 @@ void CGameStateRun::Touching() {
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll)) {
 				if ((i.big_mushroom) && (!j.big_mushroom)) {
 					Enemy enemy = Enemy(j.coll.GetLeft(), j.coll.GetTop(), { "resources/image/enemy/big_normal.bmp" , "resources/image/enemy/big_normal_flip.bmp" }); enemy.speed_x = j.speed_x; enemy.speed_y = j.speed_y; enemy.step_enemy_player_dead = true;
-					player.player_powerup->Play(7, false);
 					if (j.coll.GetFrameIndexOfBitmap() != 0) {
 						enemy.coll.SetFrameIndexOfBitmap(1);
 					}
@@ -593,12 +599,14 @@ void CGameStateRun::Touching() {
 				}
 
 			}
+			
 			if (CMovingBitmap::IsOverlap(i.coll, j.coll) && (i.turtle==true)) {
 				if ((i.turtle) && (!j.turtle)) {
 					j.is_dead = true;
 				}
 				
 			}
+			
 		}
 	}
 }
