@@ -359,7 +359,7 @@ void CGameStateRun::EventCtrl() {
 				for (int j = 0; j < 8; j++) {
 					if (j >= 0 && j <= 3) {
 						brick = Brick(startBlock + (j * 60), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" });
-						brick.foot_touch_fall = true; brick.is_fall = 4; bricks_arr.push_back(brick);
+						brick.foot_touch_fall = true; brick.is_fall = 8; bricks_arr.push_back(brick);
 					}
 					else { brick = Brick(startBlock + (j * 60), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 				}
