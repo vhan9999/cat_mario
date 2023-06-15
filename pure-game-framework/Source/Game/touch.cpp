@@ -257,7 +257,6 @@ void CGameStateRun::Touching() {
 				// end point flag
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag_blank.bmp") {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
-						i.coll.SetFrameIndexOfBitmap(1);
 						if (player.isDead == true) {
 							player.moveSpeed = 0;
 							player.player_finish_audio->Stop(5);
@@ -316,7 +315,6 @@ void CGameStateRun::Touching() {
 				// end point flag
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp" || i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag_blank.bmp") {
 					if (i.coll.GetFrameIndexOfBitmap() == 0) {
-						i.coll.SetFrameIndexOfBitmap(1);
 						if (player.isDead == true) {
 							player.moveSpeed = 0;
 							player.player_finish_audio->Stop(5);
@@ -361,7 +359,7 @@ void CGameStateRun::Touching() {
 					player.pipe_interact_audio->Play(4, false);
 					pipe_hor_animation.SetFrameIndexOfBitmap(0);
 					pipe_hor_animation.SetTopLeft(i.coll.GetLeft()-player.coll.GetWidth(), player.coll.GetTop());
-					animation_flag = true;
+					animation_flag = 
 					pipe_hor_animation_flag = true;
 					isDanger = i.is_danger;
 					return;

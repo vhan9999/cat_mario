@@ -120,7 +120,7 @@ namespace game_framework {
 		
 		CAudio *field_music = CAudio::Instance();
 
-		int current_map = 3;
+		int current_map = 4;
 
 		std::map<std::string, bool> event_list;
 		std::vector<Enemy> enemys_arr; // enemy array

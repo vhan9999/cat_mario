@@ -359,7 +359,7 @@ void CGameStateRun::EventCtrl() {
 				for (int j = 0; j < 8; j++) {
 					if (j >= 0 && j <= 3) {
 						brick = Brick(startBlock + (j * 60), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" });
-						brick.foot_touch_fall = true; brick.is_fall = 4; bricks_arr.push_back(brick);
+						brick.foot_touch_fall = true; brick.is_fall = 8; bricks_arr.push_back(brick);
 					}
 					else { brick = Brick(startBlock + (j * 60), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
 				}
@@ -424,8 +424,14 @@ void CGameStateRun::EventCtrl() {
 
 		if (player.player_on_air == false) {
 			player.coll.SetFrameIndexOfBitmap(0);
+			for (auto &i : bricks_arr) {
+				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp" && i.coll.GetFrameIndexOfBitmap() == 0) {
+					i.coll.SetFrameIndexOfBitmap(1);
+					break;
+				}
+			}
 			player.jumpSpeed = 0;
-			player.moveSpeed = 3;
+			player.moveSpeed = 4;
 			if (player.isDead == true) {
 				player.moveSpeed = 0;
 				player.player_finish_audio->Stop(5);
