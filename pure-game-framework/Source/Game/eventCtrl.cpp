@@ -255,6 +255,124 @@ void CGameStateRun::EventCtrl() {
 			
 		}
 
+			// up
+			brick = Brick(startBlock, 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+			for (int i = 0; i < 8; i++) { brick = Brick(startBlock + 60 + (i*60), 0, { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 6; i++) { brick = Brick(startBlock +540, i * 60, { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 6; i++) { brick = Brick(startBlock + 600 + (i*60), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			// down
+			for (int i = 0; i < 15; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 3; i++) {
+				if (i == 0) {
+					brick = Brick(startBlock + (i * 60) + 180, 776 - (60 * 8), { "resources/image/object/block1/item_brick.bmp", "resources/image/object/block1/brown_brick2.bmp" }); brick.item = "red_mushroom_big";
+					bricks_arr.push_back(brick);
+				}
+				else {
+					brick = Brick(startBlock + (i * 60) + 180, 776 - (60 * 8), { "resources/image/object/block1/item_brick.bmp",  "resources/image/object/block1/brown_brick2.bmp" }); brick.have_coin = true; bricks_arr.push_back(brick);
+				}
+			}
+
+			brick = Brick(startBlock + 180, groundY_up - 60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+			for (int i = 0; i < 2; i++) { brick = Brick(startBlock + 240, 776 - (60 * (1 * (i + 1))), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 3; i++) { brick = Brick(startBlock + 300, 776 - (60 * (1 * (i + 1))), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 5; i++) { brick = Brick(startBlock + 360, 776 - (60 * (1 * (i + 1))), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					brick = Brick(startBlock + (j * 60) + 420, 776 - (60 * (1 + i)), { "resources/image/object/block1/green_brick4.bmp" }); bricks_arr.push_back(brick);
+				}
+			}
+			for (int i = 0; i < 5; i++) { brick = Brick(startBlock + 660, 776 - (60 * (1 * (i + 1))), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 3; i++) { brick = Brick(startBlock + 720, 776 - (60 * (1 * (i + 1))), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 2; i++) { brick = Brick(startBlock + 780, 776 - (60 * (1 * (i + 1))), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			brick = Brick(startBlock + 840, groundY_up - 60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+
+			/* phase 7 */
+			startBlock += 15*60;
+			env = Environment(startBlock, 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
+			// up
+			for (int i = 0; i < 15; i++) { brick = Brick(startBlock + (i * 60), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			// down
+			for (int i = 0; i < 15; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+			for (int i = 0; i < 3; i++) { brick = Brick(startBlock + (i * 60) + 240, 776 - (60 * 1), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			brick = Brick(startBlock + 300, 776 - (60 * 2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 300, 776 - (60 * 3), { "resources/image/object/block1/question_block.bmp",  "resources/image/object/block1/invisible_brick.bmp" }); bricks_arr.push_back(brick);
+
+			brick = Brick(startBlock + 660, groundY_up - pipeline_mid_height + 5, { "resources/image/object/block2/pipeline_mid.bmp" }); brick.item = "orange_ball";  bricks_arr.push_back(brick);
+
+			/* phase 8 */
+				// up
+			startBlock += 15*60;
+			env = Environment(startBlock, 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
+			for (int i = 0; i < 3; i++) { brick = Brick(startBlock + (i * 60), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			// down
+			for (int i = 0; i < 3; i++) {
+				brick = Brick(startBlock + (i * 60), groundY_up, { "resources/image/object/block1/green_brick3.bmp" }); bricks_arr.push_back(brick);
+				brick = Brick(startBlock + (i * 60), groundY_down, { "resources/image/object/block1/green_brick5.bmp" }); bricks_arr.push_back(brick);
+			}
+
+			for (int i = 0; i < 3; i++) { brick = Brick(startBlock + (i * 60), 776 - (60 * 1), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			for (int i = 0; i < 2; i++) { brick = Brick(startBlock + (i * 60) + 60, 776 - (60 * 2), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			brick = Brick(startBlock + 120, 776 - (60 * 3), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+
+			brick = Brick(startBlock + 300, 776 - (60 * 6), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; brick.is_fall = 6; bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 660, 776 - (60 * 4), { "resources/image/object/block1/yellow_brick.bmp" }); brick.foot_touch_fall = true; brick.is_fall = 7; bricks_arr.push_back(brick);
+
+
+			/* phase 9 */
+			startBlock += 16*60;
+			env = Environment(startBlock, 0, { "resources/image/object/environment/dungeon_background.bmp" }); environment_arr.push_back(env);
+
+			// up
+			for (int i = 0; i < 8; i++) { brick = Brick(startBlock + (i * 60), 0, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+			// down
+
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 8; j++) {
+					if (j >= 0 && j <= 3) {
+						brick = Brick(startBlock + (j * 60), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" });
+						brick.foot_touch_fall = true; brick.is_fall = 4; bricks_arr.push_back(brick);
+					}
+					else { brick = Brick(startBlock + (j * 60), 600 + (60 * i), { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick); }
+				}
+			}
+			// invisible
+			for (int i = 0; i < 4; i++) {
+				brick = Brick(startBlock + (i * 60), 600 - (60), { "resources/image/object/block1/invisible_brick.bmp", "resources/image/object/block1/green_brick2.bmp" }); brick.invisible = true; bricks_arr.push_back(brick);
+			}
+
+			brick = Brick(startBlock + 300, 600 - pipeline_big_height + 5, { "resources/image/object/block2/pipeline_big.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 300 + 10, 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
+
+
+			for (int i = 0; i < 15; i++) {
+				for (int j = 0; j < 8; j++) {
+					brick = Brick(startBlock + (j * 60) + 480, i * 60, { "resources/image/object/block1/green_brick.bmp" }); bricks_arr.push_back(brick);
+				}
+			}
+			brick = Brick(startBlock + 480, 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 720, 600, { "resources/image/object/environment/green_rect_hor.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 840, 600 - pipeline_big_height, { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 840, 600 - (pipeline_big_height * 2), { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
+			brick = Brick(startBlock + 840, 600 - (pipeline_big_height * 3), { "resources/image/object/environment/green_rect_ver.bmp" }); bricks_arr.push_back(brick);
+
+			event_list["phase6-9"] = true;
+		}
+	}
+	else if (current_map == 4) {
+		if (player.coll.GetTop() < 500 && !event_list["big_cat"]) {
+			Enemy enemy = Enemy(160, 550, { "resources/image/enemy/cat_man.bmp","resources/image/enemy/cat_man_flip.bmp" }); enemy.step_enemy_jump = true; enemy.coll.SetFrameIndexOfBitmap(1); enemy.speed_x = 2; enemy.speed_y = -16; enemys_arr.push_back(enemy);
+			
+			event_list["big_cat"] = true;
+		}
 	}
 	if (player.isDead) {
 		if (!event_list["player_dead"]) {
