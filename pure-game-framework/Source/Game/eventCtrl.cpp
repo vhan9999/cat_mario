@@ -420,6 +420,12 @@ void CGameStateRun::EventCtrl() {
 				}
 			}
 		}
+		if (player.keyLeft == true) {
+			player.keyLeft = false;
+		}
+		else if (player.keyRight == true) {
+			player.keyRight = false;
+		}
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
 		player.jumpSpeed = 5;
