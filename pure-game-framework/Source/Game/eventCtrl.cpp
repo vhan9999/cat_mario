@@ -208,37 +208,39 @@ void CGameStateRun::EventCtrl() {
 			Enemy enemy = Enemy(512 + 100, 560, { "resources/image/enemy/cat_man.bmp","resources/image/enemy/cat_man_flip.bmp" }); enemy.step_enemy_jump = true; enemy.speed_x = -2; enemy.speed_y = -16; enemys_arr.push_back(enemy);
 			event_list["jump_big_cat_2"] = true;
 		}
-		if (!event_list["first_fall"] && player.distance_count >= 3620 && player.distance_count <= 3720) {
-			for (auto &i : bricks_arr) {
-				if (i.is_fall == 3) {
-					i.falling = true;
-					i.speed_y = 0;
-				}
-			}
-			event_list["first_fall"] = true;
-		}
-		if (!event_list["second_fall"] && event_list["first_fall"]) {
-			player.map3frame++;
-			if (player.map3frame > 42) {
+		if (cheat_mode == false) {
+			if (!event_list["first_fall"] && player.distance_count >= 3620 && player.distance_count <= 3720) {
 				for (auto &i : bricks_arr) {
-					if (i.is_fall == 4) {
+					if (i.is_fall == 3) {
 						i.falling = true;
 						i.speed_y = 0;
 					}
 				}
-				event_list["second_fall"] = true;
+				event_list["first_fall"] = true;
 			}
-		}
-		if (!event_list["third_fall"]&& event_list["second_fall"]) {
-			player.map3frame++;
-			if (player.map3frame > 115) {
-				for (auto &i : bricks_arr) {
-					if (i.is_fall == 5) {
-						i.falling = true;
-						i.speed_y = 0;
+			if (!event_list["second_fall"] && event_list["first_fall"]) {
+				player.map3frame++;
+				if (player.map3frame > 42) {
+					for (auto &i : bricks_arr) {
+						if (i.is_fall == 4) {
+							i.falling = true;
+							i.speed_y = 0;
+						}
 					}
+					event_list["second_fall"] = true;
 				}
-				event_list["third_fall"] = true;
+			}
+			if (!event_list["third_fall"] && event_list["second_fall"]) {
+				player.map3frame++;
+				if (player.map3frame > 115) {
+					for (auto &i : bricks_arr) {
+						if (i.is_fall == 5) {
+							i.falling = true;
+							i.speed_y = 0;
+						}
+					}
+					event_list["third_fall"] = true;
+				}
 			}
 		}
 		if (!event_list["crown_normal_2"] && player.distance_count >= 4517-500 && player.distance_count <= 4517 - 400) {
@@ -418,6 +420,12 @@ void CGameStateRun::EventCtrl() {
 				}
 			}
 		}
+		if (player.keyLeft == true) {
+			player.keyLeft = false;
+		}
+		else if (player.keyRight == true) {
+			player.keyRight = false;
+		}
 		player.coll.SetFrameIndexOfBitmap(4);
 		player.moveSpeed = 0; player.jumpSpeed = 0;
 		player.jumpSpeed = 5;
@@ -426,12 +434,18 @@ void CGameStateRun::EventCtrl() {
 			player.coll.SetFrameIndexOfBitmap(0);
 			for (auto &i : bricks_arr) {
 				if (i.coll.GetImageFileName() == "resources/image/object/environment/end_point_flag.bmp" && i.coll.GetFrameIndexOfBitmap() == 0) {
+					player.coll.SetTopLeft(i.coll.GetLeft(), player.coll.GetTop());
 					i.coll.SetFrameIndexOfBitmap(1);
 					break;
 				}
 			}
 			player.jumpSpeed = 0;
-			player.moveSpeed = 4;
+			if (current_map == 1) {
+				player.moveSpeed = 3;
+			}
+			else if (current_map == 4) {
+				player.moveSpeed = 4;
+			}
 			if (player.isDead == true) {
 				player.moveSpeed = 0;
 				player.player_finish_audio->Stop(5);
