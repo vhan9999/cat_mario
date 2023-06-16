@@ -406,7 +406,7 @@ void CGameStateRun::Touching() {
 		}
 		else {
 			pipe_animation.SetAnimation(40, false);
-			if (pipe_animation.GetFrameIndexOfBitmap() == 16) {
+			if (pipe_animation.GetFrameIndexOfBitmap() == 19) {
 				pipe_animation.SetAnimation(40, true);
 				current_map += 1;
 				player.isEnd = true;
